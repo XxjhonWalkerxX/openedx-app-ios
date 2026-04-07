@@ -169,6 +169,29 @@ public class SignInViewModel: ObservableObject {
         }
     }
 
+    // MARK: - LlaveMX OAuth PKCE
+
+    @MainActor
+    func signInWithLlaveMX(from anchor: ASPresentationAnchor) async {
+        isShowProgress = true
+        let provider = LlaveMXAuthProvider(apiBaseURL: config.baseURL.absoluteString)
+        do {
+            let (accessToken, _) = try await provider.authenticate(from: anchor)
+            // login(ssoToken:) intercambia el token y obtiene el perfil de usuario
+            let user = try await interactor.login(ssoToken: accessToken)
+            analytics.identify(id: "\(user.id)", username: user.username, email: user.email)
+            router.showMainOrWhatsNewScreen(sourceScreen: sourceScreen, postLoginData: nil)
+            NotificationCenter.default.post(name: .userAuthorized, object: nil)
+        } catch {
+            isShowProgress = false
+            if error.isInternetError {
+                errorMessage = CoreLocalization.Error.slowOrNoInternetConnection
+            } else {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
     func trackForgotPasswordClicked() {
         analytics.forgotPasswordClicked()
     }

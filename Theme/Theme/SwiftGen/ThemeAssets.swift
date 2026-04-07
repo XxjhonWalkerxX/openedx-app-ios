@@ -93,6 +93,7 @@ public enum ThemeAssets {
   public static let textInputUnfocusedStroke = ColorAsset(name: "TextInputUnfocusedStroke")
   public static let toggleSwitchColor = ColorAsset(name: "ToggleSwitchColor")
   public static let circleProgressBG = ColorAsset(name: "circleProgressBG")
+  public static let guindaColor = ColorAsset(name: "guindaColor")
   public static let navigationBarTintColor = ColorAsset(name: "navigationBarTintColor")
   public static let progressLineBG = ColorAsset(name: "progressLineBG")
   public static let progressPercentage = ColorAsset(name: "progressPercentage")
@@ -101,6 +102,9 @@ public enum ThemeAssets {
   public static let warningText = ColorAsset(name: "warningText")
   public static let white = ColorAsset(name: "white")
   public static let appLogo = ImageAsset(name: "appLogo")
+  public static let aprendeLogoEducacion = ImageAsset(name: "aprende_logo_educacion")
+  public static let aprendeLogoMarquesina = ImageAsset(name: "aprende_logo_marquesina")
+  public static let aprendeSlogan = ImageAsset(name: "aprende_slogan")
   public static let assignmentStroke = ColorAsset(name: "assignmentStroke")
   public static let headerBackground = ImageAsset(name: "headerBackground")
 }

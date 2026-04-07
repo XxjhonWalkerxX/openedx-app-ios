@@ -35,6 +35,19 @@
 	</dict>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>We would like to utilize your calendar list to subscribe you to your personalized calendar for this course.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>mx.aprende.ios</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mx.aprende.ios</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIAppFonts</key>
 	<array/>
 	<key>UIBackgroundModes</key>

@@ -18,15 +18,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appLogo" translatesAutoresizingMaskIntoConstraints="NO" id="N54-4c-KWq">
-                                <rect key="frame" x="146.5" y="394.5" width="121" height="121"/>
+                                <rect key="frame" x="107" y="358" width="200" height="180"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="121" id="cja-fs-EVG"/>
-                                    <constraint firstAttribute="height" constant="121" id="mrO-2w-c71"/>
+                                    <constraint firstAttribute="width" constant="200" id="cja-fs-EVG"/>
+                                    <constraint firstAttribute="height" constant="180" id="mrO-2w-c71"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="SplashBackground"/>
+                        <color key="backgroundColor" red="1.0" green="1.0" blue="1.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="N54-4c-KWq" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="deh-AL-9fZ"/>
                             <constraint firstItem="N54-4c-KWq" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="gzk-ry-JKk"/>
@@ -38,11 +38,7 @@
             <point key="canvasLocation" x="52.307692307692307" y="374.64454976303318"/>
         </scene>
     </scenes>
-    <color key="tintColor" name="SplashBackground"/>
     <resources>
-        <image name="appLogo" width="171" height="48"/>
-        <namedColor name="SplashBackground">
-            <color red="0.31764705882352939" green="0.4823529411764706" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <image name="appLogo" width="212" height="195"/>
     </resources>
 </document>

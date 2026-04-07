@@ -5,6 +5,7 @@
 //  Created by Saeed Bashir on 28.11.2023.
 //
 
+import CoreText
 import Foundation
 import SwiftUI
 
@@ -88,6 +89,15 @@ public struct Theme: Sendable {
         nonisolated(unsafe) public private(set) static var resumeButtonText = ThemeAssets.resumeButtonText.swiftUIColor
         nonisolated(unsafe) public private(set) static var socialAuthColor = ThemeAssets.socialAuthColor.swiftUIColor
         nonisolated(unsafe) public private(set) static var assignmentColor = ThemeAssets.assignmentStroke.swiftUIColor
+        nonisolated(unsafe) public private(set) static var guindaColor = ThemeAssets.guindaColor.swiftUIColor
+
+        // MARK: - @prende.mx Brand Colors
+        public static let brandGreenDark  = Color(red: 0.114, green: 0.302, blue: 0.259)  // #1D4D42
+        public static let brandGreen      = Color(red: 0.169, green: 0.412, blue: 0.349)  // #2B6959
+        public static let brandGreenLight = Color(red: 0.239, green: 0.541, blue: 0.447)  // #3D8A72
+        public static let brandCream      = Color(red: 0.925, green: 0.914, blue: 0.894)  // #ECE9E4
+        public static let brandCreamStrong = Color(red: 0.875, green: 0.831, blue: 0.761) // #DFD4C2
+        public static let brandHandle     = Color(red: 0.784, green: 0.765, blue: 0.729)  // #C8C3BA
 
         public static func update(
             accentColor: Color = ThemeAssets.accentColor.swiftUIColor,
@@ -260,6 +270,15 @@ public struct Theme: Sendable {
         }
     }
     
+    // MARK: - @prende.mx Gradients
+    public struct Gradients {
+        public static let heroGradient = LinearGradient(
+            colors: [Colors.brandGreenDark, Colors.brandGreen, Colors.brandGreenLight],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
     public struct Shapes: Sendable {
         nonisolated(unsafe) public static var isRoundedCorners: Bool = true
         nonisolated(unsafe) public static var buttonCornersRadius: Double = 8.0
@@ -332,8 +351,15 @@ public extension Theme.Fonts {
     // swiftlint:disable type_name
     class __ {}
     static func registerFonts() {
-        guard let url = Bundle(for: __.self).url(forResource: "fonts_file", withExtension: "ttf") else { return }
-        CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        let bundle = Bundle(for: __.self)
+        // Fuente principal del sistema de diseño
+        if let url = bundle.url(forResource: "fonts_file", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
+        // TT Rounds Neue Trial Variable — wdth, wght, slnt — para @prende.mx
+        if let url = bundle.url(forResource: "tt_rounds_neue_variable", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
     }
     // swiftlint:enable type_name
 }
