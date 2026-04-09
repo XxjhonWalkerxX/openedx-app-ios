@@ -33,134 +33,132 @@ public struct DiscoveryView: View {
     }
 
     public var body: some View {
-        GeometryReader { _ in
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
 
-                // [A] Hero verde — fijo, no scrollea
-                DiscoveryHeroView {
-                    router.showSettings()
-                }
+            // [A] Hero verde — fijo, no scrollea
+            DiscoveryHeroView {
+                router.showSettings()
+            }
 
-                // [B] Contenido scrollable
-                ScrollView {
-                    LazyVStack(spacing: 0) {
+            // [B] Contenido scrollable
+            ScrollView {
+                LazyVStack(spacing: 0) {
 
-                        // Espaciador para que el contenido empiece bajo el hero
-                        Color.clear
-                            .frame(height: heroHeight - heroOverlap)
+                    // Espaciador para que el contenido empiece bajo el hero
+                    Color.clear
+                        .frame(height: heroHeight - heroOverlap)
 
-                        // Sheet cream con bordes redondeados arriba
-                        VStack(spacing: 0) {
+                    // Sheet cream con bordes redondeados arriba
+                    VStack(spacing: 0) {
 
-                            // Drag handle
-                            RoundedRectangle(cornerRadius: 2)
-                                .fill(Theme.Colors.brandHandle)
-                                .frame(width: 36, height: 4)
-                                .padding(.top, 12)
-                                .padding(.bottom, 16)
+                        // Drag handle
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Theme.Colors.brandHandle)
+                            .frame(width: 36, height: 4)
+                            .padding(.top, 12)
+                            .padding(.bottom, 16)
 
-                            // Barra de búsqueda (tap → SearchView)
-                            HStack(spacing: 10) {
-                                Image(systemName: "magnifyingglass")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 18, height: 18)
-                                    .foregroundColor(Theme.Colors.brandGreen)
-                                Text("Buscar cursos...")
-                                    .font(Theme.Fonts.ttRoundsBody(13))
-                                    .foregroundColor(Theme.Colors.brandCardSecondary)
-                                Spacer()
-                            }
-                            .padding(.horizontal, 16)
-                            .frame(height: 46)
-                            .background(Color.white)
-                            .clipShape(Capsule())
-                            .onTapGesture {
-                                router.showDiscoverySearch(searchQuery: searchQuery)
-                                viewModel.discoverySearchBarClicked()
-                            }
+                        // Barra de búsqueda (tap → SearchView)
+                        HStack(spacing: 10) {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                                .foregroundColor(Theme.Colors.brandGreen)
+                            Text(DiscoveryLocalization.search)
+                                .font(Theme.Fonts.ttRoundsBody(13))
+                                .foregroundColor(Theme.Colors.brandCardSecondary)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        .frame(height: 46)
+                        .background(Color.white)
+                        .clipShape(Capsule())
+                        .onTapGesture {
+                            router.showDiscoverySearch(searchQuery: searchQuery)
+                            viewModel.discoverySearchBarClicked()
+                        }
+                        .padding(.horizontal, 20)
+
+                        // Header "Todos los cursos" + contador
+                        HStack {
+                            Text("Todos los cursos")
+                                .font(Theme.Fonts.ttRoundsCompressedMedium(20))
+                                .foregroundColor(Theme.Colors.brandCardPrimary)
+                                .kerning(-0.2)
+                            Spacer()
+                            Text("\(viewModel.courses.count) disponibles")
+                                .font(Theme.Fonts.ttRoundsBody(12))
+                                .foregroundColor(Theme.Colors.brandCardSecondary)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+                        .padding(.bottom, 12)
+
+                        // Lista de tarjetas
+                        ForEach(Array(viewModel.courses.enumerated()), id: \.offset) { index, course in
+                            DiscoveryCourseCard(
+                                course: course,
+                                index: index,
+                                onClick: {
+                                    viewModel.discoveryCourseClicked(
+                                        courseID: course.courseID,
+                                        courseName: course.name
+                                    )
+                                    router.showCourseDetais(
+                                        courseID: course.courseID,
+                                        title: course.name
+                                    )
+                                }
+                            )
                             .padding(.horizontal, 20)
-
-                            // Header "Todos los cursos" + contador
-                            HStack {
-                                Text("Todos los cursos")
-                                    .font(Theme.Fonts.ttRoundsCompressedMedium(20))
-                                    .foregroundColor(Theme.Colors.brandCardPrimary)
-                                    .kerning(-0.2)
-                                Spacer()
-                                Text("\(viewModel.courses.count) disponibles")
-                                    .font(Theme.Fonts.ttRoundsBody(12))
-                                    .foregroundColor(Theme.Colors.brandCardSecondary)
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.top, 20)
-                            .padding(.bottom, 12)
-
-                            // Lista de tarjetas
-                            ForEach(Array(viewModel.courses.enumerated()), id: \.offset) { index, course in
-                                DiscoveryCourseCard(
-                                    course: course,
-                                    index: index,
-                                    onClick: {
-                                        viewModel.discoveryCourseClicked(
-                                            courseID: course.courseID,
-                                            courseName: course.name
-                                        )
-                                        router.showCourseDetais(
-                                            courseID: course.courseID,
-                                            title: course.name
-                                        )
-                                    }
-                                )
-                                .padding(.horizontal, 20)
-                                .padding(.bottom, 10)
-                                .onAppear {
-                                    Task {
-                                        await viewModel.getDiscoveryCourses(index: index)
-                                    }
+                            .padding(.bottom, 10)
+                            .onAppear {
+                                Task {
+                                    await viewModel.getDiscoveryCourses(index: index)
                                 }
                             }
-
-                            // Indicador de carga para paginación
-                            if viewModel.nextPage <= viewModel.totalPages {
-                                ProgressView()
-                                    .padding(.top, 20)
-                                    .tint(Theme.Colors.brandGreen)
-                            }
-
-                            // Espaciador inferior (fondo brandCream)
-                            Theme.Colors.brandCream
-                                .frame(height: 80)
                         }
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.Colors.brandCream)
-                        .clipShape(DiscoverySheetShape(radius: 32))
-                    }
-                }
-                .refreshable {
-                    viewModel.totalPages = 1
-                    viewModel.nextPage = 1
-                    await viewModel.discovery(page: 1, withProgress: false)
-                }
 
-                // [C] Panel de login si no está autenticado
-                if !viewModel.userloggedIn {
-                    LogistrationBottomView(
-                        ssoEnabled: viewModel.config.uiComponents.samlSSOLoginEnabled
-                    ) { buttonAction in
-                        switch buttonAction {
-                        case .signIn:
-                            viewModel.router.showLoginScreen(sourceScreen: .discovery)
-                        case .register:
-                            viewModel.router.showRegisterScreen(sourceScreen: .discovery)
-                        case .signInWithSSO:
-                            viewModel.router.showLoginScreen(sourceScreen: .discovery)
+                        // Indicador de carga para paginación
+                        if viewModel.nextPage <= viewModel.totalPages {
+                            ProgressView()
+                                .padding(.top, 20)
+                                .tint(Theme.Colors.brandGreen)
                         }
-                    }
-                    .frame(maxHeight: .infinity, alignment: .bottom)
-                }
 
+                        // Espaciador inferior (fondo brandCream)
+                        Theme.Colors.brandCream
+                            .frame(height: 80)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(Theme.Colors.brandCream)
+                    .clipShape(DiscoverySheetShape(radius: 32))
+                }
             }
+            .refreshable {
+                viewModel.totalPages = 1
+                viewModel.nextPage = 1
+                await viewModel.discovery(page: 1, withProgress: false)
+            }
+
+            // [C] Panel de login si no está autenticado
+            if !viewModel.userloggedIn {
+                LogistrationBottomView(
+                    ssoEnabled: viewModel.config.uiComponents.samlSSOLoginEnabled
+                ) { buttonAction in
+                    switch buttonAction {
+                    case .signIn:
+                        viewModel.router.showLoginScreen(sourceScreen: .discovery)
+                    case .register:
+                        viewModel.router.showRegisterScreen(sourceScreen: .discovery)
+                    case .signInWithSSO:
+                        viewModel.router.showLoginScreen(sourceScreen: .discovery)
+                    }
+                }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+            }
+
             // [D] Offline snackbar
             OfflineSnackBarView(
                 connectivity: viewModel.connectivity,
@@ -184,8 +182,9 @@ public struct DiscoveryView: View {
                     }
                 }
             }
+
         }
-        .navigationBarHidden(true)
+        .navigationBarHidden(sourceScreen != .startup)
         .background(Theme.Colors.brandCream.ignoresSafeArea())
         .onFirstAppear {
             if !searchQuery.isEmpty {
