@@ -25,7 +25,9 @@ abstract_target "App" do
   target "Authorization" do
     project './Authorization/Authorization.xcodeproj'
     workspace './Authorization/Authorization.xcodeproj'
-    
+
+    pod 'MSAL'
+
     target 'AuthorizationTests' do
       pod 'SwiftyMocky', :git => 'https://github.com/MakeAWishFoundation/SwiftyMocky.git', :tag => '4.2.0'
     end
