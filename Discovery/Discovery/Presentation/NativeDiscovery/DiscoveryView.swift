@@ -8,8 +8,8 @@ import Core
 import OEXFoundation
 import Theme
 
-private let heroHeight: CGFloat = 200
-private let heroOverlap: CGFloat = 28
+private let heroHeight: CGFloat = 220
+private let heroOverlap: CGFloat = 24
 
 public struct DiscoveryView: View {
 
@@ -35,24 +35,26 @@ public struct DiscoveryView: View {
     public var body: some View {
         ZStack(alignment: .top) {
 
-            // Colorea el área de la status bar con verde (igual que Android)
+            // 1. Fondo verde — cubre toda la pantalla incluyendo status bar (igual que Dashboard)
             Theme.Colors.brandGreenDark
-                .ignoresSafeArea(.all, edges: .top)
+                .ignoresSafeArea()
 
-            // [A] Hero verde — fijo, no scrollea
-            DiscoveryHeroView {
-                router.showSettings()
-            }
+            // 2. Franja guinda — fija en el borde físico superior (bajo Dynamic Island)
+            Theme.Colors.guindaColor
+                .frame(height: 4)
+                .ignoresSafeArea(edges: .top)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .zIndex(10)
 
-            // [B] Contenido scrollable
+            // 3. Todo el contenido scrollea (hero + card cream) — igual que Dashboard
             ScrollView {
-                LazyVStack(spacing: 0) {
+                VStack(spacing: 0) {
 
-                    // Espaciador para que el contenido empiece bajo el hero
-                    Color.clear
-                        .frame(height: heroHeight - heroOverlap)
+                    // Hero (scrollea con el contenido)
+                    DiscoveryHeroView()
+                        .frame(height: heroHeight)
 
-                    // Sheet cream con bordes redondeados arriba
+                    // Sheet cream — solapa el hero por heroOverlap
                     VStack(spacing: 0) {
 
                         // Drag handle
@@ -125,19 +127,20 @@ public struct DiscoveryView: View {
                         }
 
                         // Indicador de carga para paginación
-                        if viewModel.nextPage <= viewModel.totalPages {
+                        if viewModel.nextPage <= viewModel.totalPages && !viewModel.courses.isEmpty {
                             ProgressView()
                                 .padding(.top, 20)
                                 .tint(Theme.Colors.brandGreen)
                         }
 
-                        // Espaciador inferior (fondo brandCream)
+                        // Relleno inferior en cream para que llegue hasta la tab bar
                         Theme.Colors.brandCream
-                            .frame(height: 80)
+                            .frame(maxWidth: .infinity, minHeight: 200)
                     }
                     .frame(maxWidth: .infinity)
                     .background(Theme.Colors.brandCream)
                     .clipShape(DiscoverySheetShape(radius: 32))
+                    .padding(.top, -heroOverlap)
                 }
             }
             .refreshable {
@@ -145,8 +148,34 @@ public struct DiscoveryView: View {
                 viewModel.nextPage = 1
                 await viewModel.discovery(page: 1, withProgress: false)
             }
+            .zIndex(1)
 
-            // [C] Panel de login si no está autenticado
+            // 4. Botón settings — overlay fijo, siempre visible sobre el hero
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: { router.showSettings() }) {
+                        Image(systemName: "person.crop.circle.badge.gear")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 40, height: 40)
+                    .background(Color.white.opacity(0.14))
+                    .overlay(
+                        Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1)
+                    )
+                    .contentShape(Circle())
+                    .clipShape(Circle())
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                Spacer()
+            }
+            .zIndex(5)
+
+            // 5. Panel de login si no está autenticado
             if !viewModel.userloggedIn {
                 LogistrationBottomView(
                     ssoEnabled: viewModel.config.uiComponents.samlSSOLoginEnabled
@@ -161,17 +190,19 @@ public struct DiscoveryView: View {
                     }
                 }
                 .frame(maxHeight: .infinity, alignment: .bottom)
+                .zIndex(2)
             }
 
-            // [D] Offline snackbar
+            // 6. Offline snackbar
             OfflineSnackBarView(
                 connectivity: viewModel.connectivity,
                 reloadAction: {
                     await viewModel.discovery(page: 1, withProgress: false)
                 }
             )
+            .zIndex(3)
 
-            // [E] Error snackbar
+            // 7. Error snackbar
             if viewModel.showError {
                 VStack {
                     Spacer()
@@ -185,11 +216,10 @@ public struct DiscoveryView: View {
                         viewModel.errorMessage = nil
                     }
                 }
+                .zIndex(3)
             }
-
         }
         .navigationBarHidden(sourceScreen != .startup)
-        .background(Theme.Colors.brandCream.ignoresSafeArea())
         .onFirstAppear {
             if !searchQuery.isEmpty {
                 router.showDiscoverySearch(searchQuery: searchQuery)
