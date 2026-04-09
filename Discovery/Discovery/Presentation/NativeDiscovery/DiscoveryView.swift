@@ -2,40 +2,24 @@
 //  DiscoveryView.swift
 //  Discovery
 //
-//  Created by Vladimir Chekyrta on 15.09.2022.
-//
 
 import SwiftUI
 import Core
 import OEXFoundation
 import Theme
 
+private let heroHeight: CGFloat = 200
+private let heroOverlap: CGFloat = 28
+
 public struct DiscoveryView: View {
-    
+
     @StateObject
     private var viewModel: DiscoveryViewModel
     private var router: DiscoveryRouter
     @State private var searchQuery: String = ""
-    @State private var isRefreshing: Bool = false
-    
+
     private var sourceScreen: LogistrationSourceScreen
-    
-    @Environment(\.isHorizontal) private var isHorizontal
-    @Environment(\.presentationMode) private var presentationMode
-    
-    private let discoveryNew: some View = VStack(alignment: .leading) {
-        Text(DiscoveryLocalization.Header.title1)
-            .font(Theme.Fonts.displaySmall)
-            .foregroundColor(Theme.Colors.textPrimary)
-            .accessibilityIdentifier("title_text")
-        Text(DiscoveryLocalization.Header.title2)
-            .font(Theme.Fonts.titleSmall)
-            .foregroundColor(Theme.Colors.textPrimary)
-            .accessibilityIdentifier("subtitle_text")
-    }.listRowBackground(Color.clear)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(DiscoveryLocalization.Header.title1 + DiscoveryLocalization.Header.title2)
-    
+
     public init(
         viewModel: DiscoveryViewModel,
         router: DiscoveryRouter,
@@ -47,107 +31,119 @@ public struct DiscoveryView: View {
         self._searchQuery = State<String>(initialValue: searchQuery ?? "")
         self.sourceScreen = sourceScreen
     }
-    
-    public var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .top) {
-                
-                // MARK: - Page name
-                VStack(alignment: .center) {
-                    
-                    // MARK: - Search fake field
-                    HStack(spacing: 11) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(Theme.Colors.textSecondary)
-                            .padding(.leading, 16)
-                            .padding(.top, 1)
-                            .accessibilityIdentifier("search_image")
-                        Text(DiscoveryLocalization.search)
-                            .foregroundColor(Theme.Colors.textSecondary)
-                            .accessibilityIdentifier("search_text")
-                        Spacer()
-                    }
-                    .onTapGesture {
-                        router.showDiscoverySearch(searchQuery: searchQuery)
-                        viewModel.discoverySearchBarClicked()
-                    }
-                    .frame(minHeight: 48)
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        Theme.Shapes.textInputShape
-                            .fill(Theme.Colors.textInputUnfocusedBackground)
-                    )
-                    .overlay(
-                        Theme.Shapes.textInputShape
-                            .stroke(lineWidth: 1)
-                            .fill(Theme.Colors.textInputUnfocusedStroke)
-                    ).onTapGesture {
-                        router.showDiscoverySearch(searchQuery: searchQuery)
-                        viewModel.discoverySearchBarClicked()
-                    }
-                    .padding(.top, 11.5)
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 20)
-                    .frameLimit(width: proxy.size.width)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(DiscoveryLocalization.search)
-                    
-                    ZStack {
-                        ScrollView {
-                            LazyVStack(spacing: 0) {
-                                HStack {
-                                    discoveryNew
-                                        .padding(.horizontal, 20)
-                                        .padding(.bottom, 20)
-                                    Spacer()
-                                }.padding(.leading, 10)
-                                let useRelativeDates = viewModel.storage.useRelativeDates
-                                ForEach(Array(viewModel.courses.enumerated()), id: \.offset) { index, course in
-                                    CourseCellView(
-                                        model: course,
-                                        type: .discovery,
-                                        index: index,
-                                        cellsCount: viewModel.courses.count,
-                                        useRelativeDates: useRelativeDates
-                                    ).padding(.horizontal, 24)
-                                        .onAppear {
-                                            Task {
-                                                await viewModel.getDiscoveryCourses(index: index)
-                                            }
-                                        }
-                                        .onTapGesture {
-                                            viewModel.discoveryCourseClicked(
-                                                courseID: course.courseID,
-                                                courseName: course.name
-                                            )
-                                            viewModel.router.showCourseDetais(
-                                                courseID: course.courseID,
-                                                title: course.name
-                                            )
-                                        }
-                                }
-                                
-                                // MARK: - ProgressBar
-                                if viewModel.nextPage <= viewModel.totalPages {
-                                    VStack(alignment: .center) {
-                                        ProgressBar(size: 40, lineWidth: 8)
-                                            .padding(.top, 20)
-                                    }.frame(maxWidth: .infinity,
-                                            maxHeight: .infinity)
-                                }
-                                VStack {}.frame(height: 40)
-                            }
-                            .frameLimit(width: proxy.size.width)
-                        }.refreshable {
-                            viewModel.totalPages = 1
-                            viewModel.nextPage = 1
-                            Task {
-                                await viewModel.discovery(page: 1, withProgress: false)
-                            }
-                        }
-                    }
-                }.accessibilityAction {}
 
+    public var body: some View {
+        GeometryReader { _ in
+            ZStack(alignment: .top) {
+
+                // [A] Hero verde — fijo, no scrollea
+                DiscoveryHeroView {
+                    router.showSettings()
+                }
+
+                // [B] Contenido scrollable
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+
+                        // Espaciador para que el contenido empiece bajo el hero
+                        Color.clear
+                            .frame(height: heroHeight - heroOverlap)
+
+                        // Sheet cream con bordes redondeados arriba
+                        VStack(spacing: 0) {
+
+                            // Drag handle
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Theme.Colors.brandHandle)
+                                .frame(width: 36, height: 4)
+                                .padding(.top, 12)
+                                .padding(.bottom, 16)
+
+                            // Barra de búsqueda (tap → SearchView)
+                            HStack(spacing: 10) {
+                                Image(systemName: "magnifyingglass")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 18, height: 18)
+                                    .foregroundColor(Theme.Colors.brandGreen)
+                                Text("Buscar cursos...")
+                                    .font(Theme.Fonts.ttRoundsBody(13))
+                                    .foregroundColor(Theme.Colors.brandCardSecondary)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 16)
+                            .frame(height: 46)
+                            .background(Color.white)
+                            .clipShape(Capsule())
+                            .onTapGesture {
+                                router.showDiscoverySearch(searchQuery: searchQuery)
+                                viewModel.discoverySearchBarClicked()
+                            }
+                            .padding(.horizontal, 20)
+
+                            // Header "Todos los cursos" + contador
+                            HStack {
+                                Text("Todos los cursos")
+                                    .font(Theme.Fonts.ttRoundsCompressedMedium(20))
+                                    .foregroundColor(Theme.Colors.brandCardPrimary)
+                                    .kerning(-0.2)
+                                Spacer()
+                                Text("\(viewModel.courses.count) disponibles")
+                                    .font(Theme.Fonts.ttRoundsBody(12))
+                                    .foregroundColor(Theme.Colors.brandCardSecondary)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.top, 20)
+                            .padding(.bottom, 12)
+
+                            // Lista de tarjetas
+                            ForEach(Array(viewModel.courses.enumerated()), id: \.offset) { index, course in
+                                DiscoveryCourseCard(
+                                    course: course,
+                                    index: index,
+                                    onClick: {
+                                        viewModel.discoveryCourseClicked(
+                                            courseID: course.courseID,
+                                            courseName: course.name
+                                        )
+                                        router.showCourseDetais(
+                                            courseID: course.courseID,
+                                            title: course.name
+                                        )
+                                    }
+                                )
+                                .padding(.horizontal, 20)
+                                .padding(.bottom, 10)
+                                .onAppear {
+                                    Task {
+                                        await viewModel.getDiscoveryCourses(index: index)
+                                    }
+                                }
+                            }
+
+                            // Indicador de carga para paginación
+                            if viewModel.nextPage <= viewModel.totalPages {
+                                ProgressView()
+                                    .padding(.top, 20)
+                                    .tint(Theme.Colors.brandGreen)
+                            }
+
+                            // Espaciador inferior (fondo brandCream)
+                            Theme.Colors.brandCream
+                                .frame(height: 80)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background(Theme.Colors.brandCream)
+                        .clipShape(DiscoverySheetShape(radius: 32))
+                    }
+                }
+                .refreshable {
+                    viewModel.totalPages = 1
+                    viewModel.nextPage = 1
+                    await viewModel.discovery(page: 1, withProgress: false)
+                }
+
+                // [C] Panel de login si no está autenticado
                 if !viewModel.userloggedIn {
                     LogistrationBottomView(
                         ssoEnabled: viewModel.config.uiComponents.samlSSOLoginEnabled
@@ -163,16 +159,17 @@ public struct DiscoveryView: View {
                     }
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-            }.padding(.top, 8)
 
-            // MARK: - Offline mode SnackBar
+            }
+            // [D] Offline snackbar
             OfflineSnackBarView(
                 connectivity: viewModel.connectivity,
                 reloadAction: {
                     await viewModel.discovery(page: 1, withProgress: false)
-                })
+                }
+            )
 
-            // MARK: - Error Alert
+            // [E] Error snackbar
             if viewModel.showError {
                 VStack {
                     Spacer()
@@ -188,9 +185,10 @@ public struct DiscoveryView: View {
                 }
             }
         }
-        .navigationBarHidden(sourceScreen != .startup)
+        .navigationBarHidden(true)
+        .background(Theme.Colors.brandCream.ignoresSafeArea())
         .onFirstAppear {
-            if !(searchQuery.isEmpty) {
+            if !searchQuery.isEmpty {
                 router.showDiscoverySearch(searchQuery: searchQuery)
                 searchQuery = ""
             }
@@ -201,28 +199,40 @@ public struct DiscoveryView: View {
                 }
             }
         }
-        .background(Theme.Colors.background.ignoresSafeArea())
+    }
+}
+
+// MARK: - Shape para esquinas redondeadas solo arriba
+
+private struct DiscoverySheetShape: Shape {
+    let radius: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: [.topLeft, .topRight],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
 
 #if DEBUG
 struct DiscoveryView_Previews: PreviewProvider {
     static var previews: some View {
-        let vm = DiscoveryViewModel(router: DiscoveryRouterMock(),
-                                    config: ConfigMock(),
-                                    interactor: DiscoveryInteractor.mock,
-                                    connectivity: Connectivity(),
-                                    analytics: DiscoveryAnalyticsMock(),
-                                    storage: CoreStorageMock())
+        let vm = DiscoveryViewModel(
+            router: DiscoveryRouterMock(),
+            config: ConfigMock(),
+            interactor: DiscoveryInteractor.mock,
+            connectivity: Connectivity(),
+            analytics: DiscoveryAnalyticsMock(),
+            storage: CoreStorageMock()
+        )
         let router = DiscoveryRouterMock()
-        
+
         DiscoveryView(viewModel: vm, router: router)
             .preferredColorScheme(.light)
             .previewDisplayName("DiscoveryView Light")
-        
-        DiscoveryView(viewModel: vm, router: router)
-            .preferredColorScheme(.dark)
-            .previewDisplayName("DiscoveryView Dark")
     }
 }
 #endif
