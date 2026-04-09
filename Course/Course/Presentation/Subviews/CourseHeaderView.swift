@@ -175,10 +175,13 @@ struct CourseHeaderView: View {
             Text(org)
                 .font(Theme.Fonts.ttRoundsBody(11, weight: 600))
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .truncationMode(.tail)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
         .background(Capsule().fill(Theme.Colors.brandGreen))
+        .frame(maxWidth: containerWidth * 0.55, alignment: .leading)
         .padding(.horizontal, 24)
         .padding(.top, 8)
         .allowsHitTesting(false)
@@ -199,6 +202,19 @@ struct CourseHeaderView: View {
         ScrollSlidingTabBar(
             selection: $viewModel.selection,
             tabs: CourseTab.allCases.map { ($0.title, $0.image) },
+            style: ScrollSlidingTabBar.Style(
+                font: Theme.Fonts.titleSmall,
+                selectedFont: Theme.Fonts.titleSmall,
+                activeAccentColor: Theme.Colors.brandGreen,
+                inactiveAccentColor: Theme.Colors.background,
+                indicatorHeight: 0,
+                borderColor: Theme.Colors.brandGreen,
+                borderHeight: 1,
+                buttonHInset: 4,
+                buttonVInset: 2,
+                buttonLeadingPadding: 8,
+                buttonTrailingPadding: 8
+            ),
             containerWidth: containerWidth
         ) { newValue in
             isAnimatingForTap = true
