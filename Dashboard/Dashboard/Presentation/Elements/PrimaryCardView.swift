@@ -2,7 +2,7 @@
 //  PrimaryCardView.swift
 //  Dashboard
 //
-//  Created by  Stepanok Ivan on 16.04.2024.
+//  Tarjeta del curso primario — replica PrimaryCourseCard de Android
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import Theme
 import Core
 
 public struct PrimaryCardView: View {
-    
+
     private let courseName: String
     private let org: String
     private let courseImage: String
@@ -24,11 +24,12 @@ public struct PrimaryCardView: View {
     private let canResume: Bool
     private let resumeTitle: String?
     private let useRelativeDates: Bool
+    private let isSelfPaced: Bool
     private var assignmentAction: (String?) -> Void
     private var openCourseAction: () -> Void
     private var resumeAction: () -> Void
     @Environment(\.isHorizontal) var isHorizontal
-    
+
     public init(
         courseName: String,
         org: String,
@@ -42,6 +43,7 @@ public struct PrimaryCardView: View {
         canResume: Bool,
         resumeTitle: String?,
         useRelativeDates: Bool,
+        isSelfPaced: Bool = false,
         assignmentAction: @escaping (String?) -> Void,
         openCourseAction: @escaping () -> Void,
         resumeAction: @escaping () -> Void
@@ -58,240 +60,174 @@ public struct PrimaryCardView: View {
         self.canResume = canResume
         self.resumeTitle = resumeTitle
         self.useRelativeDates = useRelativeDates
+        self.isSelfPaced = isSelfPaced
         self.assignmentAction = assignmentAction
         self.openCourseAction = openCourseAction
         self.resumeAction = resumeAction
     }
-    
+
+    private var progressValue: Double {
+        guard progressPossible > 0 else { return 0 }
+        return Double(progressEarned) / Double(progressPossible)
+    }
+
+    private var hasPastAssignment: Bool { !pastAssignments.isEmpty }
+
+    /// Fecha formateada igual que Android TimeUtils.getCourseFormattedDate:
+    /// "A tu ritmo · Ends Nov 29, 2026" / "Con fechas · Ended Nov 29, 2026"
+    private var formattedCourseDate: String? {
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: "en_US")
+        fmt.dateFormat = "MMM d, yyyy"
+        let paceLabel = isSelfPaced ? "A tu ritmo" : "Con fechas"
+        if let end = courseEndDate {
+            let endLabel = Date() < end ? "Ends" : "Ended"
+            return "\(paceLabel)  ·  \(endLabel) \(fmt.string(from: end))"
+        } else if let start = courseStartDate {
+            return "\(paceLabel)  ·  Starts \(fmt.string(from: start))"
+        }
+        return paceLabel
+    }
+
     public var body: some View {
-        ZStack {
-            if isHorizontal {
-                horizontalLayout
-            } else {
-                verticalLayout
-            }
-        }
-        .background(Theme.Colors.courseCardBackground)
-        .cornerRadius(8)
-        .shadow(color: Theme.Colors.courseCardShadow, radius: 4, x: 0, y: 3)
-        .padding(20)
-    }
-    
-    @ViewBuilder
-    var verticalLayout: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Group {
-                courseBanner
-                    .frame(height: 140)
+        VStack(spacing: 0) {
+            // ── Bloque superior: imagen + info ────────────────────────────────
+            HStack(spacing: 0) {
+                KFImage(URL(string: courseImage))
+                    .onFailureImage(CoreAssets.noCourseImage.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 140, height: 140)
                     .clipped()
-                ProgressLineView(progressEarned: progressEarned, progressPossible: progressPossible)
-                courseTitle
-            }
-            .onTapGesture {
-                openCourseAction()
-            }
-            assignments
-        }
-    }
-    
-    @ViewBuilder
-    var horizontalLayout: some View {
-        HStack(alignment: .top, spacing: 0) {
-            VStack(alignment: .leading, spacing: 0) {
-                GeometryReader { proxy in
-                    courseBanner
-                        .frame(width: proxy.size.width)
-                        .clipped()
-                }
-                ProgressLineView(progressEarned: progressEarned, progressPossible: progressPossible)
-            }
-            .onTapGesture {
-                openCourseAction()
-            }
-            VStack(alignment: .leading, spacing: 0) {
-                ZStack(alignment: .leading) {
-                    courseTitle
+                    .clipShape(
+                        UnevenRoundedRectangle(
+                            topLeadingRadius: 20,
+                            bottomLeadingRadius: 0,
+                            bottomTrailingRadius: 0,
+                            topTrailingRadius: 0
+                        )
+                    )
+                    .accessibilityIdentifier("course_image")
+                    .onTapGesture { openCourseAction() }
+
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(org)
+                        .font(Theme.Fonts.ttRoundsBody(9, weight: 600))
+                        .foregroundColor(Theme.Colors.brandCardSecondary)
+                        .kerning(0.3)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Text(courseName)
+                        .font(Theme.Fonts.ttRoundsCompressedMedium(14))
+                        .foregroundColor(Theme.Colors.brandCardPrimary)
+                        .kerning(-0.2)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Spacer()
+
+                    if let dateStr = formattedCourseDate {
+                        Text(dateStr)
+                            .font(Theme.Fonts.ttRoundsBody(10))
+                            .foregroundColor(Theme.Colors.brandCardSecondary)
+                            .lineLimit(1)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .background(
-                    Theme.Colors.background // need for tap area
-                )
-                
-                .onTapGesture {
-                    openCourseAction()
-                }
-                assignments
+                .padding(.horizontal, 14)
+                .padding(.vertical, 14)
+                .onTapGesture { openCourseAction() }
             }
-        }
-        .frame(minHeight: 240)
-    }
-    
-    private var assignments: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // pastAssignments
-            if pastAssignments.count == 1, let pastAssignment = pastAssignments.first {
-                courseButton(
-                    title: pastAssignment.title,
-                    description: DashboardLocalization.Learn.PrimaryCard.onePastAssignment,
-                    icon: CoreAssets.warning.swiftUIImage,
-                    selected: false,
-                    action: { assignmentAction(pastAssignments.first?.firstComponentBlockId) }
-                )
-            } else if pastAssignments.count > 1 {
-                courseButton(
-                    title: DashboardLocalization.Learn.PrimaryCard.viewAssignments,
-                    description: DashboardLocalization.Learn.PrimaryCard.pastAssignments(pastAssignments.count),
-                    icon: CoreAssets.warning.swiftUIImage,
-                    selected: false,
-                    action: { assignmentAction(nil) }
-                )
-            }
-            
-            // futureAssignment
-            if !futureAssignments.isEmpty {
-                if futureAssignments.count == 1, let futureAssignment = futureAssignments.first {
-                    courseButton(
-                        title: futureAssignment.title,
-                        description: futureAssignment.date.dateToString(
-                            style: .shortWeekdayMonthDayYear,
-                            useRelativeDates: useRelativeDates,
-                            dueIn: true
-                        ),
-                        icon: CoreAssets.chapter.swiftUIImage,
-                        selected: false,
-                        action: {
-                            assignmentAction(futureAssignments.first?.firstComponentBlockId)
-                        }
+            .frame(height: 140)
+
+            // ── Divisor ───────────────────────────────────────────────────────
+            Theme.Colors.brandDivider
+                .frame(height: 1)
+
+            // ── Pill de tarea pendiente ───────────────────────────────────────
+            if hasPastAssignment {
+                Button(action: {
+                    if pastAssignments.count == 1 {
+                        assignmentAction(pastAssignments.first?.firstComponentBlockId)
+                    } else {
+                        assignmentAction(nil)
+                    }
+                }) {
+                    HStack(spacing: 5) {
+                        Circle()
+                            .fill(Theme.Colors.guindaColor)
+                            .frame(width: 5, height: 5)
+                        Text(pastAssignments.count == 1
+                             ? "1 tarea pendiente"
+                             : "\(pastAssignments.count) tareas pendientes")
+                            .font(Theme.Fonts.ttRoundsBody(10, weight: 600))
+                            .foregroundColor(Theme.Colors.guindaColor)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(
+                        Capsule().fill(Theme.Colors.guindaColor.opacity(0.08))
                     )
-                } else if futureAssignments.count > 1 {
-                    if let firtsData = futureAssignments.sorted(by: { $0.date < $1.date }).first {
-                        courseButton(
-                            title: DashboardLocalization.Learn.PrimaryCard.futureAssignments(
-                                futureAssignments.count,
-                                firtsData.date.dateToString(style: .lastPost, useRelativeDates: useRelativeDates)
-                            ),
-                            description: nil,
-                            icon: CoreAssets.chapter.swiftUIImage,
-                            selected: false,
-                            action: {
-                                assignmentAction(nil)
-                            }
-                        )
+                }
+                .padding(.horizontal, 12)
+                .padding(.top, 10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+
+            // ── Barra de progreso + % + botón ─────────────────────────────────
+            HStack(spacing: 10) {
+                // Barra de progreso
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Theme.Colors.brandProgressTrack)
+                            .frame(height: 4)
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Theme.Colors.brandGreen, Theme.Colors.brandGreenLighter],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(width: geo.size.width * CGFloat(progressValue), height: 4)
                     }
                 }
-            }
-            
-            // ResumeButton
-            if canResume {
-                courseButton(
-                    title: resumeTitle ?? "",
-                    description: DashboardLocalization.Learn.PrimaryCard.resume,
-                    icon: CoreAssets.resumeCourse.swiftUIImage,
-                    selected: true,
-                    bgColor: Theme.Colors.accentButtonColor,
-                    action: { resumeAction() }
-                )
-            } else {
-                courseButton(
-                    title: DashboardLocalization.Learn.PrimaryCard.startCourse,
-                    description: nil,
-                    icon: CoreAssets.resumeCourse.swiftUIImage,
-                    selected: true,
-                    bgColor: Theme.Colors.accentButtonColor,
-                    action: { resumeAction() }
-                )
-            }
-        }
-    }
-    
-    private func courseButton(
-        title: String,
-        description: String?,
-        icon: Image,
-        selected: Bool,
-        bgColor: Color = Theme.Colors.primaryCardCautionBG,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: {
-            action()
-        }, label: {
-            ZStack(alignment: .top) {
-                Rectangle().frame(height: selected ? 0 : 1)
-                    .foregroundStyle(Theme.Colors.cardViewStroke)
-                HStack(alignment: .center) {
-                    VStack(alignment: .leading) {
-                        HStack(spacing: 0) {
-                            icon
-                                .renderingMode(.template)
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .foregroundStyle(foregroundColor(selected))
-                                .padding(12)
-                            
-                            VStack(alignment: .leading, spacing: 6) {
-                                if let description {
-                                    Text(description)
-                                        .font(Theme.Fonts.labelSmall)
-                                        .multilineTextAlignment(.leading)
-                                        .lineLimit(1)
-                                        .foregroundStyle(foregroundColor(selected))
-                                }
-                                Text(title)
-                                    .font(Theme.Fonts.titleSmall)
-                                    .multilineTextAlignment(.leading)
-                                    .lineLimit(1)
-                                    .foregroundStyle(foregroundColor(selected))
-                            }
-                            .padding(.top, 2)
-                        }
+                .frame(height: 4)
+
+                Text("\(Int(progressValue * 100))%")
+                    .font(Theme.Fonts.ttRoundsBody(10, weight: 700))
+                    .foregroundColor(Theme.Colors.brandCardMedium)
+                    .fixedSize()
+
+                // Botón Continuar / Iniciar
+                Button(action: { resumeAction() }) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.white)
+                        Text(canResume ? "Continuar" : "Iniciar")
+                            .font(Theme.Fonts.ttRoundsBody(11, weight: 500))
+                            .foregroundColor(.white)
                     }
-                    .padding(.bottom, 8)
-                    Spacer()
-                    CoreAssets.chevronRight.swiftUIImage
-                        .foregroundStyle(foregroundColor(selected))
-                        .padding(8)
+                    .padding(.horizontal, 14)
+                    .frame(height: 34)
+                    .background(
+                        RoundedRectangle(cornerRadius: 9)
+                            .fill(Theme.Colors.brandGreen)
+                    )
                 }
-                .padding(.top, 8)
-                .padding(.bottom, selected ? 10 : 0)
-            }.background(bgColor)
-        })
-    }
-    
-    private func foregroundColor(_ selected: Bool) -> SwiftUI.Color {
-        return selected ? Theme.Colors.white : Theme.Colors.textPrimary
-    }
-    
-    private var courseBanner: some View {
-        return KFImage(URL(string: courseImage))
-            .onFailureImage(CoreAssets.noCourseImage.image)
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .accessibilityElement(children: .ignore)
-            .accessibilityIdentifier("course_image")
-    }
-    
-    private var courseTitle: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(org)
-                .font(Theme.Fonts.labelMedium)
-                .foregroundStyle(Theme.Colors.textSecondaryLight)
-            Text(courseName)
-                .font(Theme.Fonts.titleLarge)
-                .foregroundStyle(Theme.Colors.textPrimary)
-                .lineLimit(3)
-            if let courseEndDate {
-                Text(courseEndDate.dateToString(style: .courseEndsMonthDDYear, useRelativeDates: useRelativeDates))
-                    .font(Theme.Fonts.labelMedium)
-                    .foregroundStyle(Theme.Colors.textSecondaryLight)
-            } else if let courseStartDate {
-                Text(courseStartDate.dateToString(style: .courseStartsMonthDDYear, useRelativeDates: useRelativeDates))
-                    .font(Theme.Fonts.labelMedium)
-                    .foregroundStyle(Theme.Colors.textSecondaryLight)
             }
+            .padding(.horizontal, 12)
+            .padding(.top, 10)
+            .padding(.bottom, 12)
         }
-        .padding(.top, 10)
-        .padding(.horizontal, 12)
-        .padding(.bottom, 16)
+        .background(Color.white)
+        .cornerRadius(20)
+        .shadow(color: Theme.Colors.courseCardShadow, radius: 4, x: 1, y: 2)
+        .padding(.horizontal, 20)
     }
 }
 
@@ -300,28 +236,19 @@ public struct PrimaryCardView: View {
 struct PrimaryCardView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
-            Theme.Colors.background
+            Theme.Colors.brandCream
             PrimaryCardView(
-                courseName: "Course Title",
-                org: "Organization",
+                courseName: "Introducción a la Programación con Python",
+                org: "UNAM",
                 courseImage: "https://thumbs.dreamstime.com/b/logo-edx-samsung-tablet-edx-massive-open-online-course-mooc-provider-hosts-online-university-level-courses-wide-117763805.jpg",
                 courseStartDate: nil,
                 courseEndDate: Date(),
-                futureAssignments: [
-                    Assignment(
-                        type: "Lesson",
-                        title: "HomeWork",
-                        description: "Some description",
-                        date: Date().addingTimeInterval(64000 * 3),
-                        complete: false,
-                        firstComponentBlockId: "123"
-                    )
-                ],
+                futureAssignments: [],
                 pastAssignments: [],
-                progressEarned: 10,
+                progressEarned: 12,
                 progressPossible: 45,
                 canResume: true,
-                resumeTitle: "Course Chapter 1",
+                resumeTitle: "Capítulo 3",
                 useRelativeDates: false,
                 assignmentAction: { _ in },
                 openCourseAction: {},

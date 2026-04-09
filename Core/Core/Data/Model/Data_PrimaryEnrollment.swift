@@ -213,7 +213,8 @@ public extension DataLayer.PrimaryEnrollment {
             progressEarned: primary.progress?.assignmentsCompleted ?? 0,
             progressPossible: primary.progress?.totalAssignmentsCount ?? 0,
             lastVisitedBlockID: primary.courseStatus?.lastVisitedBlockID,
-            resumeTitle: primary.courseStatus?.lastVisitedUnitDisplayName
+            resumeTitle: primary.courseStatus?.lastVisitedUnitDisplayName,
+            isSelfPaced: primary.course?.isSelfPaced ?? false
         )
     }
     

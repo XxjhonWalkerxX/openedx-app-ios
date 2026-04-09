@@ -35,7 +35,8 @@ public struct PrimaryCourse: Hashable, Sendable {
     public let progressPossible: Int
     public let lastVisitedBlockID: String?
     public let resumeTitle: String?
-    
+    public let isSelfPaced: Bool
+
     public init(
         name: String,
         org: String,
@@ -49,7 +50,8 @@ public struct PrimaryCourse: Hashable, Sendable {
         progressEarned: Int,
         progressPossible: Int,
         lastVisitedBlockID: String?,
-        resumeTitle: String?
+        resumeTitle: String?,
+        isSelfPaced: Bool = false
     ) {
         self.name = name
         self.org = org
@@ -64,6 +66,7 @@ public struct PrimaryCourse: Hashable, Sendable {
         self.progressPossible = progressPossible
         self.lastVisitedBlockID = lastVisitedBlockID
         self.resumeTitle = resumeTitle
+        self.isSelfPaced = isSelfPaced
     }
 }
 

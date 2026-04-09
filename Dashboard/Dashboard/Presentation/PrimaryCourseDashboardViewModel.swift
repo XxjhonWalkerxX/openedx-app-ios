@@ -17,6 +17,10 @@ public class PrimaryCourseDashboardViewModel: ObservableObject {
     var totalPages = 1
     @Published public private(set) var fetchInProgress = true
     @Published var enrollments: PrimaryEnrollment?
+
+    var userName: String {
+        storage.user?.name ?? ""
+    }
     @Published var showError: Bool = false
     @Published var updateNeeded: Bool = false
     private var updateShowedOnce: Bool = false
