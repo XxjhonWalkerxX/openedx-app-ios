@@ -37,6 +37,7 @@
 		E0B9F69E2B4D57F800168366 /* CourseDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6982B4D57F800168366 /* CourseDetailsView.swift */; };
 		E0B9F69F2B4D57F800168366 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6992B4D57F800168366 /* SearchViewModel.swift */; };
 		E0B9F6A02B4D57F800168366 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F69A2B4D57F800168366 /* DiscoveryView.swift */; };
+		9CAD6339F6394AF0AE219BF4 /* DiscoveryHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */; };
 		E0B9F6A12B4D57F800168366 /* CourseDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F69B2B4D57F800168366 /* CourseDetailsViewModel.swift */; };
 		E0B9F6A42B4D59E000168366 /* CourseDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6A32B4D59E000168366 /* CourseDetails.swift */; };
 		E0B9F6A62B4D620100168366 /* Data_CourseDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6A52B4D620100168366 /* Data_CourseDetailsResponse.swift */; };
@@ -115,6 +116,7 @@
 		E0B9F6982B4D57F800168366 /* CourseDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetailsView.swift; sourceTree = "<group>"; };
 		E0B9F6992B4D57F800168366 /* SearchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		E0B9F69A2B4D57F800168366 /* DiscoveryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
+		714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryHeroView.swift; sourceTree = "<group>"; };
 		E0B9F69B2B4D57F800168366 /* CourseDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetailsViewModel.swift; sourceTree = "<group>"; };
 		E0B9F6A32B4D59E000168366 /* CourseDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetails.swift; sourceTree = "<group>"; };
 		E0B9F6A52B4D620100168366 /* Data_CourseDetailsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data_CourseDetailsResponse.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				E0B9F6982B4D57F800168366 /* CourseDetailsView.swift */,
 				E0B9F6992B4D57F800168366 /* SearchViewModel.swift */,
 				E0B9F69A2B4D57F800168366 /* DiscoveryView.swift */,
+				714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */,
 				E0B9F69B2B4D57F800168366 /* CourseDetailsViewModel.swift */,
 			);
 			path = NativeDiscovery;
@@ -518,13 +521,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -582,6 +581,7 @@
 				E0B9F69D2B4D57F800168366 /* DiscoveryViewModel.swift in Sources */,
 				0283347728D499BC00C828FC /* DiscoveryInteractor.swift in Sources */,
 				E0B9F6A02B4D57F800168366 /* DiscoveryView.swift in Sources */,
+				9CAD6339F6394AF0AE219BF4 /* DiscoveryHeroView.swift in Sources */,
 				E0B9F6A12B4D57F800168366 /* CourseDetailsViewModel.swift in Sources */,
 				02F3BFDF29252F2F0051930C /* DiscoveryRouter.swift in Sources */,
 				E0D586252B300134009B4BA7 /* URL+PathExtension.swift in Sources */,
