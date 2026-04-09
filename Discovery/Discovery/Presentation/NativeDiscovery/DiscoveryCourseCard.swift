@@ -66,7 +66,6 @@ struct DiscoveryCourseCard: View {
                             .kerning(-0.2)
                             .lineSpacing(4)
                             .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
 
                         Spacer()
 
