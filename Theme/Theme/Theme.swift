@@ -92,12 +92,28 @@ public struct Theme: Sendable {
         nonisolated(unsafe) public private(set) static var guindaColor = ThemeAssets.guindaColor.swiftUIColor
 
         // MARK: - @prende.mx Brand Colors
-        public static let brandGreenDark  = Color(red: 0.114, green: 0.302, blue: 0.259)  // #1D4D42
-        public static let brandGreen      = Color(red: 0.169, green: 0.412, blue: 0.349)  // #2B6959
-        public static let brandGreenLight = Color(red: 0.239, green: 0.541, blue: 0.447)  // #3D8A72
-        public static let brandCream      = Color(red: 0.925, green: 0.914, blue: 0.894)  // #ECE9E4
-        public static let brandCreamStrong = Color(red: 0.875, green: 0.831, blue: 0.761) // #DFD4C2
-        public static let brandHandle     = Color(red: 0.784, green: 0.765, blue: 0.729)  // #C8C3BA
+        public static let brandGreenDark    = Color(red: 0.114, green: 0.302, blue: 0.259)  // #1D4D42
+        public static let brandGreen        = Color(red: 0.169, green: 0.412, blue: 0.349)  // #2B6959
+        public static let brandGreenLight   = Color(red: 0.239, green: 0.541, blue: 0.447)  // #3D8A72
+        public static let brandGreenLighter = Color(red: 0.357, green: 0.722, blue: 0.604)  // #5BB89A
+        public static let brandCream        = Color(red: 0.925, green: 0.914, blue: 0.894)  // #ECE9E4
+        public static let brandCreamStrong  = Color(red: 0.875, green: 0.831, blue: 0.761)  // #DFD4C2
+        public static let brandHandle       = Color(red: 0.784, green: 0.765, blue: 0.729)  // #C8C3BA
+        public static let brandWarmDark     = Color(red: 0.239, green: 0.188, blue: 0.125)  // #3D3020
+
+        // Colores de texto en tarjetas
+        public static let brandCardPrimary   = Color(red: 0.110, green: 0.106, blue: 0.094) // #1C1B18
+        public static let brandCardMedium    = Color(red: 0.353, green: 0.337, blue: 0.314) // #5A5650
+        public static let brandCardSecondary = Color(red: 0.604, green: 0.584, blue: 0.565) // #9A9590
+
+        // Colores de UI en tarjetas
+        public static let brandDivider       = Color(red: 0.941, green: 0.929, blue: 0.910) // #F0ECE8
+        public static let brandProgressTrack = Color(red: 0.898, green: 0.878, blue: 0.847) // #E5E0D8
+
+        // Colores de stat pills en el hero
+        public static let pillGreen  = Color(red: 0.604, green: 0.859, blue: 0.784) // #9ADBC8
+        public static let pillPink   = Color(red: 0.941, green: 0.627, blue: 0.690) // #F0A0B0
+        public static let pillYellow = Color(red: 0.961, green: 0.863, blue: 0.502) // #F5DC80
 
         public static func update(
             accentColor: Color = ThemeAssets.accentColor.swiftUIColor,
