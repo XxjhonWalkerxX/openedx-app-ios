@@ -20,7 +20,7 @@ struct CourseHeaderView: View {
 
     private let collapsedHorizontalHeight: CGFloat = 230
     private let collapsedVerticalHeight: CGFloat = 260
-    private let expandedHeight: CGFloat = 300
+    private let expandedHeight: CGFloat = 420
 
     private let courseRawImage: String?
 
@@ -131,19 +131,20 @@ struct CourseHeaderView: View {
 
     private var expandedContent: some View {
         VStack(spacing: 0) {
-            if let org = viewModel.courseStructure?.org {
-                orgBadge(org: org)
-            }
             Text(title)
-                .lineLimit(3)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(18))
+                .lineLimit(4)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(28))
                 .foregroundColor(Theme.Colors.brandCardPrimary)
-                .kerning(-0.2)
+                .kerning(-0.3)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
                 .padding(.horizontal, 24)
+                .padding(.top, 16)
                 .allowsHitTesting(false)
                 .frameLimit(width: containerWidth)
+            if let org = viewModel.courseStructure?.org {
+                orgBadge(org: org)
+            }
             courseMenuBar(containerWidth: containerWidth)
                 .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
                 .padding(.bottom, 12)
