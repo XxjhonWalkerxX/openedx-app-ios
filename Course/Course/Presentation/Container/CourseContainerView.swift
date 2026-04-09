@@ -166,11 +166,11 @@ public struct CourseContainerView: View {
         ZStack(alignment: .topLeading) {
             if !collapsed {
                 HStack {
-                    ZStack(alignment: .bottom) {
-                        VisualEffectView(effect: UIBlurEffect(style: .regular))
-                            .clipShape(Circle())
+                    ZStack(alignment: .center) {
+                        Circle().fill(Color.white.opacity(0.20))
+                        Circle().strokeBorder(Color.white.opacity(0.35), lineWidth: 1)
                         BackNavigationButton(
-                            color: Theme.Colors.textPrimary,
+                            color: .white,
                             action: {
                                 viewModel.router.back()
                             }
