@@ -61,7 +61,6 @@ struct DiscoveryHeroView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
-            .frame(height: heroHeight)
 
             // 5. Botón settings — esquina superior derecha
             VStack {
@@ -80,13 +79,13 @@ struct DiscoveryHeroView: View {
                         Circle()
                             .strokeBorder(Color.white.opacity(0.22), lineWidth: 1)
                     )
+                    .contentShape(Circle())
                     .clipShape(Circle())
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
                 Spacer()
             }
-            .frame(height: heroHeight)
         }
         .frame(height: heroHeight)
         .clipped()
