@@ -35,6 +35,10 @@ public struct DiscoveryView: View {
     public var body: some View {
         ZStack(alignment: .top) {
 
+            // Colorea el área de la status bar con verde (igual que Android)
+            Theme.Colors.brandGreenDark
+                .ignoresSafeArea(.all, edges: .top)
+
             // [A] Hero verde — fijo, no scrollea
             DiscoveryHeroView {
                 router.showSettings()

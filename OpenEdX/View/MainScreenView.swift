@@ -158,7 +158,7 @@ struct MainScreenView: View {
                 .tag(MainTab.profile)
                 .accessibilityIdentifier("profile_tabitem")
             }
-            .navigationBarHidden(viewModel.selection == .dashboard || viewModel.selection == .downloads)
+            .navigationBarHidden(viewModel.selection == .dashboard || viewModel.selection == .downloads || viewModel.selection == .discovery)
             .navigationBarBackButtonHidden(viewModel.selection == .dashboard || viewModel.selection == .downloads)
             .navigationTitle(titleBar())
             .toolbar {
