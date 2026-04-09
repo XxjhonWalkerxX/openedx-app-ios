@@ -1,8 +1,6 @@
 //
-//  TopHeaderView.swift
+//  CourseHeaderView.swift
 //  Course
-//
-//  Created by  Stepanok Ivan on 04.04.2024.
 //
 
 import SwiftUI
@@ -11,7 +9,7 @@ import Core
 import Theme
 
 struct CourseHeaderView: View {
-    
+
     @ObservedObject var viewModel: CourseContainerViewModel
     private var title: String
     private var containerWidth: CGFloat
@@ -19,12 +17,13 @@ struct CourseHeaderView: View {
     @Binding private var collapsed: Bool
     @Binding private var isAnimatingForTap: Bool
     @Environment(\.isHorizontal) private var isHorizontal
-    
+
     private let collapsedHorizontalHeight: CGFloat = 230
     private let collapsedVerticalHeight: CGFloat = 260
     private let expandedHeight: CGFloat = 300
-    
+
     private let courseRawImage: String?
+
     private enum GeometryName {
         case backButton
         case topTabBar
@@ -32,7 +31,7 @@ struct CourseHeaderView: View {
         case blurPrimaryBg
         case blurBg
     }
-    
+
     init(
         viewModel: CourseContainerViewModel,
         title: String,
@@ -50,9 +49,10 @@ struct CourseHeaderView: View {
         self._isAnimatingForTap = isAnimatingForTap
         self.courseRawImage = courseRawImage
     }
-    
+
     var body: some View {
         ZStack(alignment: .bottomLeading) {
+            // Banner image — sin cambios
             ScrollView {
                 if let banner = (courseRawImage ?? viewModel.courseStructure?.media.image.raw)?
                     .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -68,88 +68,12 @@ struct CourseHeaderView: View {
             }
             .disabled(true)
             .ignoresSafeArea()
+
             VStack(alignment: .leading) {
                 if collapsed {
-                    VStack {
-                        HStack {
-                            BackNavigationButton(
-                                color: Theme.Colors.textPrimary,
-                                action: {
-                                    viewModel.router.back()
-                                }
-                            )
-                            .backViewStyle()
-                            .matchedGeometryEffect(id: GeometryName.backButton, in: animationNamespace)
-                            .frame(width: 30, height: 30)
-                            .offset(y: 10)
-                            Text(title)
-                                .lineLimit(1)
-                                .foregroundStyle(Theme.Colors.textPrimary)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                .clipped()
-                                .font(Theme.Fonts.bodyLarge)
-                        }
-                        .padding(.top, 46)
-                        .padding(.leading, 12)
-                        courseMenuBar(containerWidth: containerWidth)
-                            .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
-                            .padding(.bottom, 12)
-                    }.background {
-                        ZStack(alignment: .bottom) {
-                            Rectangle()
-                                .padding(.top, 24)
-                                .foregroundStyle(Theme.Colors.primaryHeaderColor)
-                                .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
-                            Rectangle().frame(height: 36)
-                                .foregroundStyle(Theme.Colors.secondaryHeaderColor)
-                                .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
-                            VisualEffectView(effect: UIBlurEffect(style: .regular))
-                                .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
-                                .ignoresSafeArea()
-                        }
-                    }
+                    collapsedContent
                 } else {
-                    ZStack(alignment: .bottomLeading) {
-                        VStack {
-                            if let org = viewModel.courseStructure?.org {
-                                Text(org)
-                                    .font(Theme.Fonts.labelLarge)
-                                    .foregroundStyle(Theme.Colors.textPrimary)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.horizontal, 24)
-                                    .padding(.top, 16)
-                                    .allowsHitTesting(false)
-                                    .frameLimit(width: containerWidth)
-                            }
-                            Text(title)
-                                .lineLimit(3)
-                                .font(Theme.Fonts.titleLarge)
-                                .foregroundStyle(Theme.Colors.textPrimary)
-                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .padding(.horizontal, 24)
-                                .allowsHitTesting(false)
-                                .frameLimit(width: containerWidth)
-                            courseMenuBar(containerWidth: containerWidth)
-                                .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
-                                .padding(.bottom, 12)
-                        }.background {
-                            ZStack(alignment: .bottom) {
-                                Rectangle()
-                                    .padding(.top, 24)
-                                    .foregroundStyle(Theme.Colors.primaryHeaderColor)
-                                    .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
-                                Rectangle().frame(height: 36)
-                                    .foregroundStyle(Theme.Colors.secondaryHeaderColor)
-                                    .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
-                                VisualEffectView(effect: UIBlurEffect(style: .regular))
-                                    .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
-                                    .allowsHitTesting(false)
-                                    .ignoresSafeArea()
-                            }
-                        }
-                    }
+                    expandedContent
                 }
             }
         }
@@ -161,14 +85,116 @@ struct CourseHeaderView: View {
         )
         .ignoresSafeArea(edges: .top)
     }
-    
+
+    // MARK: - Estado colapsado
+
+    private var collapsedContent: some View {
+        VStack(spacing: 0) {
+            HStack {
+                BackNavigationButton(
+                    color: Theme.Colors.brandGreen,
+                    action: { viewModel.router.back() }
+                )
+                .backViewStyle()
+                .matchedGeometryEffect(id: GeometryName.backButton, in: animationNamespace)
+                .frame(width: 30, height: 30)
+                .offset(y: 10)
+                Text(title)
+                    .lineLimit(1)
+                    .foregroundStyle(Theme.Colors.brandGreen)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(15))
+                    .kerning(-0.2)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .clipped()
+            }
+            .padding(.top, 46)
+            .padding(.leading, 12)
+            courseMenuBar(containerWidth: containerWidth)
+                .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
+                .padding(.bottom, 12)
+        }
+        .background {
+            ZStack(alignment: .top) {
+                Theme.Colors.brandCream
+                    .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
+                Theme.Colors.guindaColor
+                    .frame(height: 4)
+                    .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
+                Color.clear
+                    .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
+                    .ignoresSafeArea()
+            }
+        }
+    }
+
+    // MARK: - Estado expandido
+
+    private var expandedContent: some View {
+        VStack(spacing: 0) {
+            if let org = viewModel.courseStructure?.org {
+                orgBadge(org: org)
+            }
+            Text(title)
+                .lineLimit(3)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(18))
+                .foregroundColor(Theme.Colors.brandCardPrimary)
+                .kerning(-0.2)
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .padding(.horizontal, 24)
+                .allowsHitTesting(false)
+                .frameLimit(width: containerWidth)
+            courseMenuBar(containerWidth: containerWidth)
+                .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
+                .padding(.bottom, 12)
+        }
+        .background {
+            ZStack(alignment: .top) {
+                UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28)
+                    .fill(Theme.Colors.brandCream)
+                    .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
+                Theme.Colors.guindaColor
+                    .frame(height: 4)
+                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28))
+                    .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
+                Color.clear
+                    .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
+                    .allowsHitTesting(false)
+                    .ignoresSafeArea()
+            }
+        }
+    }
+
+    // MARK: - Org Badge
+
+    private func orgBadge(org: String) -> some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(Color.white)
+                .frame(width: 5, height: 5)
+            Text(org)
+                .font(Theme.Fonts.ttRoundsBody(11, weight: 600))
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(Capsule().fill(Theme.Colors.brandGreen))
+        .padding(.horizontal, 24)
+        .padding(.top, 8)
+        .allowsHitTesting(false)
+        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+        .frameLimit(width: containerWidth)
+    }
+
+    // MARK: - Helpers (sin cambios)
+
     private func courseBannerURL(for path: String) -> URL? {
         if path.contains("http://") || path.contains("https://") {
             return URL(string: path)
         }
         return URL(string: viewModel.config.baseURL.absoluteString + path)
     }
-    
+
     private func courseMenuBar(containerWidth: CGFloat) -> some View {
         ScrollSlidingTabBar(
             selection: $viewModel.selection,
