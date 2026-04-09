@@ -8,8 +8,8 @@ import Core
 import OEXFoundation
 import Theme
 
-private let heroHeight: CGFloat = 220
-private let heroOverlap: CGFloat = 24
+private let heroHeight: CGFloat = 260
+private let heroOverlap: CGFloat = 15
 
 public struct DiscoveryView: View {
 
@@ -155,19 +155,13 @@ public struct DiscoveryView: View {
                 HStack {
                     Spacer()
                     Button(action: { router.showSettings() }) {
-                        Image(systemName: "person.crop.circle.badge.gear")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
+                        CoreAssets.settings.swiftUIImage
+                            .renderingMode(.template)
                             .foregroundColor(.white)
+                            .frame(width: 40, height: 40)
+                            .background(Circle().fill(Color.white.opacity(0.14)))
+                            .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
                     }
-                    .frame(width: 40, height: 40)
-                    .background(Color.white.opacity(0.14))
-                    .overlay(
-                        Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1)
-                    )
-                    .contentShape(Circle())
-                    .clipShape(Circle())
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
