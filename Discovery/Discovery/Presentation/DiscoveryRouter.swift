@@ -19,6 +19,7 @@ public protocol DiscoveryRouter: BaseRouter {
     func showUpdateRequiredView(showAccountLink: Bool)
     func showUpdateRecomendedView()
     func showDiscoverySearch(searchQuery: String?)
+    func showSettings()
     func showCourseScreens(
         courseID: String,
         hasAccess: Bool?,
@@ -53,6 +54,7 @@ public class DiscoveryRouterMock: BaseRouterMock, DiscoveryRouter {
     public func showUpdateRequiredView(showAccountLink: Bool) {}
     public func showUpdateRecomendedView() {}
     public func showDiscoverySearch(searchQuery: String? = nil) {}
+    public func showSettings() {}
     public func showCourseScreens(
         courseID: String,
         hasAccess: Bool?,
