@@ -22,9 +22,10 @@ private enum ProfileLayout {
     static let avatarSize: CGFloat = 90
     static let handleWidth: CGFloat = 36
     static let handleHeight: CGFloat = 4
-    static let handleTopPadding: CGFloat = 10
-    static let handleBottomPadding: CGFloat = 8
+    static let handleTopPadding: CGFloat = 12
+    static let handleBottomPadding: CGFloat = 16
     static let contentBottomPadding: CGFloat = 60
+    static let heroOverlap: CGFloat = 15
     static let circleLargeSize: CGFloat = 210
     static let circleMediumSize: CGFloat = 110
     static let circleSmallSize: CGFloat = 70
@@ -41,73 +42,100 @@ public struct ProfileView: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .top) {
+        GeometryReader { _ in
+            ZStack(alignment: .top) {
 
-            // Fondo base
-            Theme.Colors.brandGreenDark
-                .ignoresSafeArea()
+                // Fondo base
+                Theme.Colors.brandGreenDark
+                    .ignoresSafeArea()
 
-            // Banda guinda
-            Theme.Colors.guindaColor
-                .frame(height: ProfileLayout.guindaBandHeight)
-                .ignoresSafeArea(edges: .top)
-                .frame(maxWidth: .infinity, alignment: .top)
-                .zIndex(10)
+                // Banda guinda
+                Theme.Colors.guindaColor
+                    .frame(height: ProfileLayout.guindaBandHeight)
+                    .ignoresSafeArea(edges: .top)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .zIndex(10)
 
-            // Contenido scrollable
-            ScrollView {
-                VStack(spacing: 0) {
-                    profileHero
-                    creamCard
-                        .offset(y: -15)
-                }
-            }
-            .refreshable {
-                Task {
-                    await viewModel.getMyProfile(withProgress: false)
-                }
-            }
-            .accessibilityAction {}
-            .zIndex(1)
-
-            // Offline snackbar
-            OfflineSnackBarView(
-                connectivity: viewModel.connectivity,
-                reloadAction: {
-                    await viewModel.getMyProfile(withProgress: false)
-                }
-            ).zIndex(2)
-
-            // Error snackbar
-            if viewModel.showError {
-                VStack {
-                    Spacer()
-                    SnackBarView(message: viewModel.errorMessage)
-                }
-                .padding(
-                    .bottom,
-                    viewModel.connectivity.isInternetAvaliable ? 0 : OfflineSnackBarView.height
-                )
-                .transition(.move(edge: .bottom))
-                .onAppear {
-                    doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
-                        viewModel.errorMessage = nil
+                // Contenido scrollable
+                ScrollView {
+                    VStack(spacing: 0) {
+                        profileHero
+                        creamCard
+                            .padding(.top, -ProfileLayout.heroOverlap)
                     }
                 }
-                .zIndex(2)
+                .refreshable {
+                    Task {
+                        await viewModel.getMyProfile(withProgress: false)
+                    }
+                }
+                .accessibilityAction {}
+                .zIndex(1)
+
+                // Settings button — overlay fijo sobre el hero
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            viewModel.router.showSettings()
+                        }) {
+                            CoreAssets.settings.swiftUIImage
+                                .renderingMode(.template)
+                                .foregroundColor(.white)
+                                .frame(
+                                    width: ProfileLayout.settingsButtonSize,
+                                    height: ProfileLayout.settingsButtonSize
+                                )
+                                .background(Circle().fill(Color.white.opacity(0.14)))
+                                .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
+                        }
+                        .accessibilityIdentifier("settings_button")
+                    }
+                    .padding(.horizontal, ProfileLayout.horizontalPadding)
+                    .padding(.top, ProfileLayout.heroTopPadding)
+                    Spacer()
+                }
+                .zIndex(5)
+
+                // Offline snackbar
+                OfflineSnackBarView(
+                    connectivity: viewModel.connectivity,
+                    reloadAction: {
+                        await viewModel.getMyProfile(withProgress: false)
+                    }
+                ).zIndex(2)
+
+                // Error snackbar
+                if viewModel.showError {
+                    VStack {
+                        Spacer()
+                        SnackBarView(message: viewModel.errorMessage)
+                    }
+                    .padding(
+                        .bottom,
+                        viewModel.connectivity.isInternetAvaliable ? 0 : OfflineSnackBarView.height
+                    )
+                    .transition(.move(edge: .bottom))
+                    .onAppear {
+                        doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
+                            viewModel.errorMessage = nil
+                        }
+                    }
+                    .zIndex(2)
+                }
             }
-        }
-        .onAppear {
-            Task {
-                await viewModel.getMyProfile()
+            .onAppear {
+                Task {
+                    await viewModel.getMyProfile()
+                }
             }
-        }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
-        .navigationTitle(ProfileLocalization.title)
-        .onReceive(NotificationCenter.default.publisher(for: .profileUpdated)) { _ in
-            Task {
-                await viewModel.getMyProfile()
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
+            .navigationTitle(ProfileLocalization.title)
+            .onReceive(NotificationCenter.default.publisher(for: .profileUpdated)) { _ in
+                Task {
+                    await viewModel.getMyProfile()
+                }
             }
         }
     }
@@ -124,25 +152,9 @@ public struct ProfileView: View {
 
             VStack(spacing: ProfileLayout.heroElementSpacing) {
 
-                // Settings button — top right
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        viewModel.router.showSettings()
-                    }) {
-                        CoreAssets.settings.swiftUIImage
-                            .renderingMode(.template)
-                            .foregroundColor(.white)
-                            .frame(
-                                width: ProfileLayout.settingsButtonSize,
-                                height: ProfileLayout.settingsButtonSize
-                            )
-                            .background(Circle().fill(Color.white.opacity(0.14)))
-                            .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
-                    }
-                    .padding(.trailing, ProfileLayout.horizontalPadding)
-                    .accessibilityIdentifier("settings_button")
-                }
+                // Espacio para el settings button flotante
+                Color.clear
+                    .frame(height: ProfileLayout.settingsButtonSize)
 
                 // Avatar
                 UserAvatar(
@@ -180,24 +192,15 @@ public struct ProfileView: View {
         ZStack {
             Circle()
                 .strokeBorder(Color.white.opacity(0.06), lineWidth: 34)
-                .frame(
-                    width: ProfileLayout.circleLargeSize,
-                    height: ProfileLayout.circleLargeSize
-                )
+                .frame(width: ProfileLayout.circleLargeSize, height: ProfileLayout.circleLargeSize)
                 .offset(x: 130, y: -40)
             Circle()
                 .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(
-                    width: ProfileLayout.circleMediumSize,
-                    height: ProfileLayout.circleMediumSize
-                )
+                .frame(width: ProfileLayout.circleMediumSize, height: ProfileLayout.circleMediumSize)
                 .offset(x: -120, y: 130)
             Circle()
                 .strokeBorder(Color.white.opacity(0.07), lineWidth: 13)
-                .frame(
-                    width: ProfileLayout.circleSmallSize,
-                    height: ProfileLayout.circleSmallSize
-                )
+                .frame(width: ProfileLayout.circleSmallSize, height: ProfileLayout.circleSmallSize)
                 .offset(x: -70, y: 20)
         }
     }
@@ -223,7 +226,7 @@ public struct ProfileView: View {
             } else {
                 VStack(spacing: 16) {
 
-                    // Edit Profile button — verde sólido (default de StyledButton)
+                    // Edit Profile button — colores del proyecto
                     StyledButton(
                         ProfileLocalization.editProfile,
                         action: {
@@ -237,23 +240,26 @@ public struct ProfileView: View {
                                     if let updatedImage { viewModel.updatedAvatar = updatedImage }
                                 }
                             )
-                        }
+                        },
+                        color: Theme.Colors.background,
+                        textColor: Theme.Colors.accentColor,
+                        borderColor: Theme.Colors.accentColor
                     )
                     .padding(.horizontal, ProfileLayout.horizontalPadding)
 
                     // Bio (opcional)
                     profileInfo
-
-                    Spacer().frame(height: ProfileLayout.contentBottomPadding)
                 }
                 .padding(.top, 8)
             }
+
+            // Filler — extiende el fondo crema hasta el borde inferior
+            Theme.Colors.brandCream
+                .frame(maxWidth: .infinity, minHeight: 300)
         }
-        .frame(maxWidth: .infinity, alignment: .top)
-        .background(
-            UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32)
-                .fill(Theme.Colors.brandCream)
-        )
+        .frame(maxWidth: .infinity)
+        .background(Theme.Colors.brandCream)
+        .clipShape(ProfileSheetShape(radius: 32))
     }
 
     // MARK: - Profile Info (bio)
@@ -283,6 +289,21 @@ public struct ProfileView: View {
             .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
             .padding(.horizontal, ProfileLayout.horizontalPadding)
         }
+    }
+}
+
+// MARK: - Shape para esquinas redondeadas solo arriba
+
+private struct ProfileSheetShape: Shape {
+    let radius: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: [.topLeft, .topRight],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
 

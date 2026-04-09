@@ -19,9 +19,9 @@ private enum SettingsLayout {
     static let backButtonSize: CGFloat = 40
     static let handleWidth: CGFloat = 36
     static let handleHeight: CGFloat = 4
-    static let handleTopPadding: CGFloat = 10
-    static let handleBottomPadding: CGFloat = 8
-    static let contentBottomPadding: CGFloat = 60
+    static let handleTopPadding: CGFloat = 12
+    static let handleBottomPadding: CGFloat = 16
+    static let heroOverlap: CGFloat = 15
     static let circleLargeSize: CGFloat = 210
     static let circleMediumSize: CGFloat = 110
     static let circleSmallSize: CGFloat = 70
@@ -41,92 +41,92 @@ public struct SettingsView: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .top) {
+        GeometryReader { _ in
+            ZStack(alignment: .top) {
 
-            // Fondo base
-            Theme.Colors.brandGreenDark
-                .ignoresSafeArea()
+                // Fondo base
+                Theme.Colors.brandGreenDark
+                    .ignoresSafeArea()
 
-            // Banda guinda
-            Theme.Colors.guindaColor
-                .frame(height: SettingsLayout.guindaBandHeight)
-                .ignoresSafeArea(edges: .top)
-                .frame(maxWidth: .infinity, alignment: .top)
-                .zIndex(10)
+                // Banda guinda
+                Theme.Colors.guindaColor
+                    .frame(height: SettingsLayout.guindaBandHeight)
+                    .ignoresSafeArea(edges: .top)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .zIndex(10)
 
-            // Contenido scrollable
-            ScrollView {
-                VStack(spacing: 0) {
-                    settingsHero
-                    creamCard
-                        .offset(y: -15)
-                }
-            }
-            .zIndex(1)
-
-            // Error snackbar
-            if viewModel.showError {
-                VStack {
-                    Spacer()
-                    SnackBarView(message: viewModel.errorMessage)
-                }
-                .transition(.move(edge: .bottom))
-                .onAppear {
-                    doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
-                        viewModel.errorMessage = nil
+                // Contenido scrollable
+                ScrollView {
+                    VStack(spacing: 0) {
+                        settingsHero
+                        creamCard
+                            .padding(.top, -SettingsLayout.heroOverlap)
                     }
                 }
-                .zIndex(2)
+                .zIndex(1)
+
+                // Back button — overlay fijo
+                VStack {
+                    HStack {
+                        Button(action: {
+                            viewModel.router.back()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(
+                                    width: SettingsLayout.backButtonSize,
+                                    height: SettingsLayout.backButtonSize
+                                )
+                                .background(Circle().fill(Color.white.opacity(0.14)))
+                                .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
+                        }
+                        .accessibilityIdentifier("back_button")
+                        Spacer()
+                    }
+                    .padding(.horizontal, SettingsLayout.horizontalPadding)
+                    .padding(.top, SettingsLayout.heroTopPadding)
+                    Spacer()
+                }
+                .zIndex(5)
+
+                // Error snackbar
+                if viewModel.showError {
+                    VStack {
+                        Spacer()
+                        SnackBarView(message: viewModel.errorMessage)
+                    }
+                    .transition(.move(edge: .bottom))
+                    .onAppear {
+                        doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
+                            viewModel.errorMessage = nil
+                        }
+                    }
+                    .zIndex(2)
+                }
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .navigationTitle(ProfileLocalization.settings)
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .navigationTitle(ProfileLocalization.settings)
     }
 
     // MARK: - Hero
 
     private var settingsHero: some View {
-        ZStack(alignment: .top) {
+        ZStack(alignment: .bottom) {
 
             Theme.Gradients.heroGradient
 
             settingsCircles
                 .allowsHitTesting(false)
 
-            VStack(spacing: 0) {
-
-                // Back button row
-                HStack {
-                    Button(action: {
-                        viewModel.router.back()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(
-                                width: SettingsLayout.backButtonSize,
-                                height: SettingsLayout.backButtonSize
-                            )
-                            .background(Circle().fill(Color.white.opacity(0.14)))
-                            .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
-                    }
-                    .padding(.leading, SettingsLayout.horizontalPadding)
-                    .accessibilityIdentifier("back_button")
-
-                    Spacer()
-                }
-
-                Spacer()
-
-                // Título centrado
-                Text(ProfileLocalization.settings)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(22))
-                    .foregroundColor(.white)
-                    .kerning(-0.2)
-                    .padding(.bottom, 24)
-            }
-            .padding(.top, SettingsLayout.heroTopPadding)
+            // Título centrado en la parte baja del hero
+            Text(ProfileLocalization.settings)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(22))
+                .foregroundColor(.white)
+                .kerning(-0.2)
+                .padding(.bottom, 28)
         }
         .frame(minHeight: SettingsLayout.heroMinHeight)
     }
@@ -135,24 +135,15 @@ public struct SettingsView: View {
         ZStack {
             Circle()
                 .strokeBorder(Color.white.opacity(0.06), lineWidth: 34)
-                .frame(
-                    width: SettingsLayout.circleLargeSize,
-                    height: SettingsLayout.circleLargeSize
-                )
+                .frame(width: SettingsLayout.circleLargeSize, height: SettingsLayout.circleLargeSize)
                 .offset(x: 130, y: -40)
             Circle()
                 .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(
-                    width: SettingsLayout.circleMediumSize,
-                    height: SettingsLayout.circleMediumSize
-                )
+                .frame(width: SettingsLayout.circleMediumSize, height: SettingsLayout.circleMediumSize)
                 .offset(x: -120, y: 60)
             Circle()
                 .strokeBorder(Color.white.opacity(0.07), lineWidth: 13)
-                .frame(
-                    width: SettingsLayout.circleSmallSize,
-                    height: SettingsLayout.circleSmallSize
-                )
+                .frame(width: SettingsLayout.circleSmallSize, height: SettingsLayout.circleSmallSize)
                 .offset(x: -70, y: 20)
         }
     }
@@ -184,15 +175,16 @@ public struct SettingsView: View {
                     logOutButton
                 }
                 .padding(.horizontal, isHorizontal ? 24 : 0)
-                .padding(.bottom, SettingsLayout.contentBottomPadding)
                 .padding(.top, 8)
             }
+
+            // Filler — extiende el fondo crema hasta el borde inferior
+            Theme.Colors.brandCream
+                .frame(maxWidth: .infinity, minHeight: 300)
         }
-        .frame(maxWidth: .infinity, alignment: .top)
-        .background(
-            UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32)
-                .fill(Theme.Colors.brandCream)
-        )
+        .frame(maxWidth: .infinity)
+        .background(Theme.Colors.brandCream)
+        .clipShape(SettingsSheetShape(radius: 32))
     }
 
     // MARK: - Dates & Calendar
@@ -214,10 +206,7 @@ public struct SettingsView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(ProfileLocalization.datesAndCalendar)
-        .cardStyle(
-            bgColor: Theme.Colors.textInputUnfocusedBackground,
-            strokeColor: .clear
-        )
+        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
     }
 
     // MARK: - Manage Account
@@ -237,14 +226,11 @@ public struct SettingsView: View {
                         .flipsForRightToLeftLayoutDirection(true)
                 }
             })
-            .accessibilityIdentifier("video_settings_button")
+            .accessibilityIdentifier("manage_account_button")
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(ProfileLocalization.manageAccount)
-        .cardStyle(
-            bgColor: Theme.Colors.textInputUnfocusedBackground,
-            strokeColor: .clear
-        )
+        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
     }
 
     // MARK: - Settings (Video)
@@ -275,10 +261,7 @@ public struct SettingsView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(ProfileLocalization.settingsVideo)
-        .cardStyle(
-            bgColor: Theme.Colors.textInputUnfocusedBackground,
-            strokeColor: .clear
-        )
+        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
     }
 
     // MARK: - Log out
@@ -322,6 +305,21 @@ public struct SettingsView: View {
         .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
         .padding(.top, 24)
         .padding(.bottom, 60)
+    }
+}
+
+// MARK: - Shape para esquinas redondeadas solo arriba
+
+private struct SettingsSheetShape: Shape {
+    let radius: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: [.topLeft, .topRight],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
 
