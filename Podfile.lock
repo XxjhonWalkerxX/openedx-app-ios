@@ -1,4 +1,7 @@
 PODS:
+  - MSAL (2.10.0):
+    - MSAL/app-lib (= 2.10.0)
+  - MSAL/app-lib (2.10.0)
   - Sourcery (1.8.0):
     - Sourcery/CLI-Only (= 1.8.0)
   - Sourcery/CLI-Only (1.8.0)
@@ -8,12 +11,14 @@ PODS:
     - Sourcery (= 1.8.0)
 
 DEPENDENCIES:
+  - MSAL
   - SwiftGen (~> 6.6)
   - SwiftLint (~> 0.57.0)
   - SwiftyMocky (from `https://github.com/MakeAWishFoundation/SwiftyMocky.git`, tag `4.2.0`)
 
 SPEC REPOS:
   trunk:
+    - MSAL
     - Sourcery
     - SwiftGen
     - SwiftLint
@@ -29,11 +34,12 @@ CHECKOUT OPTIONS:
     :tag: 4.2.0
 
 SPEC CHECKSUMS:
+  MSAL: 36fef03c162c615c2df9a8e4dfa3110f4b64c416
   Sourcery: 6f5fe49b82b7e02e8c65560cbd52e1be67a1af2e
   SwiftGen: 4993cbf71cbc4886f775e26f8d5c3a1188ec9f99
   SwiftLint: 92196976e597b9afec5dbe374810103e6c1d9d7c
   SwiftyMocky: c5e96e4ff76ec6dbf5a5941aeb039b5a546954a0
 
-PODFILE CHECKSUM: 2d71ad797d49fa32b47c3315b92159de82824103
+PODFILE CHECKSUM: a28f729a546a05f806262b6cd4cb98e05279e1ea
 
 COCOAPODS: 1.16.2
