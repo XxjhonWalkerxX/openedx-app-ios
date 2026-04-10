@@ -6,25 +6,29 @@
 import SwiftUI
 import Core
 import OEXFoundation
-import Kingfisher
 import Theme
 
 // MARK: - Layout Constants
 
 private enum SettingsLayout {
     static let horizontalPadding: CGFloat = 20
-    static let heroTopPadding: CGFloat = 8
-    static let heroMinHeight: CGFloat = 140
-    static let guindaBandHeight: CGFloat = 4
-    static let backButtonSize: CGFloat = 40
-    static let handleWidth: CGFloat = 36
-    static let handleHeight: CGFloat = 4
-    static let handleTopPadding: CGFloat = 12
-    static let handleBottomPadding: CGFloat = 16
-    static let heroOverlap: CGFloat = 15
-    static let circleLargeSize: CGFloat = 210
-    static let circleMediumSize: CGFloat = 110
-    static let circleSmallSize: CGFloat = 70
+    static let topBandHeight: CGFloat = 4
+    static let headerVerticalPadding: CGFloat = 60
+    static let headerVerticalPaddingLandscape: CGFloat = 8
+    static let sectionSpacing: CGFloat = 20
+    static let contentTopPadding: CGFloat = 2
+    static let contentTopPaddingLandscape: CGFloat = 16
+    static let rowMinHeight: CGFloat = 66
+    static let rowCornerRadius: CGFloat = 18
+    static let versionCardCornerRadius: CGFloat = 14
+    static let logoutCornerRadius: CGFloat = 14
+    static let logoutBorderWidth: CGFloat = 2
+    static let backButtonSize: CGFloat = 54
+    static let backButtonCornerRadius: CGFloat = 14
+    static let headerMinHeightPortrait: CGFloat = 160
+    static let headerMinHeightLandscape: CGFloat = 96
+    static let headerBottomPaddingPortrait: CGFloat = 24
+    static let headerBottomPaddingLandscape: CGFloat = 10
 }
 
 // MARK: - SettingsView
@@ -34,292 +38,307 @@ public struct SettingsView: View {
     @ObservedObject
     private var viewModel: SettingsViewModel
 
-    @Environment(\.isHorizontal) private var isHorizontal
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     public init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
     }
 
     public var body: some View {
-        GeometryReader { _ in
-            ZStack(alignment: .top) {
-
-                // Fondo base
-                Theme.Colors.brandGreenDark
-                    .ignoresSafeArea()
-
-                // Banda guinda
-                Theme.Colors.guindaColor
-                    .frame(height: SettingsLayout.guindaBandHeight)
-                    .ignoresSafeArea(edges: .top)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .zIndex(10)
-
-                // Contenido scrollable
-                ScrollView {
-                    VStack(spacing: 0) {
-                        settingsHero
-                        creamCard
-                            .padding(.top, -SettingsLayout.heroOverlap)
-                    }
-                }
-                .zIndex(1)
-
-                // Back button — overlay fijo
-                VStack {
-                    HStack {
-                        Button(action: {
-                            viewModel.router.back()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.white)
-                                .frame(
-                                    width: SettingsLayout.backButtonSize,
-                                    height: SettingsLayout.backButtonSize
-                                )
-                                .background(Circle().fill(Color.white.opacity(0.14)))
-                                .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
-                        }
-                        .accessibilityIdentifier("back_button")
-                        Spacer()
-                    }
-                    .padding(.horizontal, SettingsLayout.horizontalPadding)
-                    .padding(.top, SettingsLayout.heroTopPadding)
-                    Spacer()
-                }
-                .zIndex(5)
-
-                // Error snackbar
-                if viewModel.showError {
-                    VStack {
-                        Spacer()
-                        SnackBarView(message: viewModel.errorMessage)
-                    }
-                    .transition(.move(edge: .bottom))
-                    .onAppear {
-                        doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
-                            viewModel.errorMessage = nil
-                        }
-                    }
-                    .zIndex(2)
-                }
-            }
-            .navigationBarHidden(true)
-            .navigationBarBackButtonHidden(true)
-            .navigationTitle(ProfileLocalization.settings)
-        }
-    }
-
-    // MARK: - Hero
-
-    private var settingsHero: some View {
-        ZStack(alignment: .bottom) {
-
-            Theme.Gradients.heroGradient
-
-            settingsCircles
-                .allowsHitTesting(false)
-
-            // Título centrado en la parte baja del hero
-            Text(ProfileLocalization.settings)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(22))
-                .foregroundColor(.white)
-                .kerning(-0.2)
-                .padding(.bottom, 28)
-        }
-        .frame(minHeight: SettingsLayout.heroMinHeight)
-    }
-
-    private var settingsCircles: some View {
-        ZStack {
-            Circle()
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 34)
-                .frame(width: SettingsLayout.circleLargeSize, height: SettingsLayout.circleLargeSize)
-                .offset(x: 130, y: -40)
-            Circle()
-                .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(width: SettingsLayout.circleMediumSize, height: SettingsLayout.circleMediumSize)
-                .offset(x: -120, y: 60)
-            Circle()
-                .strokeBorder(Color.white.opacity(0.07), lineWidth: 13)
-                .frame(width: SettingsLayout.circleSmallSize, height: SettingsLayout.circleSmallSize)
-                .offset(x: -70, y: 20)
-        }
-    }
-
-    // MARK: - Cream Card
-
-    private var creamCard: some View {
-        VStack(spacing: 0) {
-
-            // Drag handle
-            Capsule()
-                .fill(Theme.Colors.brandHandle)
-                .frame(width: SettingsLayout.handleWidth, height: SettingsLayout.handleHeight)
-                .padding(.top, SettingsLayout.handleTopPadding)
-                .padding(.bottom, SettingsLayout.handleBottomPadding)
-
-            if viewModel.isShowProgress {
-                ProgressBar(size: 40, lineWidth: 8)
-                    .padding(.top, 200)
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity, minHeight: 300)
-                    .accessibilityIdentifier("progress_bar")
-            } else {
-                VStack(alignment: .leading, spacing: 12) {
-                    manageAccount
-                    settings
-                    datesAndCalendar
-                    ProfileSupportInfoView(viewModel: viewModel)
-                    logOutButton
-                }
-                .padding(.horizontal, isHorizontal ? 24 : 0)
-                .padding(.top, 8)
-            }
-
-            // Filler — extiende el fondo crema hasta el borde inferior
+        ZStack(alignment: .top) {
             Theme.Colors.brandCream
-                .frame(maxWidth: .infinity, minHeight: 300)
-        }
-        .frame(maxWidth: .infinity)
-        .background(Theme.Colors.brandCream)
-        .clipShape(SettingsSheetShape(radius: 32))
-    }
+                .ignoresSafeArea()
 
-    // MARK: - Dates & Calendar
+            VStack(spacing: 0) {
+                topHeader
 
-    @ViewBuilder
-    private var datesAndCalendar: some View {
-        VStack(alignment: .leading, spacing: 27) {
-            Button(action: {
-                viewModel.router.showDatesAndCalendar()
-            }, label: {
-                HStack {
-                    Text(ProfileLocalization.datesAndCalendar)
-                        .font(Theme.Fonts.titleMedium)
-                    Spacer()
-                    Image(systemName: "chevron.right")
+                if viewModel.isShowProgress {
+                    ProgressBar(size: 40, lineWidth: 8)
+                        .padding(.top, 120)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        .accessibilityIdentifier("progress_bar")
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
+                            sectionHeader(ProfileLocalization.manageAccount.uppercased())
+                            settingsRow(
+                                title: ProfileLocalization.manageAccount,
+                                accessibilityID: "manage_account_button",
+                                action: {
+                                    viewModel.trackProfileVideoSettingsClicked()
+                                    viewModel.router.showManageAccount()
+                                }
+                            )
+
+                            sectionHeader(ProfileLocalization.settings.uppercased())
+                            settingsRow(
+                                title: ProfileLocalization.settingsVideo.replacingOccurrences(of: " settings", with: ""),
+                                accessibilityID: "video_settings_button",
+                                action: {
+                                    viewModel.trackProfileVideoSettingsClicked()
+                                    viewModel.router.showVideoSettings()
+                                }
+                            )
+                            settingsRow(
+                                title: ProfileLocalization.datesAndCalendar,
+                                accessibilityID: "dates_and_calendar_cell",
+                                action: {
+                                    viewModel.router.showDatesAndCalendar()
+                                }
+                            )
+
+                            sectionHeader(ProfileLocalization.supportInfo.uppercased())
+                            settingsRow(
+                                title: ProfileLocalization.contact,
+                                accessibilityID: "contact_support",
+                                action: {
+                                    guard let emailURL = viewModel.contactSupport(),
+                                          UIApplication.shared.canOpenURL(emailURL) else {
+                                        viewModel.errorMessage = ProfileLocalization.Error.cannotSendEmail
+                                        return
+                                    }
+                                    viewModel.trackEmailSupportClicked()
+                                    UIApplication.shared.open(emailURL)
+                                }
+                            )
+
+                            versionCard
+                            logoutButton
+                        }
+                        .padding(.horizontal, SettingsLayout.horizontalPadding)
+                        .padding(.top, contentTopPadding)
+                        .padding(.bottom, 44)
+                    }
+                    .scrollIndicators(.hidden)
                 }
-            })
-            .accessibilityIdentifier("dates_and_calendar_cell")
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(ProfileLocalization.datesAndCalendar)
-        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
-    }
+            }
 
-    // MARK: - Manage Account
-
-    @ViewBuilder
-    private var manageAccount: some View {
-        VStack(alignment: .leading, spacing: 27) {
-            Button(action: {
-                viewModel.trackProfileVideoSettingsClicked()
-                viewModel.router.showManageAccount()
-            }, label: {
-                HStack {
-                    Text(ProfileLocalization.manageAccount)
-                        .font(Theme.Fonts.titleMedium)
+            if viewModel.showError {
+                VStack {
                     Spacer()
-                    Image(systemName: "chevron.right")
-                        .flipsForRightToLeftLayoutDirection(true)
+                    SnackBarView(message: viewModel.errorMessage)
                 }
-            })
-            .accessibilityIdentifier("manage_account_button")
+                .transition(.move(edge: .bottom))
+                .onAppear {
+                    doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
+                        viewModel.errorMessage = nil
+                    }
+                }
+                .zIndex(2)
+            }
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(ProfileLocalization.manageAccount)
-        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle(ProfileLocalization.settings)
     }
 
-    // MARK: - Settings (Video)
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: SettingsLayout.topBandHeight)
 
-    @ViewBuilder
-    private var settings: some View {
-        Text(ProfileLocalization.settings)
-            .padding(.horizontal, 24)
+            HStack(alignment: .top, spacing: 12) {
+                Button(action: {
+                    viewModel.router.back()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: SettingsLayout.backButtonSize, height: SettingsLayout.backButtonSize)
+                        .background(
+                            RoundedRectangle(cornerRadius: SettingsLayout.backButtonCornerRadius, style: .continuous)
+                                .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(ProfileLocalization.settings)
+                        .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                    Text("Personaliza tu experiencia")
+                        .font(Theme.Fonts.labelLarge)
+                        .fontWeight(.semibold)
+                        .opacity(0.95)
+                }
+                .foregroundColor(.white)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, SettingsLayout.horizontalPadding)
+            .padding(.top, headerTopPadding + 10)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
+    private var headerTopPadding: CGFloat {
+        if isLandscapeLike {
+            return SettingsLayout.headerVerticalPaddingLandscape
+        } else {
+            return SettingsLayout.headerVerticalPadding
+        }
+    }
+
+    private var headerBottomPadding: CGFloat {
+        if isLandscapeLike {
+            return SettingsLayout.headerBottomPaddingLandscape
+        } else {
+            return SettingsLayout.headerBottomPaddingPortrait
+        }
+    }
+
+    private var headerMinHeight: CGFloat {
+        if isLandscapeLike {
+            return SettingsLayout.headerMinHeightLandscape
+        } else {
+            return SettingsLayout.headerMinHeightPortrait
+        }
+    }
+
+    private var isLandscapeLike: Bool {
+        verticalSizeClass == .compact
+    }
+
+    private var contentTopPadding: CGFloat {
+        if isLandscapeLike {
+            return SettingsLayout.contentTopPaddingLandscape
+        } else {
+            return SettingsLayout.contentTopPadding
+        }
+    }
+
+    private func sectionHeader(_ title: String) -> some View {
+        Text(title)
             .font(Theme.Fonts.labelLarge)
-            .foregroundColor(Theme.Colors.textSecondary)
-            .accessibilityIdentifier("settings_text")
-            .padding(.top, 12)
+            .fontWeight(.semibold)
+            .tracking(0.3)
+            .foregroundColor(Theme.Colors.brandGreen)
+            .padding(.leading, 2)
+    }
 
-        VStack(alignment: .leading, spacing: 27) {
-            Button(action: {
-                viewModel.trackProfileVideoSettingsClicked()
-                viewModel.router.showVideoSettings()
-            }, label: {
-                HStack {
-                    Text(ProfileLocalization.settingsVideo)
-                        .font(Theme.Fonts.titleMedium)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .flipsForRightToLeftLayoutDirection(true)
-                }
-            })
-            .accessibilityIdentifier("video_settings_button")
+    private func settingsRow(
+        title: String,
+        accessibilityID: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                    .font(Theme.Fonts.titleMedium)
+                    .foregroundColor(Theme.Colors.brandCardPrimary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Theme.Colors.brandGreen)
+                    .flipsForRightToLeftLayoutDirection(true)
+                    .font(.system(size: 15, weight: .semibold))
+            }
+            .padding(.horizontal, 18)
+            .frame(maxWidth: .infinity, minHeight: SettingsLayout.rowMinHeight)
+            .background(
+                RoundedRectangle(cornerRadius: SettingsLayout.rowCornerRadius, style: .continuous)
+                    .fill(Theme.Colors.white)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: SettingsLayout.rowCornerRadius, style: .continuous)
+                    .stroke(Color.black.opacity(0.04), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.06), radius: 5, x: 0, y: 2)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(ProfileLocalization.settingsVideo)
-        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
+        .accessibilityLabel(title)
+        .accessibilityIdentifier(accessibilityID)
     }
 
-    // MARK: - Log out
+    private var versionCard: some View {
+        Button(action: {
+            if viewModel.versionState != .actual {
+                viewModel.openAppStore()
+            }
+        }) {
+            VStack(spacing: 8) {
+                Text("\(ProfileLocalization.Settings.version) \(viewModel.currentVersion)")
+                    .font(Theme.Fonts.titleMedium)
+                    .foregroundColor(Theme.Colors.brandCardPrimary)
 
-    private var logOutButton: some View {
-        VStack {
-            Button(action: {
-                viewModel.trackLogoutClickedClicked()
-                viewModel.router.presentView(
-                    transitionStyle: .crossDissolve,
-                    animated: true
-                ) {
-                    AlertView(
-                        alertTitle: ProfileLocalization.LogoutAlert.title,
-                        alertMessage: ProfileLocalization.LogoutAlert.text,
-                        positiveAction: CoreLocalization.Alert.accept,
-                        onCloseTapped: {
-                            viewModel.router.dismiss(animated: true)
-                        },
-                        firstButtonTapped: {
-                            viewModel.router.dismiss(animated: true)
-                            Task {
-                                await viewModel.logOut()
-                            }
-                        },
-                        type: .logOut
-                    )
+                switch viewModel.versionState {
+                case .actual:
+                    HStack(spacing: 6) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(Theme.Colors.brandGreen)
+                        Text(ProfileLocalization.Settings.upToDate)
+                            .font(Theme.Fonts.labelLarge)
+                            .foregroundColor(Theme.Colors.brandCardMedium)
+                    }
+                case .updateNeeded:
+                    Text("\(ProfileLocalization.Settings.tapToUpdate) \(viewModel.latestVersion)")
+                        .font(Theme.Fonts.labelLarge)
+                        .foregroundColor(Theme.Colors.accentColor)
+                case .updateRequired:
+                    Text(ProfileLocalization.Settings.tapToInstall)
+                        .font(Theme.Fonts.labelLarge)
+                        .foregroundColor(Theme.Colors.accentColor)
                 }
-            }, label: {
-                HStack {
-                    Text(ProfileLocalization.logout)
-                    Spacer()
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                }
-            })
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(ProfileLocalization.logout)
-            .accessibilityIdentifier("logout_button")
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .background(
+                RoundedRectangle(cornerRadius: SettingsLayout.versionCardCornerRadius, style: .continuous)
+                    .fill(Theme.Colors.brandCreamStrong)
+            )
         }
-        .foregroundColor(Theme.Colors.alert)
-        .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
-        .padding(.top, 24)
-        .padding(.bottom, 60)
+        .disabled(viewModel.versionState == .actual)
+        .accessibilityIdentifier("version_button")
     }
-}
 
-// MARK: - Shape para esquinas redondeadas solo arriba
-
-private struct SettingsSheetShape: Shape {
-    let radius: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: [.topLeft, .topRight],
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
+    private var logoutButton: some View {
+        Button(action: {
+            viewModel.trackLogoutClickedClicked()
+            viewModel.router.presentView(
+                transitionStyle: .crossDissolve,
+                animated: true
+            ) {
+                AlertView(
+                    alertTitle: ProfileLocalization.LogoutAlert.title,
+                    alertMessage: ProfileLocalization.LogoutAlert.text,
+                    positiveAction: CoreLocalization.Alert.accept,
+                    onCloseTapped: {
+                        viewModel.router.dismiss(animated: true)
+                    },
+                    firstButtonTapped: {
+                        viewModel.router.dismiss(animated: true)
+                        Task {
+                            await viewModel.logOut()
+                        }
+                    },
+                    type: .logOut
+                )
+            }
+        }) {
+            HStack(spacing: 8) {
+                Text(ProfileLocalization.logout)
+                    .font(Theme.Fonts.titleMedium)
+                Image(systemName: "rectangle.portrait.and.arrow.right")
+                    .font(.system(size: 18, weight: .semibold))
+            }
+            .foregroundColor(Theme.Colors.guindaColor)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: SettingsLayout.logoutCornerRadius, style: .continuous)
+                    .fill(Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: SettingsLayout.logoutCornerRadius, style: .continuous)
+                    .stroke(Theme.Colors.guindaColor, lineWidth: SettingsLayout.logoutBorderWidth)
+            )
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(ProfileLocalization.logout)
+        .accessibilityIdentifier("logout_button")
     }
 }
 
