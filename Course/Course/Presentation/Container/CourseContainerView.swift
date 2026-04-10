@@ -110,15 +110,16 @@ public struct CourseContainerView: View {
                     tabs
                     GeometryReader { proxy in
                         VStack(spacing: 0) {
-                            CourseHeaderView(
-                                viewModel: viewModel,
-                                title: title,
-                                collapsed: $collapsed,
-                                containerWidth: proxy.size.width,
-                                animationNamespace: animationNamespace,
-                                isAnimatingForTap: $isAnimatingForTap,
-                                courseRawImage: courseRawImage
-                            )
+                                CourseHeaderView(
+                                    viewModel: viewModel,
+                                    title: title,
+                                    collapsed: $collapsed,
+                                    containerWidth: proxy.size.width,
+                                    animationNamespace: animationNamespace,
+                                    isAnimatingForTap: $isAnimatingForTap,
+                                    courseRawImage: courseRawImage,
+                                    headerHeight: $viewHeight
+                                )
                         }
                         .offset(
                             y: ignoreOffset
@@ -165,6 +166,7 @@ public struct CourseContainerView: View {
     private func backButton(containerWidth: CGFloat) -> some View {
         ZStack(alignment: .topLeading) {
             if !collapsed {
+                let topInset = UIApplication.shared.windowInsets.top
                 HStack {
                     ZStack(alignment: .center) {
                         Circle().fill(Color.white.opacity(0.20))
@@ -182,7 +184,7 @@ public struct CourseContainerView: View {
                     .frame(width: 30, height: 30)
                     .padding(.vertical, 8)
                     .padding(.leading, 12)
-                    .padding(.top, idiom == .pad ? 0 : 55)
+                    .padding(.top, idiom == .pad ? 0 : max(12, topInset + 8))
                     Spacer()
                 }
             }

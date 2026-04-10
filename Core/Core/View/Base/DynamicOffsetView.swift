@@ -25,6 +25,7 @@ public struct DynamicOffsetView: View {
     @Binding private var coordinate: CGFloat
     @Binding private var collapsed: Bool
     @Binding private var viewHeight: CGFloat
+    private var externalHeight: Binding<CGFloat>?
     @State private var collapseHeight: CGFloat = .zero
     
     @Environment(\.isHorizontal) private var isHorizontal
@@ -33,17 +34,30 @@ public struct DynamicOffsetView: View {
     public init(
         coordinate: Binding<CGFloat>,
         collapsed: Binding<Bool>,
-        viewHeight: Binding<CGFloat>
+        viewHeight: Binding<CGFloat>,
+        externalHeight: Binding<CGFloat>? = nil
     ) {
         self._coordinate = coordinate
         self._collapsed = collapsed
         self._viewHeight = viewHeight
+        self.externalHeight = externalHeight
+    }
+
+    private var externalHeightValue: CGFloat {
+        externalHeight?.wrappedValue ?? 0
+    }
+
+    private var effectiveHeight: CGFloat {
+        if externalHeightValue > 0 {
+            return externalHeightValue
+        }
+        return collapseHeight
     }
     
     public var body: some View {
         VStack {
         }
-        .frame(height: collapseHeight)
+        .frame(height: effectiveHeight)
         .overlay(
             GeometryReader { geometry -> Color in
                 if !isOnTheScreen {
@@ -64,13 +78,21 @@ public struct DynamicOffsetView: View {
         )
         .onAppear {
             isOnTheScreen = true
-            changeCollapsedHeight(collapsed: collapsed, isHorizontal: isHorizontal)
+            if externalHeightValue > 0 {
+                collapseHeight = externalHeightValue
+                viewHeight = collapseHeight
+            } else {
+                changeCollapsedHeight(collapsed: collapsed, isHorizontal: isHorizontal)
+            }
         }
         .onDisappear {
             isOnTheScreen = false
         }
         .onChange(of: collapsed) { collapsed in
-            if !collapsed {
+            if externalHeightValue > 0 {
+                collapseHeight = externalHeightValue
+                viewHeight = collapseHeight
+            } else if !collapsed {
                 changeCollapsedHeight(collapsed: collapsed, isHorizontal: isHorizontal)
             }
         }
@@ -78,7 +100,17 @@ public struct DynamicOffsetView: View {
             if isHorizontal {
                 collapsed = true
             }
-            changeCollapsedHeight(collapsed: collapsed, isHorizontal: isHorizontal)
+            if externalHeightValue > 0 {
+                collapseHeight = externalHeightValue
+                viewHeight = collapseHeight
+            } else {
+                changeCollapsedHeight(collapsed: collapsed, isHorizontal: isHorizontal)
+            }
+        }
+        .onChange(of: externalHeightValue) { newValue in
+            guard newValue > 0 else { return }
+            collapseHeight = newValue
+            viewHeight = collapseHeight
         }
     }
     

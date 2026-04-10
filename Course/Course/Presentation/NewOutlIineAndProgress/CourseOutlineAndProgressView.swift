@@ -123,7 +123,8 @@ public struct CourseOutlineAndProgressView: View {
                                 DynamicOffsetView(
                                     coordinate: $coordinate,
                                     collapsed: $collapsed,
-                                    viewHeight: $viewHeight
+                                    viewHeight: $viewHeight,
+                                    externalHeight: $viewHeight
                                 )
 
                                 VStack(alignment: .leading) {

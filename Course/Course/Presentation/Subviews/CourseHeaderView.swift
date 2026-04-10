@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Foundation
 import Kingfisher
 import Core
 import Theme
@@ -16,13 +17,27 @@ struct CourseHeaderView: View {
     private var animationNamespace: Namespace.ID
     @Binding private var collapsed: Bool
     @Binding private var isAnimatingForTap: Bool
+    @Binding private var headerHeight: CGFloat
     @Environment(\.isHorizontal) private var isHorizontal
 
     private let collapsedHorizontalHeight: CGFloat = 230
     private let collapsedVerticalHeight: CGFloat = 260
-    private let expandedHeight: CGFloat = 420
+    private let bannerHeight: CGFloat = 450
+    private let expandedContentHeight: CGFloat = 200
+    private let imageOverlap: CGFloat = 40
+    @State private var measuredContentHeight: CGFloat = 0
+    private var contentHeight: CGFloat {
+        measuredContentHeight > 0 ? measuredContentHeight : expandedContentHeight
+    }
+    private var expandedHeight: CGFloat { bannerHeight + contentHeight - imageOverlap }
 
     private let courseRawImage: String?
+    private static let courseEndFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "es")
+        formatter.dateFormat = "MMM yyyy"
+        return formatter
+    }()
 
     private enum GeometryName {
         case backButton
@@ -39,7 +54,8 @@ struct CourseHeaderView: View {
         containerWidth: CGFloat,
         animationNamespace: Namespace.ID,
         isAnimatingForTap: Binding<Bool>,
-        courseRawImage: String?
+        courseRawImage: String?,
+        headerHeight: Binding<CGFloat>
     ) {
         self.viewModel = viewModel
         self.title = title
@@ -48,10 +64,11 @@ struct CourseHeaderView: View {
         self.animationNamespace = animationNamespace
         self._isAnimatingForTap = isAnimatingForTap
         self.courseRawImage = courseRawImage
+        self._headerHeight = headerHeight
     }
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
+        ZStack(alignment: .topLeading) {
             // Banner image — sin cambios
             ScrollView {
                 if let banner = (courseRawImage ?? viewModel.courseStructure?.media.image.raw)?
@@ -60,7 +77,7 @@ struct CourseHeaderView: View {
                         .onFailureImage(CoreAssets.noCourseImage.image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(maxHeight: expandedHeight, alignment: .center)
+                        .frame(height: bannerHeight, alignment: .center)
                         .allowsHitTesting(false)
                         .clipped()
                         .background(Theme.Colors.background)
@@ -76,6 +93,7 @@ struct CourseHeaderView: View {
                     expandedContent
                 }
             }
+            .padding(.top, collapsed ? 0 : (bannerHeight - imageOverlap))
         }
         .background(Theme.Colors.background)
         .frame(
@@ -84,6 +102,17 @@ struct CourseHeaderView: View {
             ) : expandedHeight
         )
         .ignoresSafeArea(edges: .top)
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        headerHeight = proxy.size.height
+                    }
+                    .onChange(of: proxy.size.height) { newValue in
+                        headerHeight = newValue
+                    }
+            }
+        )
     }
 
     // MARK: - Estado colapsado
@@ -131,24 +160,59 @@ struct CourseHeaderView: View {
 
     private var expandedContent: some View {
         VStack(spacing: 0) {
+            let hasOrg = (viewModel.courseStructure?.org.isEmpty == false)
+            if let org = viewModel.courseStructure?.org {
+                orgBadge(org: org)
+                    .padding(.top, 14)
+            }
             Text(title)
-                .lineLimit(4)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(28))
+                .lineLimit(3)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(18))
                 .foregroundColor(Theme.Colors.brandCardPrimary)
                 .kerning(-0.3)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .padding(.horizontal, 24)
-                .padding(.top, 16)
+                .padding(.horizontal, 20)
+                .padding(.top, hasOrg ? 10 : 14)
                 .allowsHitTesting(false)
                 .frameLimit(width: containerWidth)
-            if let org = viewModel.courseStructure?.org {
-                orgBadge(org: org)
+            if !metadataChips.isEmpty {
+                HStack(spacing: 8) {
+                    ForEach(metadataChips, id: \.self) { label in
+                        Text(label)
+                            .font(Theme.Fonts.ttRoundsBody(11, weight: 700))
+                            .foregroundColor(Color(red: 0.333, green: 0.333, blue: 0.333))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(
+                                Capsule().fill(Theme.Colors.brandCreamStrong)
+                            )
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 14)
+                .allowsHitTesting(false)
+                .frameLimit(width: containerWidth)
+            } else {
+                Spacer().frame(height: 14)
             }
             courseMenuBar(containerWidth: containerWidth)
                 .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
                 .padding(.bottom, 12)
         }
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        measuredContentHeight = proxy.size.height
+                    }
+                    .onChange(of: proxy.size.height) { newValue in
+                        measuredContentHeight = newValue
+                    }
+            }
+        )
         .background {
             ZStack(alignment: .top) {
                 UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28)
@@ -169,25 +233,42 @@ struct CourseHeaderView: View {
     // MARK: - Org Badge
 
     private func orgBadge(org: String) -> some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 5) {
             Circle()
-                .fill(Color.white)
+                .fill(Theme.Colors.brandGreen)
                 .frame(width: 5, height: 5)
             Text(org)
                 .font(Theme.Fonts.ttRoundsBody(11, weight: 600))
-                .foregroundColor(.white)
+                .foregroundColor(Theme.Colors.brandGreen)
                 .lineLimit(1)
                 .truncationMode(.tail)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
-        .background(Capsule().fill(Theme.Colors.brandGreen))
+        .background(
+            Capsule()
+                .fill(Theme.Colors.brandGreen.opacity(0.1))
+        )
+        .overlay(
+            Capsule()
+                .stroke(Theme.Colors.brandGreen.opacity(0.3), lineWidth: 0.5)
+        )
         .frame(maxWidth: containerWidth * 0.55, alignment: .leading)
-        .padding(.horizontal, 24)
-        .padding(.top, 8)
+        .padding(.horizontal, 20)
         .allowsHitTesting(false)
         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
         .frameLimit(width: containerWidth)
+    }
+
+    private var metadataChips: [String] {
+        var chips: [String] = []
+        if let isSelfPaced = viewModel.courseStructure?.isSelfPaced {
+            chips.append(isSelfPaced ? "A tu ritmo" : "Con instructor")
+        }
+        if let end = viewModel.courseEnd {
+            chips.append("Hasta \(Self.courseEndFormatter.string(from: end))")
+        }
+        return chips
     }
 
     // MARK: - Helpers (sin cambios)

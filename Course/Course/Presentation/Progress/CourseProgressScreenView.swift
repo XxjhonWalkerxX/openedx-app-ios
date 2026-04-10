@@ -55,11 +55,12 @@ struct CourseProgressScreenView: View {
                     } else {
                         ScrollView {
                             VStack(alignment: .center) {
-                                DynamicOffsetView(
-                                    coordinate: $coordinate,
-                                    collapsed: $collapsed,
-                                    viewHeight: $viewHeight
-                                )
+                        DynamicOffsetView(
+                            coordinate: $coordinate,
+                            collapsed: $collapsed,
+                            viewHeight: $viewHeight,
+                            externalHeight: $viewHeight
+                        )
                                 RefreshProgressView(isShowRefresh: $viewModel.isShowRefresh)
                                 
                                 courseProgressContent

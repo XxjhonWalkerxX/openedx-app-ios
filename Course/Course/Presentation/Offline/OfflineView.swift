@@ -90,11 +90,12 @@ struct OfflineView: View {
                     } else {
                         ScrollView {
                             VStack(alignment: .leading) {
-                                DynamicOffsetView(
-                                    coordinate: $coordinate,
-                                    collapsed: $collapsed,
-                                    viewHeight: $viewHeight
-                                )
+                            DynamicOffsetView(
+                                coordinate: $coordinate,
+                                collapsed: $collapsed,
+                                viewHeight: $viewHeight,
+                                externalHeight: $viewHeight
+                            )
                                 TotalDownloadedProgressView(
                                     downloadedFilesSize: viewModel.downloadedFilesSize,
                                     totalFilesSize: viewModel.totalFilesSize,

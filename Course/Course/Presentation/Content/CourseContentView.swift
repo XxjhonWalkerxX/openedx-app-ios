@@ -84,7 +84,8 @@ public struct CourseContentView: View {
                             DynamicOffsetView(
                                 coordinate: $coordinate,
                                 collapsed: $collapsed,
-                                viewHeight: $viewHeight
+                                viewHeight: $viewHeight,
+                                externalHeight: $viewHeight
                             )
                             RefreshProgressView(isShowRefresh: $viewModel.isShowRefresh)
                             VStack(alignment: .leading) {

@@ -59,11 +59,12 @@ public struct CourseDatesView: View {
                     GeometryReader { proxy in
                         VStack {
                             ScrollView {
-                                DynamicOffsetView(
-                                    coordinate: $coordinate,
-                                    collapsed: $collapsed,
-                                    viewHeight: $viewHeight
-                                )
+                        DynamicOffsetView(
+                            coordinate: $coordinate,
+                            collapsed: $collapsed,
+                            viewHeight: $viewHeight,
+                            externalHeight: $viewHeight
+                        )
                                 
                                 FullScreenErrorView(
                                     type: .noContent(

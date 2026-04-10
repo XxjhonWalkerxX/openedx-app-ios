@@ -42,7 +42,8 @@ struct HandoutsView: View {
                         DynamicOffsetView(
                             coordinate: $coordinate,
                             collapsed: $collapsed,
-                            viewHeight: $viewHeight
+                            viewHeight: $viewHeight,
+                            externalHeight: $viewHeight
                         )
                         if viewModel.isShowProgress {
                             HStack(alignment: .center) {

@@ -46,8 +46,9 @@ public final class LlaveMXAuthProvider: NSObject {
     // Configuración OAuth
     private static let clientID          = "202602091646467055"
     private static let authorizationURL  = "https://val-llave.infotec.mx/oauth.xhtml"
-    // HTTPS bridge igual que Android — el servidor redirige a mx.aprende.ios://oauth/callback
-    private static let redirectURI       = "https://dev.mexicox.gob.mx/mobile/callback"
+    // Custom scheme directo — LlaveMX redirige a mx.aprende.ios://oauth/callback
+    // ASWebAuthenticationSession lo intercepta sin necesidad del HTTPS bridge
+    private static let redirectURI       = "mx.aprende.ios://oauth/callback"
     private static let callbackScheme    = "mx.aprende.ios"
 
     // UserDefaults keys (temporales durante el flujo)

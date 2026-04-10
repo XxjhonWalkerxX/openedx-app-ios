@@ -25,7 +25,8 @@ struct CourseDateListView: View {
                     DynamicOffsetView(
                         coordinate: $coordinate,
                         collapsed: $collapsed,
-                        viewHeight: $viewHeight
+                        viewHeight: $viewHeight,
+                        externalHeight: $viewHeight
                     )
                     VStack(alignment: .leading, spacing: 0) {
                         
