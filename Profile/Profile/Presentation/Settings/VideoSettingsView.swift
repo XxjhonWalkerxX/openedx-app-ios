@@ -9,11 +9,34 @@ import SwiftUI
 import Core
 import Theme
 
+private enum VideoSettingsLayout {
+    static let topBandHeight: CGFloat = 4
+    static let horizontalPadding: CGFloat = 20
+    static let headerVerticalPaddingPortrait: CGFloat = 52
+    static let headerVerticalPaddingLandscape: CGFloat = 8
+    static let headerBottomPaddingPortrait: CGFloat = 18
+    static let headerBottomPaddingLandscape: CGFloat = 10
+    static let headerMinHeightPortrait: CGFloat = 152
+    static let headerMinHeightLandscape: CGFloat = 84
+    static let headerTitleSpacing: CGFloat = 12
+    static let sectionSpacing: CGFloat = 10
+    static let contentTopPaddingPortrait: CGFloat = 2
+    static let contentTopPaddingLandscape: CGFloat = 10
+    static let contentHorizontalPaddingPortrait: CGFloat = 24
+    static let contentHorizontalPaddingLandscape: CGFloat = 28
+    static let contentMaxWidthLandscape: CGFloat = 620
+    static let backButtonSize: CGFloat = 54
+    static let backButtonCornerRadius: CGFloat = 14
+    static let cardCornerRadius: CGFloat = 18
+    static let cardHorizontalPadding: CGFloat = 18
+    static let cardVerticalPadding: CGFloat = 16
+}
+
 public struct VideoSettingsView: View {
     
     @ObservedObject
     private var viewModel: SettingsViewModel
-    @Environment(\.isHorizontal) private var isHorizontal
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     public init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
@@ -22,72 +45,30 @@ public struct VideoSettingsView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                VStack {
-                    ThemeAssets.headerBackground.swiftUIImage
-                        .resizable()
-                        .edgesIgnoringSafeArea(.top)
-                }
-                .frame(maxWidth: .infinity, maxHeight: 200)
-                .accessibilityIdentifier("auth_bg_image")
-                
-                // MARK: - Page name
-                VStack(alignment: .center) {
-                    ZStack {
-                        HStack {
-                            Text(ProfileLocalization.Settings.videoSettingsTitle)
-                                .titleSettings(color: Theme.Colors.loginNavigationText)
-                                .accessibilityIdentifier("manage_account_text")
-                        }
-                        VStack {
-                            BackNavigationButton(
-                                color: Theme.Colors.loginNavigationText,
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: VideoSettingsLayout.sectionSpacing) {
+                            videoToggleCard
+                            videoNavigationCard(
+                                title: ProfileLocalization.Settings.videoQualityTitle,
+                                description: viewModel.selectedQuality.settingsDescription(),
+                                accessibilityID: "video_stream_quality_button",
+                                imageID: "video_stream_quality_image",
                                 action: {
-                                    viewModel.router.back()
+                                    viewModel.router.showVideoQualityView(viewModel: viewModel)
                                 }
                             )
-                            .backViewStyle()
-                            .padding(.leading, isHorizontal ? 48 : 0)
-                            .accessibilityIdentifier("back_button")
-                            
-                        }.frame(minWidth: 0,
-                                maxWidth: .infinity,
-                                alignment: .topLeading)
-                    }
-                    // MARK: - Page Body
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 24) {
-                            // MARK: Wi-fi
-                            HStack {
-                                SettingsCell(
-                                    title: ProfileLocalization.Settings.wifiTitle,
-                                    description: ProfileLocalization.Settings.wifiDescription
-                                )
-                                Toggle(isOn: $viewModel.wifiOnly, label: {})
-                                    .toggleStyle(SwitchToggleStyle(tint: Theme.Colors.toggleSwitchColor))
-                                    .frame(width: 50)
-                                    .accessibilityIdentifier("download_agreement_switch")
-                            }.foregroundColor(Theme.Colors.textPrimary)
-                            Divider()
-                            
-                            // MARK: Streaming Quality
-                            HStack {
-                                Button(action: {
-                                    viewModel.router.showVideoQualityView(viewModel: viewModel)
-                                }, label: {
-                                    SettingsCell(title: ProfileLocalization.Settings.videoQualityTitle,
-                                                 description: viewModel.selectedQuality.settingsDescription())
-                                })
-                                .accessibilityIdentifier("video_stream_quality_button")
-                                Image(systemName: "chevron.right")
-                                    .padding(.trailing, 12)
-                                    .frame(width: 10)
-                                    .accessibilityIdentifier("video_stream_quality_image")
-                            }
-                            Divider()
-                            
-                            // MARK: Download Quality
-                            HStack {
-                                Button {
+                            videoNavigationCard(
+                                title: CoreLocalization.Settings.videoDownloadQualityTitle,
+                                description: viewModel.userSettings.downloadQuality.settingsDescription,
+                                accessibilityID: "video_download_quality_button",
+                                imageID: "video_download_quality_image",
+                                action: {
                                     viewModel.router.showVideoDownloadQualityView(
                                         downloadQuality: viewModel.userSettings.downloadQuality,
                                         didSelect: { quality in
@@ -97,36 +78,169 @@ public struct VideoSettingsView: View {
                                         },
                                         analytics: viewModel.coreAnalytics
                                     )
-                                } label: {
-                                    SettingsCell(
-                                        title: CoreLocalization.Settings.videoDownloadQualityTitle,
-                                        description: viewModel.userSettings.downloadQuality.settingsDescription
-                                    )
                                 }
-                                .accessibilityIdentifier("video_download_quality_button")
-                                Image(systemName: "chevron.right")
-                                    .padding(.trailing, 12)
-                                    .frame(width: 10)
-                                    .accessibilityIdentifier("video_download_quality_image")
-                            }
-                            Divider()
+                            )
                         }
-                        .frameLimit(width: proxy.size.width)
-                        .padding(.horizontal, 24)
-                        .padding(.top, 24)
+                        .frame(maxWidth: contentMaxWidth(for: proxy.size.width))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.horizontal, contentHorizontalPadding)
+                        .padding(.top, contentTopPadding)
+                        .padding(.bottom, 32)
                     }
-                    .roundedBackground(Theme.Colors.background)
+                    .scrollIndicators(.hidden)
                 }
             }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .navigationTitle(ProfileLocalization.Settings.videoSettingsTitle)
-        .ignoresSafeArea(.all, edges: .horizontal)
+    }
+
+    private var isLandscapeLike: Bool {
+        verticalSizeClass == .compact
+    }
+
+    private var headerTopPadding: CGFloat {
+        isLandscapeLike ? VideoSettingsLayout.headerVerticalPaddingLandscape : VideoSettingsLayout.headerVerticalPaddingPortrait
+    }
+
+    private var headerBottomPadding: CGFloat {
+        isLandscapeLike ? VideoSettingsLayout.headerBottomPaddingLandscape : VideoSettingsLayout.headerBottomPaddingPortrait
+    }
+
+    private var headerMinHeight: CGFloat {
+        isLandscapeLike ? VideoSettingsLayout.headerMinHeightLandscape : VideoSettingsLayout.headerMinHeightPortrait
+    }
+
+    private var contentTopPadding: CGFloat {
+        isLandscapeLike ? VideoSettingsLayout.contentTopPaddingLandscape : VideoSettingsLayout.contentTopPaddingPortrait
+    }
+
+    private var contentHorizontalPadding: CGFloat {
+        isLandscapeLike ? VideoSettingsLayout.contentHorizontalPaddingLandscape : VideoSettingsLayout.contentHorizontalPaddingPortrait
+    }
+
+    private func contentMaxWidth(for availableWidth: CGFloat) -> CGFloat {
+        if isLandscapeLike {
+            return min(availableWidth - (contentHorizontalPadding * 2), VideoSettingsLayout.contentMaxWidthLandscape)
+        } else {
+            return availableWidth - (contentHorizontalPadding * 2)
+        }
+    }
+
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: VideoSettingsLayout.topBandHeight)
+
+            HStack(alignment: .top, spacing: VideoSettingsLayout.headerTitleSpacing) {
+                Button(action: {
+                    viewModel.router.back()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: VideoSettingsLayout.backButtonSize, height: VideoSettingsLayout.backButtonSize)
+                        .background(
+                            RoundedRectangle(cornerRadius: VideoSettingsLayout.backButtonCornerRadius, style: .continuous)
+                                .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                Text(ProfileLocalization.Settings.videoSettingsTitle)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .foregroundColor(.white)
+                    .accessibilityIdentifier("manage_account_text")
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, VideoSettingsLayout.horizontalPadding)
+            .padding(.top, headerTopPadding)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+            .accessibilityIdentifier("auth_bg_image")
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
+    private var videoToggleCard: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(ProfileLocalization.Settings.wifiTitle)
+                    .font(Theme.Fonts.titleMedium)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Theme.Colors.brandGreen)
+                Text(ProfileLocalization.Settings.wifiDescription)
+                    .font(Theme.Fonts.bodySmall)
+                    .foregroundColor(Theme.Colors.brandCardMedium)
+            }
+
+            Spacer()
+
+            Toggle(isOn: $viewModel.wifiOnly, label: {})
+                .toggleStyle(SwitchToggleStyle(tint: Theme.Colors.brandGreen))
+                .frame(width: 50)
+                .accessibilityIdentifier("download_agreement_switch")
+        }
+        .padding(.horizontal, VideoSettingsLayout.cardHorizontalPadding)
+        .padding(.vertical, VideoSettingsLayout.cardVerticalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            Theme.Colors.background
-                .ignoresSafeArea()
+            RoundedRectangle(cornerRadius: VideoSettingsLayout.cardCornerRadius, style: .continuous)
+                .fill(Theme.Colors.white)
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: VideoSettingsLayout.cardCornerRadius, style: .continuous)
+                .stroke(Color.black.opacity(0.04), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.06), radius: 5, x: 0, y: 2)
+    }
+
+    private func videoNavigationCard(
+        title: String,
+        description: String,
+        accessibilityID: String,
+        imageID: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(Theme.Fonts.titleMedium)
+                        .fontWeight(.semibold)
+                        .foregroundColor(Theme.Colors.brandGreen)
+                    Text(description)
+                        .font(Theme.Fonts.bodySmall)
+                        .foregroundColor(Theme.Colors.brandCardMedium)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Theme.Colors.brandGreen)
+                    .accessibilityIdentifier(imageID)
+            }
+            .padding(.horizontal, VideoSettingsLayout.cardHorizontalPadding)
+            .padding(.vertical, VideoSettingsLayout.cardVerticalPadding)
+            .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: VideoSettingsLayout.cardCornerRadius, style: .continuous)
+                    .fill(Theme.Colors.white)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: VideoSettingsLayout.cardCornerRadius, style: .continuous)
+                    .stroke(Color.black.opacity(0.04), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.06), radius: 5, x: 0, y: 2)
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityID)
     }
 }
 
