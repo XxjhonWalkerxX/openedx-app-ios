@@ -10,12 +10,40 @@ import Core
 import OEXFoundation
 import Theme
 
+private enum ManageAccountLayout {
+    static let topBandHeight: CGFloat = 4
+    static let headerHorizontalPadding: CGFloat = 20
+    static let headerTopPaddingPortrait: CGFloat = 52
+    static let headerTopPaddingLandscape: CGFloat = 8
+    static let headerBottomPaddingPortrait: CGFloat = 18
+    static let headerBottomPaddingLandscape: CGFloat = 10
+    static let headerMinHeightPortrait: CGFloat = 152
+    static let headerMinHeightLandscape: CGFloat = 84
+    static let headerTitleSpacing: CGFloat = 12
+    static let backButtonSize: CGFloat = 54
+    static let backButtonCornerRadius: CGFloat = 14
+
+    static let contentTopPaddingPortrait: CGFloat = 2
+    static let contentTopPaddingLandscape: CGFloat = 10
+    static let contentHorizontalPaddingPortrait: CGFloat = 24
+    static let contentHorizontalPaddingLandscape: CGFloat = 28
+    static let contentMaxWidthLandscape: CGFloat = 620
+
+    static let sectionSpacing: CGFloat = 20
+    static let profileSpacing: CGFloat = 12
+    static let profileNameSpacing: CGFloat = 4
+    static let profileTopPaddingPortrait: CGFloat = 4
+    static let profileTopPaddingLandscape: CGFloat = 12
+    static let editButtonTopPadding: CGFloat = 4
+    static let deleteButtonTopPadding: CGFloat = 24
+}
+
 public struct ManageAccountView: View {
     
     @ObservedObject
     private var viewModel: ManageAccountViewModel
-    
-    @Environment(\.isHorizontal) private var isHorizontal
+
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     public init(viewModel: ManageAccountViewModel) {
         self.viewModel = viewModel
@@ -24,45 +52,18 @@ public struct ManageAccountView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                VStack {
-                    ThemeAssets.headerBackground.swiftUIImage
-                        .resizable()
-                        .edgesIgnoringSafeArea(.top)
-                }
-                .frame(maxWidth: .infinity, maxHeight: 200)
-                .accessibilityIdentifier("auth_bg_image")
-                
-                // MARK: - Page name
-                VStack(alignment: .center) {
-                    ZStack {
-                        HStack {
-                            Text(ProfileLocalization.manageAccount)
-                                .titleSettings(color: Theme.Colors.loginNavigationText)
-                                .accessibilityIdentifier("manage_account_text")
-                        }
-                        VStack {
-                            BackNavigationButton(
-                                color: Theme.Colors.loginNavigationText,
-                                action: {
-                                    viewModel.router.back()
-                                }
-                            )
-                            .backViewStyle()
-                            .padding(.leading, isHorizontal ? 48 : 0)
-                            .accessibilityIdentifier("back_button")
-                            
-                        }.frame(minWidth: 0,
-                                maxWidth: .infinity,
-                                alignment: .topLeading)
-                    }
-                    
-                    // MARK: - Page Body
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
                     ScrollView {
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: ManageAccountLayout.sectionSpacing) {
                             if viewModel.isShowProgress {
                                 ProgressBar(size: 40, lineWidth: 8)
-                                    .padding(.top, 200)
-                                    .padding(.horizontal)
+                                    .padding(.top, 120)
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .accessibilityIdentifier("progress_bar")
                             } else {
                                 userAvatar
@@ -70,16 +71,17 @@ public struct ManageAccountView: View {
                                 deleteAccount
                             }
                         }
+                        .frame(maxWidth: contentMaxWidth(for: proxy.size.width))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, contentTopPadding)
+                        .padding(.horizontal, contentHorizontalPadding)
+                        .padding(.bottom, 32)
                     }
                     .refreshable {
                         Task {
                             await viewModel.getMyProfile(withProgress: false)
                         }
                     }
-                    .frameLimit(width: proxy.size.width)
-                    .padding(.top, 24)
-                    .padding(.horizontal, isHorizontal ? 24 : 0)
-                    .roundedBackground(Theme.Colors.background)
                 }
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
@@ -108,34 +110,130 @@ public struct ManageAccountView: View {
                 }
             }
         }
-        .background(
-            Theme.Colors.background
-                .ignoresSafeArea()
-        )
-        .ignoresSafeArea(.all, edges: .horizontal)
         .onFirstAppear {
             Task {
                 await viewModel.getMyProfile()
             }
         }
     }
+
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: ManageAccountLayout.topBandHeight)
+
+            HStack(alignment: .top, spacing: ManageAccountLayout.headerTitleSpacing) {
+                Button(action: {
+                    viewModel.router.back()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: ManageAccountLayout.backButtonSize, height: ManageAccountLayout.backButtonSize)
+                        .background(
+                            RoundedRectangle(cornerRadius: ManageAccountLayout.backButtonCornerRadius, style: .continuous)
+                                .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                Text(ProfileLocalization.manageAccount)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .foregroundColor(.white)
+                    .accessibilityIdentifier("manage_account_text")
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, ManageAccountLayout.headerHorizontalPadding)
+            .padding(.top, headerTopPadding)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+            .accessibilityIdentifier("auth_bg_image")
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
+    private var isLandscapeLike: Bool {
+        verticalSizeClass == .compact
+    }
+
+    private var headerTopPadding: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.headerTopPaddingLandscape
+        } else {
+            return ManageAccountLayout.headerTopPaddingPortrait
+        }
+    }
+
+    private var headerBottomPadding: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.headerBottomPaddingLandscape
+        } else {
+            return ManageAccountLayout.headerBottomPaddingPortrait
+        }
+    }
+
+    private var headerMinHeight: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.headerMinHeightLandscape
+        } else {
+            return ManageAccountLayout.headerMinHeightPortrait
+        }
+    }
+
+    private var contentTopPadding: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.contentTopPaddingLandscape
+        } else {
+            return ManageAccountLayout.contentTopPaddingPortrait
+        }
+    }
+
+    private var contentHorizontalPadding: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.contentHorizontalPaddingLandscape
+        } else {
+            return ManageAccountLayout.contentHorizontalPaddingPortrait
+        }
+    }
+
+    private var profileTopPadding: CGFloat {
+        if isLandscapeLike {
+            return ManageAccountLayout.profileTopPaddingLandscape
+        } else {
+            return ManageAccountLayout.profileTopPaddingPortrait
+        }
+    }
+
+    private func contentMaxWidth(for availableWidth: CGFloat) -> CGFloat {
+        if isLandscapeLike {
+            return min(availableWidth - (contentHorizontalPadding * 2), ManageAccountLayout.contentMaxWidthLandscape)
+        } else {
+            return availableWidth - (contentHorizontalPadding * 2)
+        }
+    }
     
     private var userAvatar: some View {
-        HStack(alignment: .center, spacing: 12) {
+        HStack(alignment: .center, spacing: ManageAccountLayout.profileSpacing) {
             UserAvatar(url: viewModel.userModel?.avatarUrl ?? "", image: $viewModel.updatedAvatar)
                 .accessibilityIdentifier("user_avatar_image")
-            VStack(alignment: .leading, spacing: 4) {
-                Text(viewModel.userModel?.name ?? "")
+            VStack(alignment: .leading, spacing: ManageAccountLayout.profileNameSpacing) {
+                Text(displayName)
                     .font(Theme.Fonts.headlineSmall)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Theme.Colors.brandGreen)
                     .accessibilityIdentifier("user_name_text")
-                Text("\(viewModel.userModel?.email ?? "")")
+                Text(displayEmail)
                     .font(Theme.Fonts.labelLarge)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .foregroundColor(Theme.Colors.brandGreen)
                     .accessibilityIdentifier("user_username_text")
             }
             Spacer()
-        }.padding(.all, 24)
+        }
+        .padding(.top, profileTopPadding)
             .frame(
                 minWidth: 0,
                 maxWidth: .infinity,
@@ -159,8 +257,8 @@ public struct ManageAccountView: View {
             alignment: .center
         )
         .font(Theme.Fonts.labelLarge)
-        .foregroundColor(Theme.Colors.alert)
-        .padding(.top, 12)
+        .foregroundColor(Theme.Colors.guindaColor)
+        .padding(.top, ManageAccountLayout.deleteButtonTopPadding)
         .accessibilityIdentifier("delete_account_button")
     }
     
@@ -184,16 +282,35 @@ public struct ManageAccountView: View {
                         }
                     )
                 },
-                color: Theme.Colors.background,
-                textColor: Theme.Colors.accentColor,
-                borderColor: Theme.Colors.accentColor
-            ).padding(.horizontal, 24)
+                color: Theme.Colors.white,
+                textColor: Theme.Colors.brandGreen,
+                borderColor: Theme.Colors.brandGreen
+            )
         }
+        .padding(.top, ManageAccountLayout.editButtonTopPadding)
         .frame(
             minWidth: 0,
             maxWidth: .infinity,
             alignment: .center
         )
+    }
+
+    private var displayEmail: String {
+        viewModel.userModel?.email ?? ""
+    }
+
+    private var displayName: String {
+        let trimmedName = (viewModel.userModel?.name ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedName.isEmpty {
+            return trimmedName.uppercased()
+        }
+
+        let emailPrefix = displayEmail.split(separator: "@").first.map(String.init) ?? ""
+        if !emailPrefix.isEmpty {
+            return emailPrefix.replacingOccurrences(of: ".", with: " ").uppercased()
+        }
+
+        return ""
     }
 }
 
