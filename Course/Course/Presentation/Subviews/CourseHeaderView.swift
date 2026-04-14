@@ -96,13 +96,13 @@ struct CourseHeaderView: View {
             }
             .padding(.top, collapsed ? 0 : (bannerHeight - imageOverlap))
         }
-        // Restauramos el fondo fill completo para evitar la transparencia del gap,
-        // usando brandCream como en Android.
-        .background(Theme.Colors.brandCream)
+        // Aplicamos fondo solamente en expansión para no bloquear la lista inferior
+        .background(collapsed ? Color.clear : Theme.Colors.background)
         .frame(
             height: collapsed ? (
                 isHorizontal ? collapsedHorizontalHeight : collapsedVerticalHeight
-            ) : expandedHeight
+            ) : expandedHeight,
+            alignment: .top
         )
         .ignoresSafeArea(edges: .top)
         .background(
