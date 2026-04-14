@@ -154,18 +154,17 @@ struct CourseHeaderView: View {
                 .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
                 .padding(.bottom, 12)
         }
-        .background {
+        .background(
             ZStack(alignment: .top) {
                 Theme.Colors.brandCream
                     .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
+                    .ignoresSafeArea(edges: .top) // Ignora top safe area para pintar detrás de la batería/notch
                 Theme.Colors.guindaColor
                     .frame(height: 4)
                     .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
-                Color.clear
-                    .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
-                    .ignoresSafeArea()
+                    // La franja guinda queda contenida, pero el fondo crema sube a tapar todo
             }
-        }
+        )
     }
 
     // MARK: - Estado expandido
