@@ -32,18 +32,18 @@ struct ContinueWithView: View {
         Button(action: action) {
             HStack {
                 Text(courseContinueUnit.displayName)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.ttRoundsBody(14, weight: 500))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.leading)
                     .lineLimit(2)
-                
+
                 Spacer()
-                
+
                 HStack(spacing: 8) {
                     Text(CoreLocalization.Courseware.continue)
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.ttRoundsBody(14, weight: 700))
                         .foregroundColor(.white)
-                    
+
                     CoreAssets.arrowLeft.swiftUIImage
                         .renderingMode(.template)
                         .foregroundColor(.white)
@@ -51,13 +51,14 @@ struct ContinueWithView: View {
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
             .frame(height: 56)
-            .background(Theme.Colors.accentColor)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .background(Theme.Colors.brandGreen)
+            .clipShape(Capsule())
+            .shadow(color: Theme.Colors.brandGreen.opacity(0.35), radius: 6, x: 0, y: 3)
         }
         .padding(.horizontal, 24)
+        .padding(.vertical, 8)
     }
 }
 

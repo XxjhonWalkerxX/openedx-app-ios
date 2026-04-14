@@ -26,11 +26,6 @@ struct CustomDisclosureGroup: View {
             ForEach(course.childs) { chapter in
                 let chapterIndex = course.childs.firstIndex(where: { $0.id == chapter.id })
                 VStack(alignment: .leading, spacing: 0) {
-                    // MARK: - Progress Bar
-                    SectionProgressView(progress: chapterProgress(for: chapter))
-                        .padding(.horizontal, -16)
-                        .padding(.top, -12)
-                    
                     Button(
                         action: {
                             withAnimation(.linear(duration: course.childs.count > 1 ? 0.2 : 0.05)) {
@@ -38,20 +33,25 @@ struct CustomDisclosureGroup: View {
                             }
                             viewModel.trackSectionClicked(chapter)
                         }, label: {
-                            HStack {
-                                CoreAssets.chevronRight.swiftUIImage
-                                    .rotationEffect(
-                                        .degrees(viewModel.expandedSections[chapter.id] ?? false ? -90 : 90)
-                                    )
-                                    .foregroundColor(Theme.Colors.textPrimary)
+                            HStack(spacing: 12) {
+                                // Círculo verde con el número del módulo
+                                ZStack {
+                                    Circle()
+                                        .fill(Theme.Colors.brandGreen)
+                                        .frame(width: 28, height: 28)
+                                    Text("\(chapterIndex.map { $0 + 1 } ?? 1)")
+                                        .font(Theme.Fonts.ttRoundsBody(14, weight: 700))
+                                        .foregroundColor(Theme.Colors.brandCream)
+                                }
+
                                 if chapter.childs.allSatisfy({ $0.completion == 1 }) {
                                     CoreAssets.finishedSequence.swiftUIImage.renderingMode(.template)
                                         .foregroundColor(Theme.Colors.success)
                                 }
                                 Text(chapter.displayName)
-                                    .font(Theme.Fonts.titleMedium)
-                                    .foregroundColor(Theme.Colors.textPrimary)
-                                    .lineLimit(1)
+                                    .font(Theme.Fonts.ttRoundsBody(16, weight: 600))
+                                    .foregroundColor(Theme.Colors.brandGreen)
+                                    .lineLimit(2)
                                 Spacer()
                                 if canDownloadAllSections(in: chapter),
                                    let state = downloadAllButtonState(for: chapter) {
@@ -71,6 +71,13 @@ struct CustomDisclosureGroup: View {
                                         }
                                     )
                                 }
+                                
+                                // Chevron del lado derecho
+                                CoreAssets.chevronRight.swiftUIImage
+                                    .rotationEffect(
+                                        .degrees(viewModel.expandedSections[chapter.id] ?? false ? 90 : 0)
+                                    )
+                                    .foregroundColor(Theme.Colors.brandGreen)
                             }
                         }
                     )
@@ -166,15 +173,15 @@ struct CustomDisclosureGroup: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+                .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Theme.Colors.datesSectionBackground)
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Theme.Colors.background)
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(style: .init(lineWidth: 1, lineCap: .round, lineJoin: .round, miterLimit: 1))
-                        .foregroundColor(Theme.Colors.cardViewStroke)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Theme.Colors.brandCreamStrong)
+                        .offset(y: 4)
                 )
             }
         }
