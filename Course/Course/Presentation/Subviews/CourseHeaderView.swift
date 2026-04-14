@@ -69,21 +69,21 @@ struct CourseHeaderView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            // Banner image — sin cambios
-            ScrollView {
+            // Banner image — altura colapsada a 0 + opacidad 0 para eliminar derrame
+            ZStack {
                 if let banner = (courseRawImage ?? viewModel.courseStructure?.media.image.raw)?
                     .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                     KFImage(courseBannerURL(for: banner))
                         .onFailureImage(CoreAssets.noCourseImage.image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(height: bannerHeight, alignment: .center)
                         .allowsHitTesting(false)
                         .clipped()
                         .background(Theme.Colors.background)
                 }
             }
-            .disabled(true)
+            .frame(height: collapsed ? 0 : bannerHeight)
+            .opacity(collapsed ? 0 : 1)
             .ignoresSafeArea()
 
             VStack(alignment: .leading) {
@@ -101,7 +101,6 @@ struct CourseHeaderView: View {
                 isHorizontal ? collapsedHorizontalHeight : collapsedVerticalHeight
             ) : expandedHeight
         )
-        .clipped()
         .ignoresSafeArea(edges: .top)
         .background(
             GeometryReader { proxy in
