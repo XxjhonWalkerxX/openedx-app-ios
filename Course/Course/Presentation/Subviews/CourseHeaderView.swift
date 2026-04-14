@@ -101,6 +101,7 @@ struct CourseHeaderView: View {
                 isHorizontal ? collapsedHorizontalHeight : collapsedVerticalHeight
             ) : expandedHeight
         )
+        .clipped()
         .ignoresSafeArea(edges: .top)
         .background(
             GeometryReader { proxy in
