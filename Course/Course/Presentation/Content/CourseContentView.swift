@@ -173,7 +173,7 @@ public struct CourseContentView: View {
             }
         }
         .background(
-            Theme.Colors.background
+            Theme.Colors.brandCream
                 .ignoresSafeArea()
         )
     }
