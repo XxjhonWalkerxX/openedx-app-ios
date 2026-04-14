@@ -83,6 +83,7 @@ struct CourseHeaderView: View {
                 }
             }
             .frame(height: collapsed ? 0 : bannerHeight)
+            .clipped()
             .opacity(collapsed ? 0 : 1)
             .ignoresSafeArea()
 
@@ -95,11 +96,13 @@ struct CourseHeaderView: View {
             }
             .padding(.top, collapsed ? 0 : (bannerHeight - imageOverlap))
         }
-        .background(Theme.Colors.background)
+        // Aplicamos fondo solamente en expansión para no bloquear la lista inferior
+        .background(collapsed ? Color.clear : Theme.Colors.background)
         .frame(
             height: collapsed ? (
                 isHorizontal ? collapsedHorizontalHeight : collapsedVerticalHeight
-            ) : expandedHeight
+            ) : expandedHeight,
+            alignment: .top
         )
         .ignoresSafeArea(edges: .top)
         .background(
