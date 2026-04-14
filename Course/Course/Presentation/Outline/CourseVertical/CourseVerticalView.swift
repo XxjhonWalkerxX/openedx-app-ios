@@ -35,41 +35,9 @@ public struct CourseVerticalView: View {
     public var body: some View {
         ZStack(alignment: .top) {
             // MARK: - Page Body
-            VStack(spacing: 0) {
-                // MARK: - Custom Header Matches Android
-                HStack {
-                    Button(action: {
-                        viewModel.router.back()
-                    }) {
-                        CoreAssets.arrowLeft.swiftUIImage
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(Theme.Colors.brandGreen)
-                    }
-                    .padding(.leading, 24)
-                    .frame(width: 48, height: 48, alignment: .leading)
-                    
-                    Spacer()
-                    
-                    Text(title)
-                        .font(Theme.Fonts.ttRoundsBody(18, weight: 600))
-                        .foregroundColor(Theme.Colors.brandGreen)
-                        .lineLimit(1)
-                    
-                    Spacer()
-                    
-                    // Fake view for centering
-                    Color.clear
-                        .frame(width: 48, height: 48)
-                }
-                .padding(.top, 8)
-                .padding(.bottom, 8)
-                
-                GeometryReader { proxy in
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
                         
                         // MARK: - Header
                         HStack(spacing: 8) {
@@ -80,9 +48,6 @@ public struct CourseVerticalView: View {
                                 .font(Theme.Fonts.ttRoundsBody(10, weight: 700))
                                 .foregroundColor(Theme.Colors.guindaColor)
                                 .kerning(1.2)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                                .layoutPriority(1)
                             Rectangle()
                                 .fill(Theme.Colors.guindaColor.opacity(0.3))
                                 .frame(height: 1)
@@ -93,7 +58,8 @@ public struct CourseVerticalView: View {
                         
                         // MARK: - Lessons list
                         ForEach(Array(viewModel.verticals.enumerated()), id: \.element.id) { index, vertical in
-                            let accentColor = (index % 3 == 2) ? Theme.Colors.guindaColor : Theme.Colors.brandGreen
+                            let isGraded = vertical.childs.contains(where: { $0.graded })
+                            let accentColor = isGraded ? Theme.Colors.guindaColor : Theme.Colors.brandGreen
                             let isCompleted = vertical.completion == 1
                             
                             Button(action: {
@@ -181,15 +147,15 @@ public struct CourseVerticalView: View {
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(vertical.displayName)
                         }
-                        .frameLimit(width: proxy.size.width)
-                        Spacer(minLength: 84)
                     }
-                    .accessibilityAction {}
-                    .onRightSwipeGesture {
-                        viewModel.router.back()
-                    }
+                    .frameLimit(width: proxy.size.width)
+                    Spacer(minLength: 84)
                 }
-            } // Close the VStack
+                .accessibilityAction {}
+                .onRightSwipeGesture {
+                    viewModel.router.back()
+                }
+            }
             .padding(.top, 8)
             
             // MARK: - Offline mode SnackBar
@@ -212,8 +178,9 @@ public struct CourseVerticalView: View {
                 }
             }
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(false)
+        .navigationBarBackButtonHidden(false)
+        .navigationTitle(title)
         .background(
             Theme.Colors.brandCream
                 .ignoresSafeArea()
