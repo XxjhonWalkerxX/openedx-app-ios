@@ -25,7 +25,10 @@ struct CustomDisclosureGroup: View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(course.childs) { chapter in
                 let chapterIndex = course.childs.firstIndex(where: { $0.id == chapter.id })
+                let isExpanded = viewModel.expandedSections[chapter.id] ?? false
+                
                 VStack(alignment: .leading, spacing: 0) {
+                    // MARK: - Header (Chapter)
                     Button(
                         action: {
                             withAnimation(.linear(duration: course.childs.count > 1 ? 0.2 : 0.05)) {
@@ -49,9 +52,10 @@ struct CustomDisclosureGroup: View {
                                         .foregroundColor(Theme.Colors.success)
                                 }
                                 Text(chapter.displayName)
-                                    .font(Theme.Fonts.ttRoundsBody(16, weight: 600))
+                                    .font(Theme.Fonts.ttRoundsBody(15, weight: 600))
                                     .foregroundColor(Theme.Colors.brandGreen)
                                     .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
                                 Spacer()
                                 if canDownloadAllSections(in: chapter),
                                    let state = downloadAllButtonState(for: chapter) {
@@ -67,7 +71,6 @@ struct CustomDisclosureGroup: View {
                                             case .finished:
                                                 DownloadFinishedView()
                                             }
-                                            
                                         }
                                     )
                                 }
@@ -75,113 +78,118 @@ struct CustomDisclosureGroup: View {
                                 // Chevron del lado derecho
                                 CoreAssets.chevronRight.swiftUIImage
                                     .rotationEffect(
-                                        .degrees(viewModel.expandedSections[chapter.id] ?? false ? 90 : 0)
+                                        .degrees(isExpanded ? 90 : 0)
                                     )
                                     .foregroundColor(Theme.Colors.brandGreen)
                             }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 16)
                         }
                     )
-                    .padding(.top, 8)
-                    if viewModel.expandedSections[chapter.id] ?? false {
-                        VStack(alignment: .leading) {
-                            ForEach(chapter.childs) { sequential in
-                                let sequentialIndex = chapter.childs.firstIndex(where: { $0.id == sequential.id })
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Button(
-                                            action: {
-                                                guard let chapterIndex = chapterIndex else { return }
-                                                guard let sequentialIndex else { return }
-                                                guard let courseVertical = sequential.childs.first else { return }
-                                                guard let block = courseVertical.childs.first else {
-                                                    viewModel.router.showGatedContentError(url: courseVertical.webUrl)
-                                                    return
+                    .background(Theme.Colors.background)
+                    
+                    // MARK: - Expanded Items (Sequentials)
+                    if isExpanded {
+                        VStack(spacing: 0) {
+                            ForEach(Array(chapter.childs.enumerated()), id: \.element.id) { sequentialIndex, sequential in
+                                VStack(spacing: 0) {
+                                    Button(
+                                        action: {
+                                            guard let chapterIndex = chapterIndex else { return }
+                                            guard let courseVertical = sequential.childs.first else { return }
+                                            guard let block = courseVertical.childs.first else {
+                                                viewModel.router.showGatedContentError(url: courseVertical.webUrl)
+                                                return
+                                            }
+                                            
+                                            viewModel.trackSequentialClicked(sequential)
+                                            if viewModel.config.uiComponents.courseDropDownNavigationEnabled {
+                                                viewModel.router.showCourseUnit(
+                                                    courseName: viewModel.courseStructure?.displayName ?? "",
+                                                    blockId: block.id,
+                                                    courseID: viewModel.courseStructure?.id ?? "",
+                                                    verticalIndex: 0,
+                                                    chapters: course.childs,
+                                                    chapterIndex: chapterIndex,
+                                                    sequentialIndex: sequentialIndex,
+                                                    showVideoNavigation: false,
+                                                    courseVideoStructure: nil
+                                                )
+                                            } else {
+                                                viewModel.router.showCourseVerticalView(
+                                                    courseID: viewModel.courseStructure?.id ?? "",
+                                                    courseName: viewModel.courseStructure?.displayName ?? "",
+                                                    title: sequential.displayName,
+                                                    chapters: course.childs,
+                                                    chapterIndex: chapterIndex,
+                                                    sequentialIndex: sequentialIndex
+                                                )
+                                            }
+                                        },
+                                        label: {
+                                            HStack(spacing: 12) {
+                                                if sequential.completion == 1 {
+                                                    CoreAssets.finishedSequence.swiftUIImage
+                                                        .renderingMode(.template)
+                                                        .resizable()
+                                                        .foregroundColor(Theme.Colors.success)
+                                                        .frame(width: 16, height: 16)
+                                                } else {
+                                                    Circle()
+                                                        .stroke(Theme.Colors.brandGreen, lineWidth: 1.5)
+                                                        .frame(width: 14, height: 14)
                                                 }
                                                 
-                                                viewModel.trackSequentialClicked(sequential)
-                                                if viewModel.config.uiComponents.courseDropDownNavigationEnabled {
-                                                    viewModel.router.showCourseUnit(
-                                                        courseName: viewModel.courseStructure?.displayName ?? "",
-                                                        blockId: block.id,
-                                                        courseID: viewModel.courseStructure?.id ?? "",
-                                                        verticalIndex: 0,
-                                                        chapters: course.childs,
-                                                        chapterIndex: chapterIndex,
-                                                        sequentialIndex: sequentialIndex,
-                                                        showVideoNavigation: false,
-                                                        courseVideoStructure: nil
-                                                    )
-                                                } else {
-                                                    viewModel.router.showCourseVerticalView(
-                                                        courseID: viewModel.courseStructure?.id ?? "",
-                                                        courseName: viewModel.courseStructure?.displayName ?? "",
-                                                        title: sequential.displayName,
-                                                        chapters: course.childs,
-                                                        chapterIndex: chapterIndex,
-                                                        sequentialIndex: sequentialIndex
-                                                    )
-                                                }
-                                            },
-                                            label: {
-                                                VStack(alignment: .leading) {
-                                                    HStack {
-                                                        if sequential.completion == 1 {
-                                                            CoreAssets.finishedSequence.swiftUIImage
-                                                                .renderingMode(.template)
-                                                                .resizable()
-                                                                .foregroundColor(Theme.Colors.success)
-                                                                .frame(width: 20, height: 20)
-                                                        } else {
-                                                            sequential.type.image
-                                                        }
-                                                        Text(sequential.displayName)
-                                                            .font(Theme.Fonts.titleSmall)
-                                                            .multilineTextAlignment(.leading)
-                                                            .lineLimit(1)
-                                                            .frame(
-                                                                maxWidth: idiom == .pad
-                                                                ? proxy.size.width * 0.5
-                                                                : proxy.size.width * 0.6,
-                                                                alignment: .leading
-                                                            )
-                                                    }
-                                                    if let assignmentStatusText = assignmentStatusText(
-                                                        sequential: sequential
-                                                    ) {
+                                                VStack(alignment: .leading, spacing: 2) {
+                                                    Text(sequential.displayName)
+                                                        .font(Theme.Fonts.ttRoundsBody(14, weight: 600))
+                                                        .foregroundColor(Theme.Colors.textPrimary)
+                                                        .multilineTextAlignment(.leading)
+                                                        .lineLimit(2)
+                                                    
+                                                    if let assignmentStatusText = assignmentStatusText(sequential: sequential) {
                                                         Text(assignmentStatusText)
-                                                            .font(Theme.Fonts.bodySmall)
+                                                            .font(Theme.Fonts.ttRoundsBody(12, weight: 400))
+                                                            .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
                                                             .multilineTextAlignment(.leading)
                                                             .lineLimit(2)
                                                     }
                                                 }
-                                                .foregroundColor(Theme.Colors.textPrimary)
-                                                .accessibilityElement(children: .ignore)
-                                                .accessibilityLabel(sequential.displayName)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                
+                                                CoreAssets.chevronRight.swiftUIImage
+                                                    .renderingMode(.template)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 12, height: 12)
+                                                    .foregroundColor(Theme.Colors.brandGreen)
                                             }
-                                        )
-                                        Spacer()
-                                        if sequential.due != nil {
-                                            CoreAssets.chevronRight.swiftUIImage
-                                                .foregroundColor(Theme.Colors.textPrimary)
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 14)
                                         }
+                                    )
+                                    .accessibilityElement(children: .combine)
+                                    .accessibilityLabel(sequential.displayName)
+                                    
+                                    if sequentialIndex != chapter.childs.count - 1 {
+                                        Divider()
+                                            .padding(.horizontal, 16)
                                     }
-                                    .padding(.vertical, 4)
                                 }
+                                .background(Theme.Colors.background)
                             }
                         }
-                        .padding(.top, 8)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 16)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Theme.Colors.background)
+                        .stroke(Theme.Colors.brandCreamStrong, lineWidth: isExpanded ? 1 : 0)
                 )
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Theme.Colors.brandCreamStrong)
-                        .offset(y: 4)
+                        .offset(y: isExpanded ? 0 : 4) // Remueve la sombra "dura" cuando está expandido
                 )
             }
         }
