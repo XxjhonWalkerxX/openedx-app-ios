@@ -106,10 +106,22 @@ struct CourseHeaderView: View {
             GeometryReader { proxy in
                 Color.clear
                     .onAppear {
-                        headerHeight = proxy.size.height
+                        // Reportar altura visible: cuando colapsado, el header sube
+                        // 115pt (coordinateBoundaryLower en CourseContainerView),
+                        // así que el spacer debe ser frame - 115 para no dejar hueco.
+                        headerHeight = collapsed
+                            ? max(0, proxy.size.height - 115)
+                            : proxy.size.height
                     }
                     .onChange(of: proxy.size.height) { newValue in
-                        headerHeight = newValue
+                        headerHeight = collapsed
+                            ? max(0, newValue - 115)
+                            : newValue
+                    }
+                    .onChange(of: collapsed) { newCollapsed in
+                        headerHeight = newCollapsed
+                            ? max(0, proxy.size.height - 115)
+                            : proxy.size.height
                     }
             }
         )
