@@ -37,66 +37,115 @@ public struct CourseVerticalView: View {
             // MARK: - Page Body
             GeometryReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        
+                        // MARK: - Header
+                        HStack(spacing: 8) {
+                            Rectangle()
+                                .fill(Theme.Colors.guindaColor.opacity(0.3))
+                                .frame(height: 1)
+                            Text("CONTENIDO DE LA SECCIÓN")
+                                .font(Theme.Fonts.ttRoundsBody(10, weight: 700))
+                                .foregroundColor(Theme.Colors.guindaColor)
+                                .kerning(1.2)
+                            Rectangle()
+                                .fill(Theme.Colors.guindaColor.opacity(0.3))
+                                .frame(height: 1)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+                        .padding(.bottom, 16)
+                        
                         // MARK: - Lessons list
-                        ForEach(viewModel.verticals, id: \.id) { vertical in
-                            if let index = viewModel.verticals.firstIndex(where: {$0.id == vertical.id}) {
-                                HStack {
-                                Button(action: {
-                                    let vertical = viewModel.verticals[index]
-                                    if let block = vertical.childs.first {
-                                        viewModel.trackVerticalClicked(
-                                            courseId: courseID,
-                                            courseName: courseName,
-                                            vertical: vertical
-                                        )
-                                        viewModel.router.showCourseUnit(
-                                            courseName: courseName,
-                                            blockId: block.id,
-                                            courseID: courseID,
-                                            verticalIndex: index,
-                                            chapters: viewModel.chapters,
-                                            chapterIndex: viewModel.chapterIndex,
-                                            sequentialIndex: viewModel.sequentialIndex,
-                                            showVideoNavigation: false,
-                                            courseVideoStructure: nil
-                                        )
-                                    }
-                                }, label: {
-                                        Group {
-                                            if vertical.completion == 1 {
-                                                CoreAssets.finished.swiftUIImage
-                                                    .renderingMode(.template)
-                                                    .foregroundColor(.accentColor)
-                                            } else {
-                                                CourseVerticalImageView(blocks: vertical.childs)
-                                            }
-                                            Text(vertical.displayName)
-                                                .font(Theme.Fonts.titleMedium)
-                                                .lineLimit(1)
-                                                .frame(maxWidth: idiom == .pad
-                                                       ? proxy.size.width * 0.5
-                                                       : proxy.size.width * 0.6,
-                                                       alignment: .leading)
-                                                .multilineTextAlignment(.leading)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }.foregroundColor(Theme.Colors.textPrimary)
-                                    }).accessibilityElement(children: .ignore)
-                                        .accessibilityLabel(vertical.displayName)
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                        .flipsForRightToLeftLayoutDirection(true)
-                                            .padding(.vertical, 8)
-                                    }
-                                .padding(.horizontal, 36)
-                                    .padding(.vertical, 14)
-                                if index != viewModel.verticals.count - 1 {
-                                    Divider()
-                                        .frame(height: 1)
-                                        .overlay(Theme.Colors.cardViewStroke)
-                                        .padding(.horizontal, 24)
+                        ForEach(Array(viewModel.verticals.enumerated()), id: \.element.id) { index, vertical in
+                            let isGraded = vertical.childs.contains(where: { $0.graded })
+                            let accentColor = isGraded ? Theme.Colors.guindaColor : Theme.Colors.brandGreen
+                            let isCompleted = vertical.completion == 1
+                            
+                            Button(action: {
+                                if let block = vertical.childs.first {
+                                    viewModel.trackVerticalClicked(
+                                        courseId: courseID,
+                                        courseName: courseName,
+                                        vertical: vertical
+                                    )
+                                    viewModel.router.showCourseUnit(
+                                        courseName: courseName,
+                                        blockId: block.id,
+                                        courseID: courseID,
+                                        verticalIndex: index,
+                                        chapters: viewModel.chapters,
+                                        chapterIndex: viewModel.chapterIndex,
+                                        sequentialIndex: viewModel.sequentialIndex,
+                                        showVideoNavigation: false,
+                                        courseVideoStructure: nil
+                                    )
                                 }
-                            }
+                            }, label: {
+                                HStack(spacing: 0) {
+                                    // Color margin left
+                                    Rectangle()
+                                        .fill(accentColor)
+                                        .frame(width: 4)
+                                    
+                                    HStack(spacing: 14) {
+                                        // Number
+                                        Text(String(format: "%02d", index + 1))
+                                            .font(Theme.Fonts.ttRoundsBody(14, weight: 700))
+                                            .foregroundColor(accentColor.opacity(0.6))
+                                        
+                                        // Icon container
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(accentColor.opacity(0.15))
+                                                .frame(width: 38, height: 38)
+                                            
+                                            // Icon from CourseVerticalImageView or Success mark
+                                            if isCompleted {
+                                                CoreAssets.finishedSequence.swiftUIImage
+                                                    .renderingMode(.template)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 18, height: 18)
+                                                    .foregroundColor(accentColor)
+                                            } else {
+                                                if let block = vertical.childs.first {
+                                                    block.type.image
+                                                        .renderingMode(.template)
+                                                        .foregroundColor(accentColor)
+                                                } else {
+                                                    CourseVerticalImageView(blocks: vertical.childs)
+                                                        .foregroundColor(accentColor)
+                                                }
+                                            }
+                                        }
+                                        
+                                        // Text label
+                                        Text(vertical.displayName)
+                                            .font(Theme.Fonts.ttRoundsBody(15, weight: 600))
+                                            .foregroundColor(Theme.Colors.textPrimary)
+                                            .lineLimit(2)
+                                            .multilineTextAlignment(.leading)
+                                        
+                                        Spacer(minLength: 0)
+                                        
+                                        CoreAssets.chevronRight.swiftUIImage
+                                            .renderingMode(.template)
+                                            .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                            .frame(width: 12, height: 12)
+                                    }
+                                    .padding(.vertical, 14)
+                                    .padding(.trailing, 20)
+                                    .padding(.leading, 16)
+                                }
+                                .background(Theme.Colors.background)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 3)
+                            })
+                            .padding(.horizontal, 24)
+                            .padding(.bottom, 12)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(vertical.displayName)
                         }
                     }
                     .frameLimit(width: proxy.size.width)
@@ -133,7 +182,7 @@ public struct CourseVerticalView: View {
         .navigationBarBackButtonHidden(false)
         .navigationTitle(title)
         .background(
-            Theme.Colors.background
+            Theme.Colors.brandCream
                 .ignoresSafeArea()
         )
     }
