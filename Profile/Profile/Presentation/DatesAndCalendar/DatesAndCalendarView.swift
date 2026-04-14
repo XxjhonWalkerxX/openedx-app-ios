@@ -9,6 +9,26 @@ import SwiftUI
 import Theme
 import Core
 
+private enum DatesAndCalendarLayout {
+    static let horizontalPadding: CGFloat = 20
+    static let topBandHeight: CGFloat = 4
+    static let headerVerticalPadding: CGFloat = 60
+    static let headerVerticalPaddingLandscape: CGFloat = 8
+    static let headerMinHeightPortrait: CGFloat = 160
+    static let headerMinHeightLandscape: CGFloat = 96
+    static let headerBottomPaddingPortrait: CGFloat = 24
+    static let headerBottomPaddingLandscape: CGFloat = 10
+    static let sectionSpacing: CGFloat = 20
+    static let contentTopPadding: CGFloat = 2
+    static let contentTopPaddingLandscape: CGFloat = 16
+    static let cardCornerRadius: CGFloat = 22
+    static let cardShadowRadius: CGFloat = 5
+    static let cardShadowYOffset: CGFloat = 2
+    static let cardStrokeOpacity: CGFloat = 0.04
+    static let cardShadowOpacity: CGFloat = 0.06
+    static let buttonCornerRadius: CGFloat = 14
+}
+
 public struct DatesAndCalendarView: View {
     
     @ObservedObject
@@ -25,32 +45,23 @@ public struct DatesAndCalendarView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                ThemeAssets.headerBackground.swiftUIImage
-                    .resizable()
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(maxWidth: .infinity, maxHeight: 200)
-                    .accessibilityIdentifier("title_bg_image")
-                
-                VStack {
-                    // MARK: Navigation and Title
-                    NavigationTitle(
-                        title: ProfileLocalization.DatesAndCalendar.title,
-                        backAction: {
-                            viewModel.router.back()
-                        }
-                    )
-                    
-                    // MARK: Body
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
                     ScrollView {
-                        Group {
+                        VStack(alignment: .leading, spacing: DatesAndCalendarLayout.sectionSpacing) {
                             calendarSyncCard
-                            RelativeDatesToggleView(useRelativeDates: $viewModel.profileStorage.useRelativeDates)
+                            relativeDatesCard
                         }
-                        .padding(.horizontal, isHorizontal ? 48 : 0)
+                        .padding(.horizontal, DatesAndCalendarLayout.horizontalPadding)
+                        .padding(.top, contentTopPadding)
+                        .padding(.bottom, 44)
                     }
                     .frameLimit(width: proxy.size.width)
-                    .roundedBackground(Theme.Colors.background)
-                    .ignoresSafeArea(.all, edges: .bottom)
+                    .scrollIndicators(.hidden)
                 }
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
@@ -130,52 +141,129 @@ public struct DatesAndCalendarView: View {
         }
     }
 
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: DatesAndCalendarLayout.topBandHeight)
+
+            HStack(alignment: .top, spacing: 12) {
+                Button(action: {
+                    viewModel.router.back()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: 54, height: 54)
+                        .background(
+                            RoundedRectangle(cornerRadius: DatesAndCalendarLayout.buttonCornerRadius, style: .continuous)
+                                .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                Text(ProfileLocalization.DatesAndCalendar.title)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .foregroundColor(.white)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, DatesAndCalendarLayout.horizontalPadding)
+            .padding(.top, headerTopPadding + 10)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
+    private var headerTopPadding: CGFloat {
+        isLandscapeLike ? DatesAndCalendarLayout.headerVerticalPaddingLandscape : DatesAndCalendarLayout.headerVerticalPadding
+    }
+
+    private var headerBottomPadding: CGFloat {
+        isLandscapeLike ? DatesAndCalendarLayout.headerBottomPaddingLandscape : DatesAndCalendarLayout.headerBottomPaddingPortrait
+    }
+
+    private var headerMinHeight: CGFloat {
+        isLandscapeLike ? DatesAndCalendarLayout.headerMinHeightLandscape : DatesAndCalendarLayout.headerMinHeightPortrait
+    }
+
+    private var contentTopPadding: CGFloat {
+        isLandscapeLike ? DatesAndCalendarLayout.contentTopPaddingLandscape : DatesAndCalendarLayout.contentTopPadding
+    }
+
+    private var isLandscapeLike: Bool {
+        isHorizontal
+    }
+
     // MARK: - Calendar Sync Card
     private var calendarSyncCard: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 14) {
             Text(ProfileLocalization.CalendarSync.title)
-                .multilineTextAlignment(.leading)
-                .padding(.top, 24)
-                .padding(.horizontal, 24)
-                .font(Theme.Fonts.bodyMedium)
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .center, spacing: 16) {
-                    CoreAssets.calendarSyncIcon.swiftUIImage
-                        .foregroundStyle(Theme.Colors.textPrimary)
-                        .padding(.bottom, 16)
-                    
-                    Text(ProfileLocalization.CalendarSync.title)
-                        .font(Theme.Fonts.bodyLarge)
-                        .bold()
-                        .foregroundColor(Theme.Colors.textPrimary)
-                        .accessibilityIdentifier("calendar_sync_title")
-                    
-                    Text(ProfileLocalization.CalendarSync.description)
-                        .font(Theme.Fonts.bodyMedium)
-                        .foregroundColor(Theme.Colors.textPrimary)
-                        .accessibilityIdentifier("calendar_sync_description")
-                    
-                    StyledButton(
-                        ProfileLocalization.CalendarSync.button,
-                        action: {
-                            Task {
-                                await viewModel.requestCalendarPermission()
-                            }
-                        },
-                        horizontalPadding: true
-                    )
-                    .fixedSize()
-                    .accessibilityIdentifier("calendar_sync_button")
-                }
-                .frame(minWidth: 0,
-                       maxWidth: .infinity,
-                       alignment: .top)
-                .multilineTextAlignment(.center)
+                .font(Theme.Fonts.labelLarge)
+                .foregroundColor(Theme.Colors.brandCardMedium)
+                .padding(.leading, 2)
+
+            VStack(alignment: .center, spacing: 16) {
+                CoreAssets.calendarSyncIcon.swiftUIImage
+                    .foregroundStyle(Theme.Colors.brandGreen)
+                    .padding(.bottom, 4)
+
+                Text(ProfileLocalization.CalendarSync.title)
+                    .font(Theme.Fonts.titleMedium)
+                    .foregroundColor(Theme.Colors.brandCardPrimary)
+                    .accessibilityIdentifier("calendar_sync_title")
+
+                Text(ProfileLocalization.CalendarSync.description)
+                    .font(Theme.Fonts.bodyMedium)
+                    .foregroundColor(Theme.Colors.brandCardPrimary)
+                    .multilineTextAlignment(.center)
+                    .accessibilityIdentifier("calendar_sync_description")
+
+                StyledButton(
+                    ProfileLocalization.CalendarSync.button,
+                    action: {
+                        Task {
+                            await viewModel.requestCalendarPermission()
+                        }
+                    },
+                    color: Theme.Colors.brandGreen,
+                    textColor: Theme.Colors.white,
+                    borderColor: .clear,
+                    horizontalPadding: true
+                )
+                .accessibilityIdentifier("calendar_sync_button")
             }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .padding(.top, 24)
-            .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
+            .frame(maxWidth: .infinity, alignment: .top)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 24)
+            .background(
+                RoundedRectangle(cornerRadius: DatesAndCalendarLayout.cardCornerRadius, style: .continuous)
+                    .fill(Theme.Colors.brandCreamStrong)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DatesAndCalendarLayout.cardCornerRadius, style: .continuous)
+                    .stroke(Color.black.opacity(DatesAndCalendarLayout.cardStrokeOpacity), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(DatesAndCalendarLayout.cardShadowOpacity), radius: DatesAndCalendarLayout.cardShadowRadius, x: 0, y: DatesAndCalendarLayout.cardShadowYOffset)
         }
+    }
+
+    private var relativeDatesCard: some View {
+        RelativeDatesToggleView(useRelativeDates: $viewModel.profileStorage.useRelativeDates)
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: DatesAndCalendarLayout.cardCornerRadius, style: .continuous)
+                    .fill(Theme.Colors.white)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DatesAndCalendarLayout.cardCornerRadius, style: .continuous)
+                    .stroke(Color.black.opacity(DatesAndCalendarLayout.cardStrokeOpacity), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(DatesAndCalendarLayout.cardShadowOpacity), radius: DatesAndCalendarLayout.cardShadowRadius, x: 0, y: DatesAndCalendarLayout.cardShadowYOffset)
     }
 }
 
