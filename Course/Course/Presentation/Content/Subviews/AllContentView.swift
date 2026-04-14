@@ -71,16 +71,7 @@ struct AllContentView: View {
                             if let course = viewModel.courseStructure {
                                 
                                 Spacer(minLength: 16)
-                                // MARK: Course Progress
-                                if let progress = viewModel.courseProgress(),
-                                   let total = progress.totalAssignmentsCount, total > 0 {
-                                    CourseProgressView(progress: progress)
-                                        .padding(.horizontal, 24)
-                                        .accessibilityElement(children: .combine)
-                                        .accessibilityLabel(CourseLocalization.Accessibility.courseProgressSection)
-                                    Spacer(minLength: 16)
-                                }
-                                
+
                                 // MARK: Continue Unit
                                 if let continueWith = viewModel.continueWith,
                                    let courseStructure = viewModel.courseStructure {

@@ -94,9 +94,9 @@ public struct CourseContentView: View {
                                     selectedTab: $viewModel.selectedTab,
                                     courseId: courseID,
                                     courseName: title,
-                                    analytics: viewModel.analytics
+                                    analytics: viewModel.analytics,
+                                    progress: viewModel.courseProgress()
                                 )
-                                    .padding(.horizontal, 24)
                                     .padding(.top, 16)
                                 
                                 // MARK: - Content based on selected tab
