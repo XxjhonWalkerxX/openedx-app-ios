@@ -76,6 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Theme.Fonts.registerFonts()
         window = UIWindow(frame: UIScreen.main.bounds)
+        window?.overrideUserInterfaceStyle = .light
         window?.rootViewController = RouteController()
         window?.makeKeyAndVisible()
         window?.tintColor = Theme.UIColors.accentColor
@@ -193,6 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 await Container.shared.resolve(DownloadManagerProtocol.self)?.deleteAll()
                 await Container.shared.resolve(CoreDataHandlerProtocol.self)?.clear()
             }
+            window?.overrideUserInterfaceStyle = .light
             window?.rootViewController = RouteController()
         }
         
