@@ -10,6 +10,23 @@ import Core
 import OEXFoundation
 import Theme
 
+private enum EditProfileLayout {
+    static let horizontalPadding: CGFloat = 24
+    static let headerTopPadding: CGFloat = 14
+    static let headerBottomPadding: CGFloat = 10
+    static let headerSidePadding: CGFloat = 20
+    static let headerButtonSize: CGFloat = 44
+    static let avatarSize: CGFloat = 104
+    static let avatarBadgeSize: CGFloat = 34
+    static let avatarBadgeOffsetX: CGFloat = 34
+    static let avatarBadgeOffsetY: CGFloat = 42
+    static let summarySpacing: CGFloat = 12
+    static let sectionSpacing: CGFloat = 24
+    static let fieldSpacing: CGFloat = 18
+    static let contentTopPadding: CGFloat = 10
+    static let contentBottomPadding: CGFloat = 48
+}
+
 public struct EditProfileView: View {
     
     @ObservedObject public var viewModel: EditProfileViewModel
@@ -31,101 +48,73 @@ public struct EditProfileView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                // MARK: - Page Body
-                ScrollView {
-                    VStack {
-                        Text(viewModel.profileChanges.profileType.localizedValue.capitalized)
-                            .font(Theme.Fonts.titleSmall)
-                            .foregroundColor(Theme.Colors.textSecondary)
-                            .accessibilityIdentifier("profile_type_text")
-                        Button(
-                            action: {
-                                withAnimation {
-                                    showingBottomSheet.toggle()
-                                }
-                            },
-                            label: {
-                                UserAvatar(
-                                    url: viewModel.profileChanges.profileType == .full
-                                    ? viewModel.userModel.avatarUrl
-                                    : "",
-                                    image: viewModel.profileChanges.profileType == .full
-                                    ? $viewModel.inputImage
-                                    : .constant(nil)
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
+                    ScrollView {
+                        VStack(spacing: EditProfileLayout.sectionSpacing) {
+                            profileSummary
+
+                            VStack(alignment: .leading, spacing: EditProfileLayout.fieldSpacing) {
+                                PickerView(
+                                    config: viewModel.yearsConfiguration,
+                                    router: viewModel.router
                                 )
-                                .padding(.top, 30)
-                                .overlay(
-                                    ZStack {
-                                        Circle().frame(width: 36, height: 36)
-                                            .foregroundColor(Theme.Colors.accentXColor)
-                                        CoreAssets.addPhoto.swiftUIImage.renderingMode(.template)
-                                            .foregroundColor(Theme.Colors.primaryButtonTextColor)
+
+                                if viewModel.isEditable {
+                                    PickerView(
+                                        config: viewModel.countriesConfiguration,
+                                        router: viewModel.router
+                                    )
+
+                                    PickerView(
+                                        config: viewModel.spokenLanguageConfiguration,
+                                        router: viewModel.router
+                                    )
+
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        Text(ProfileLocalization.Edit.Fields.aboutMe)
+                                            .font(Theme.Fonts.titleMedium)
+                                            .foregroundColor(Theme.Colors.textPrimary)
+                                            .accessibilityIdentifier("about_text")
+
+                                        TextEditor(text: $viewModel.profileChanges.shortBiography)
+                                            .font(Theme.Fonts.bodyMedium)
+                                            .foregroundColor(Theme.Colors.textInputTextColor)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 4)
+                                            .frame(height: 200)
+                                            .scrollContentBackground(.hidden)
+                                            .background(
+                                                Theme.Shapes.textInputShape
+                                                    .fill(Theme.Colors.textInputBackground)
+                                            )
+                                            .overlay(
+                                                Theme.Shapes.textInputShape
+                                                    .stroke(lineWidth: 1)
+                                                    .fill(Theme.Colors.textInputStroke)
+                                            )
+                                            .accessibilityIdentifier("short_bio_textarea")
                                     }
-                                        .offset(x: 36, y: 50)
-                                        .saturation(viewModel.canEditAvatar ? 1.0 : 0)
-                                )
-                            })
-                        .disabled(!viewModel.canEditAvatar)
-                        .accessibilityIdentifier("change_profile_image_button")
-                        
-                        Text(viewModel.userModel.name)
-                            .font(Theme.Fonts.headlineSmall)
-                            .accessibilityIdentifier("username_text")
-                        
-                        Button(ProfileLocalization.switchTo + " " +
-                               viewModel.profileChanges.profileType.switchToButtonTitle,
-                               action: {
-                            viewModel.switchProfile()
-                        })
-                        .padding(.vertical, 24)
-                        .font(Theme.Fonts.labelLarge)
-                        .accessibilityIdentifier("switch_profile_button")
-                        
-                        Group {
-                            PickerView(
-                                config: viewModel.yearsConfiguration,
-                                router: viewModel.router
-                            )
-                            if viewModel.isEditable {
-                                VStack(alignment: .leading) {
-                                    PickerView(config: viewModel.countriesConfiguration,
-                                               router: viewModel.router)
-                                    
-                                    PickerView(config: viewModel.spokenLanguageConfiguration,
-                                               router: viewModel.router)
-                                    
-                                    Text(ProfileLocalization.Edit.Fields.aboutMe)
-                                        .font(Theme.Fonts.titleMedium)
-                                        .accessibilityIdentifier("about_text")
-                                    TextEditor(text: $viewModel.profileChanges.shortBiography)
-                                        .font(Theme.Fonts.bodyMedium)
-                                        .foregroundColor(Theme.Colors.textInputTextColor)
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 4)
-                                        .frame(height: 200)
-                                        .scrollContentBackground(.hidden)
-                                        .background(
-                                            Theme.Shapes.textInputShape
-                                                .fill(Theme.Colors.textInputBackground)
-                                        )
-                                        .overlay(
-                                            Theme.Shapes.textInputShape
-                                                .stroke(lineWidth: 1)
-                                                .fill(
-                                                    Theme.Colors.textInputStroke
-                                                )
-                                        )
-                                        .accessibilityIdentifier("short_bio_textarea")
                                 }
                             }
                         }
-                        .onReceive(viewModel.yearsConfiguration.$text
-                            .combineLatest(viewModel.countriesConfiguration.$text,
-                                           viewModel.spokenLanguageConfiguration.$text),
-                                   perform: { _ in
-                            viewModel.checkChanges()
-                            viewModel.checkProfileType()
-                        })
+                        .padding(.horizontal, EditProfileLayout.horizontalPadding)
+                        .padding(.top, EditProfileLayout.contentTopPadding)
+                        .padding(.bottom, EditProfileLayout.contentBottomPadding)
+                        .onReceive(
+                            viewModel.yearsConfiguration.$text.combineLatest(
+                                viewModel.countriesConfiguration.$text,
+                                viewModel.spokenLanguageConfiguration.$text
+                            ),
+                            perform: { _ in
+                                viewModel.checkChanges()
+                                viewModel.checkProfileType()
+                            }
+                        )
                         .onChange(of: viewModel.profileChanges) { _ in
                             viewModel.checkChanges()
                             viewModel.checkProfileType()
@@ -135,31 +124,36 @@ public struct EditProfileView: View {
                                 viewModel.profileChanges.shortBiography.removeLast()
                             }
                         })
-                        
-                        Spacer(minLength: 84)
                     }
-                    .padding(.horizontal, 24)
+                    .frameLimit(width: proxy.size.width)
+                    .scrollIndicators(.hidden)
                     .sheet(isPresented: $showingImagePicker) {
                         ImagePickerView(image: $viewModel.inputImage)
                             .ignoresSafeArea()
                     }
-                    .frameLimit(width: proxy.size.width)
-                }
-                .padding(.top, 8)
-                .onChange(of: showingImagePicker, perform: { value in
-                    if !value {
-                        if let image = viewModel.inputImage {
-                            viewModel.profileChanges.isAvatarChanged = true
-                            viewModel.resizeImage(image: image, longSideSize: 500)
+                    .onChange(of: showingImagePicker, perform: { value in
+                        if !value {
+                            if let image = viewModel.inputImage {
+                                viewModel.profileChanges.isAvatarChanged = true
+                                viewModel.resizeImage(image: image, longSideSize: 500)
+                            }
                         }
+                    })
+                    .onRightSwipeGesture {
+                        viewModel.backButtonTapped()
                     }
-                })
-                .onRightSwipeGesture {
-                    viewModel.backButtonTapped()
+                    .scrollAvoidKeyboard(dismissKeyboardByTap: true)
+                    .ignoresSafeArea(edges: .bottom)
                 }
-                .scrollAvoidKeyboard(dismissKeyboardByTap: true)
-                .ignoresSafeArea(edges: .bottom)
-                // MARK: - Error Alert
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
+                .navigationTitle(ProfileLocalization.editProfile)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        EmptyView()
+                    }
+                }
+
                 if viewModel.showError {
                     VStack {
                         Spacer()
@@ -172,7 +166,7 @@ public struct EditProfileView: View {
                         }
                     }
                 }
-                // MARK: - Alert
+
                 if viewModel.showAlert {
                     VStack(alignment: .center) {
                         Spacer()
@@ -180,8 +174,8 @@ public struct EditProfileView: View {
                             CoreAssets.alarm.swiftUIImage.renderingMode(.template)
                             Text(viewModel.alertMessage ?? "")
                                 .font(Theme.Fonts.labelLarge)
-                        }.shadowCardStyle(bgColor: Theme.Colors.warning,
-                                          textColor: .black)
+                        }
+                        .shadowCardStyle(bgColor: Theme.Colors.warning, textColor: .black)
                         .transition(.move(edge: .bottom))
                         .onAppear {
                             doAfter(Theme.Timeout.snackbarMessageLongTimeout) {
@@ -190,6 +184,7 @@ public struct EditProfileView: View {
                         }
                     }
                 }
+
                 ProfileBottomSheet(
                     showingBottomSheet: $showingBottomSheet,
                     openGallery: {
@@ -202,8 +197,9 @@ public struct EditProfileView: View {
                         viewModel.inputImage = CoreAssets.noAvatar.image
                         viewModel.profileChanges.isAvatarDeleted = true
                         showingBottomSheet = false
-                    })
-                
+                    }
+                )
+
                 if viewModel.isShowProgress {
                     ProgressBar(size: 40, lineWidth: 8)
                         .padding(.top, 150)
@@ -211,48 +207,132 @@ public struct EditProfileView: View {
                         .accessibilityIdentifier("progress_bar")
                 }
             }
-            .navigationBarHidden(false)
-            .navigationBarBackButtonHidden(true)
-            .navigationTitle(ProfileLocalization.editProfile)
-            .toolbar {
-                ToolbarItem(
-                    placement: .navigationBarLeading,
-                    content: {
-                        BackNavigationButton(color: Theme.Colors.accentColor) {
-                            viewModel.backButtonTapped()
-                        }
-                        .offset(x: -8, y: -1.5)
-                    }
-                )
-                ToolbarItem(placement: .navigationBarTrailing, content: {
-                    Button(action: {
-                        if viewModel.isChanged {
-                            Task {
-                                viewModel.trackProfileEditDoneClicked()
-                                await viewModel.saveProfileUpdates()
-                            }
-                        }
-                    }, label: {
-                        HStack(spacing: 2) {
-                            CoreAssets.done.swiftUIImage.renderingMode(.template)
-                                .foregroundColor(Theme.Colors.accentXColor)
-                            Text(CoreLocalization.done)
-                                .font(Theme.Fonts.labelLarge)
-                                .foregroundColor(Theme.Colors.accentXColor)
-                        }
-                    })
-                    .opacity(viewModel.isChanged ? 1 : 0.3)
-                    .accessibilityIdentifier("done_button")
-                })
-            }
-            .background(
-                Theme.Colors.background
-                    .ignoresSafeArea()
-            )
             .onFirstAppear {
+                viewModel.checkProfileType()
+                viewModel.checkChanges()
                 viewModel.trackScreenEvent()
             }
         }
+    }
+
+    private var topHeader: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Button(action: {
+                viewModel.backButtonTapped()
+            }) {
+                CoreAssets.arrowLeft.swiftUIImage
+                    .renderingMode(.template)
+                    .foregroundColor(Theme.Colors.brandGreen)
+                    .frame(width: EditProfileLayout.headerButtonSize, height: EditProfileLayout.headerButtonSize)
+            }
+            .accessibilityIdentifier("back_button")
+
+            Spacer(minLength: 0)
+
+            Text(ProfileLocalization.editProfile)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(28))
+                .foregroundColor(Theme.Colors.brandGreen)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+
+            Spacer(minLength: 0)
+
+            Button(action: {
+                if viewModel.isChanged {
+                    Task {
+                        viewModel.trackProfileEditDoneClicked()
+                        await viewModel.saveProfileUpdates()
+                    }
+                }
+            }, label: {
+                HStack(spacing: 4) {
+                    CoreAssets.done.swiftUIImage.renderingMode(.template)
+                        .foregroundColor(Theme.Colors.brandGreen)
+                    Text(CoreLocalization.done)
+                        .font(Theme.Fonts.labelLarge)
+                        .foregroundColor(Theme.Colors.brandGreen)
+                }
+            })
+            .opacity(viewModel.isChanged ? 1 : 0.3)
+            .accessibilityIdentifier("done_button")
+        }
+        .padding(.horizontal, EditProfileLayout.headerSidePadding)
+        .padding(.top, EditProfileLayout.headerTopPadding)
+        .padding(.bottom, EditProfileLayout.headerBottomPadding)
+        .background(Theme.Colors.brandCream)
+    }
+
+    private var profileSummary: some View {
+        VStack(spacing: EditProfileLayout.summarySpacing) {
+            Text(viewModel.profileChanges.profileType.localizedValue.capitalized)
+                .font(Theme.Fonts.titleSmall)
+                .foregroundColor(Theme.Colors.textSecondary)
+                .accessibilityIdentifier("profile_type_text")
+
+            Button(
+                action: {
+                    withAnimation {
+                        showingBottomSheet.toggle()
+                    }
+                },
+                label: {
+                    UserAvatar(
+                        url: viewModel.profileChanges.profileType == .full
+                        ? viewModel.userModel.avatarUrl
+                        : "",
+                        image: viewModel.profileChanges.profileType == .full
+                        ? $viewModel.inputImage
+                        : .constant(nil),
+                        size: EditProfileLayout.avatarSize,
+                        borderColor: Theme.Colors.brandCardPrimary
+                    )
+                    .overlay(
+                        ZStack {
+                            Circle()
+                                .frame(width: EditProfileLayout.avatarBadgeSize, height: EditProfileLayout.avatarBadgeSize)
+                                .foregroundColor(Theme.Colors.brandGreen)
+                            CoreAssets.addPhoto.swiftUIImage.renderingMode(.template)
+                                .foregroundColor(Theme.Colors.white)
+                        }
+                        .offset(
+                            x: EditProfileLayout.avatarBadgeOffsetX,
+                            y: EditProfileLayout.avatarBadgeOffsetY
+                        )
+                        .saturation(viewModel.canEditAvatar ? 1.0 : 0)
+                    )
+                    .padding(.top, 18)
+                }
+            )
+            .disabled(!viewModel.canEditAvatar)
+            .accessibilityIdentifier("change_profile_image_button")
+
+            Text(displayNameText.uppercased())
+                .font(Theme.Fonts.ttRoundsCompressedMedium(32))
+                .foregroundColor(Theme.Colors.brandGreen)
+                .multilineTextAlignment(.center)
+                .accessibilityIdentifier("username_text")
+
+            Button(
+                ProfileLocalization.switchTo + " " + viewModel.profileChanges.profileType.switchToButtonTitle,
+                action: {
+                    viewModel.switchProfile()
+                    viewModel.checkProfileType()
+                    viewModel.checkChanges()
+                }
+            )
+            .font(Theme.Fonts.titleMedium)
+            .foregroundColor(Theme.Colors.brandGreen)
+            .accessibilityIdentifier("switch_profile_button")
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var displayNameText: String {
+        let trimmedName = viewModel.userModel.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedName.isEmpty {
+            return viewModel.userModel.username
+        }
+        return trimmedName
     }
 }
 
