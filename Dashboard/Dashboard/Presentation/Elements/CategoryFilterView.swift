@@ -44,11 +44,10 @@ enum CategoryOption: String, CaseIterable {
 
 struct CategoryFilterView: View {
     @Binding var selectedOption: CategoryOption
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 ForEach(Array(CategoryOption.allCases.enumerated()), id: \.offset) { index, option in
                     Button(action: {
                         selectedOption = option
@@ -56,36 +55,30 @@ struct CategoryFilterView: View {
                            label: {
                         HStack {
                             Text(option.text)
-                                .font(Theme.Fonts.titleSmall)
+                                .font(Theme.Fonts.ttRoundsBody(15, weight: 500))
                                 .foregroundColor(
-                                    option == selectedOption ? Theme.Colors.slidingSelectedTextColor : (
-                                        colorScheme == .light ? Theme.Colors.accentColor : .white
-                                    )
+                                    option == selectedOption
+                                    ? Theme.Colors.white
+                                    : Theme.Colors.brandGreen
                                 )
                         }
-                        .padding(.horizontal, 17)
+                        .padding(.horizontal, 18)
                         .padding(.vertical, 8)
                         .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .foregroundStyle(
-                                        option == selectedOption
-                                        ? Theme.Colors.accentColor
-                                        : Theme.Colors.cardViewBackground
-                                    )
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(
-                                        colorScheme == .light ? Theme.Colors.accentColor : .clear,
-                                        style: .init(lineWidth: 1)
-                                    )
-                            }
-                            .padding(.vertical, 1)
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .fill(option == selectedOption ? Theme.Colors.brandGreen : Theme.Colors.brandCream)
+                        }
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .stroke(Theme.Colors.brandGreen, lineWidth: option == selectedOption ? 0 : 1)
                         }
                     })
-                    .padding(.leading, index == 0 ? 16 : 0)
+                    .padding(.leading, index == 0 ? 20 : 0)
+                    .padding(.trailing, index == CategoryOption.allCases.count - 1 ? 20 : 0)
                 }
             }
-            .fixedSize()
+            .padding(.vertical, 2)
         }
+        .scrollIndicators(.hidden)
     }
 }

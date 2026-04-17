@@ -12,6 +12,25 @@ import Core
 
 struct CourseCardView: View {
 
+    enum VisualStyle {
+        case dashboardCompact
+        case allCoursesCompact
+        case allCoursesGrid
+    }
+
+    private enum Layout {
+        static let compactCardWidth: CGFloat = 144
+        static let compactImageHeight: CGFloat = 132
+        static let compactCardHeight: CGFloat = 214
+        static let allCoursesCompactImageHeight: CGFloat = 132
+        static let allCoursesCompactCardHeight: CGFloat = 214
+        static let imageHeight: CGFloat = 124
+        static let cardHeight: CGFloat = 286
+        static let dateRowHeight: CGFloat = 20
+        static let titleRowHeight: CGFloat = 70
+        static let statusRowHeight: CGFloat = 18
+    }
+
     private let courseName: String
     private let courseImage: String
     private let progressEarned: Int
@@ -22,6 +41,8 @@ struct CourseCardView: View {
     private let showProgress: Bool
     private let useRelativeDates: Bool
     private let accentColor: Color
+    private let visualStyle: VisualStyle
+    private let fillWidth: Bool
 
     init(
         courseName: String,
@@ -33,6 +54,8 @@ struct CourseCardView: View {
         hasAccess: Bool,
         showProgress: Bool,
         useRelativeDates: Bool,
+        visualStyle: VisualStyle = .dashboardCompact,
+        fillWidth: Bool = false,
         accentColor: Color = Theme.Colors.brandGreen
     ) {
         self.courseName = courseName
@@ -44,6 +67,8 @@ struct CourseCardView: View {
         self.hasAccess = hasAccess
         self.showProgress = showProgress
         self.useRelativeDates = useRelativeDates
+        self.visualStyle = visualStyle
+        self.fillWidth = fillWidth
         self.accentColor = accentColor
     }
 
@@ -64,22 +89,68 @@ struct CourseCardView: View {
         return Theme.Colors.brandCardSecondary
     }
 
+    private var courseDateText: String {
+        if let endDate = courseEndDate {
+            let label = Date() < endDate ? "Ends" : "Ended on"
+            let formatted = endDate.dateToString(style: .shortWeekdayMonthDayYear, useRelativeDates: useRelativeDates)
+            return "\(label) \(formatted)"
+        }
+
+        if let startDate = courseStartDate {
+            if startDate > Date() {
+                return "Starts Soon"
+            }
+            let formatted = startDate.dateToString(style: .shortWeekdayMonthDayYear, useRelativeDates: useRelativeDates)
+            return "Started \(formatted)"
+        }
+
+        return "Starts Soon"
+    }
+
+    private var shouldShowDateLine: Bool {
+        visualStyle == .allCoursesGrid || visualStyle == .allCoursesCompact
+    }
+
+    private var cardHeight: CGFloat {
+        switch visualStyle {
+        case .dashboardCompact:
+            return Layout.compactCardHeight
+        case .allCoursesCompact:
+            return Layout.allCoursesCompactCardHeight
+        case .allCoursesGrid:
+            return Layout.cardHeight
+        }
+    }
+
+    private var imageHeight: CGFloat {
+        switch visualStyle {
+        case .dashboardCompact:
+            return Layout.compactImageHeight
+        case .allCoursesCompact:
+            return Layout.allCoursesCompactImageHeight
+        case .allCoursesGrid:
+            return Layout.imageHeight
+        }
+    }
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack(alignment: .leading, spacing: 0) {
-                // Barra de acento superior
                 accentColor
                     .frame(height: 3)
 
-                // Imagen cuadrada con ring de progreso
                 ZStack(alignment: .bottomTrailing) {
-                    KFImage(URL(string: courseImage))
-                        .onFailureImage(CoreAssets.noCourseImage.image)
-                        .resizable()
-                        .scaledToFill()
-                        .clipped()
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityIdentifier("course_image")
+                    GeometryReader { proxy in
+                        KFImage(URL(string: courseImage))
+                            .onFailureImage(CoreAssets.noCourseImage.image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: imageHeight, alignment: .center)
+                            .clipped()
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityIdentifier("course_image")
+                    }
+                    .frame(height: imageHeight)
 
                     if showProgress {
                         ProgressRingView(progress: progressValue)
@@ -88,26 +159,61 @@ struct CourseCardView: View {
                             .padding(.bottom, 8)
                     }
                 }
-                .frame(maxWidth: 144)
-                .frame(height: 132)
+                .frame(maxWidth: fillWidth ? .infinity : Layout.compactCardWidth)
+                .frame(height: imageHeight)
                 .clipped()
 
-                // Título y estado
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(courseName)
-                        .font(Theme.Fonts.ttRoundsCompressedMedium(13))
-                        .foregroundColor(Theme.Colors.brandCardPrimary)
-                        .kerning(-0.2)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-
-                    Text(statusText)
-                        .font(progressValue >= 1.0
-                            ? Theme.Fonts.ttRoundsCompressedMedium(11)
-                            : Theme.Fonts.ttRoundsCompressedThinItalic(11))
-                        .foregroundColor(statusColor)
+                if showProgress {
+                    GeometryReader { proxy in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(Theme.Colors.brandCardSecondary.opacity(0.5))
+                            Capsule()
+                                .fill(Theme.Colors.brandGreen)
+                                .frame(width: proxy.size.width * CGFloat(progressValue))
+                        }
+                    }
+                    .frame(height: 5)
+                } else {
+                    Rectangle()
+                        .fill(Theme.Colors.brandDivider)
+                        .frame(height: 1)
                 }
-                .padding(.horizontal, 10)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    if shouldShowDateLine {
+                        HStack(spacing: 6) {
+                            Text(courseDateText)
+                                .font(Theme.Fonts.labelSmall)
+                                .foregroundColor(Theme.Colors.brandCardSecondary)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+
+                            Spacer()
+
+                            Text(statusText)
+                                .font(Theme.Fonts.ttRoundsCompressedThinItalic(10))
+                                .foregroundColor(statusColor)
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: Layout.dateRowHeight, maxHeight: Layout.dateRowHeight, alignment: .center)
+                    }
+
+                    Text(courseName)
+                        .font(visualStyle == .allCoursesGrid ? Theme.Fonts.titleMedium : Theme.Fonts.ttRoundsCompressedMedium(13))
+                        .foregroundColor(Theme.Colors.brandCardPrimary)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .multilineTextAlignment(.leading)
+                        .frame(
+                            maxWidth: .infinity,
+                            minHeight: visualStyle == .allCoursesGrid ? Layout.titleRowHeight : 42,
+                            maxHeight: visualStyle == .allCoursesGrid ? Layout.titleRowHeight : 42,
+                            alignment: .topLeading
+                        )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 12)
                 .padding(.top, 10)
                 .padding(.bottom, 12)
             }
@@ -126,10 +232,16 @@ struct CourseCardView: View {
                 .padding(8)
             }
         }
-        .frame(width: 144)
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Theme.Colors.courseCardShadow, radius: 3, x: 1, y: 2)
+        .frame(maxWidth: fillWidth ? .infinity : Layout.compactCardWidth)
+        .frame(height: cardHeight)
+        .background(Theme.Colors.white)
+        .cornerRadius(14)
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.black.opacity(0.04), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .shadow(color: .black.opacity(0.06), radius: 5, x: 0, y: 2)
     }
 }
 

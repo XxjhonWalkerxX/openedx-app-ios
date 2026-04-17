@@ -10,6 +10,16 @@ import Core
 import OEXFoundation
 import Theme
 
+private enum AllCoursesLayout {
+    static let horizontalPadding: CGFloat = 20
+    static let headerTopPadding: CGFloat = 2
+    static let headerBottomPadding: CGFloat = 4
+    static let headerButtonSize: CGFloat = 34
+    static let sectionSpacing: CGFloat = 10
+    static let gridRowSpacing: CGFloat = 12
+    static let gridColumnSpacing: CGFloat = 16
+}
+
 @MainActor
 public struct AllCoursesView: View {
     
@@ -27,21 +37,8 @@ public struct AllCoursesView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                VStack {
-                    BackNavigationButton(
-                        color: Theme.Colors.textPrimary,
-                        action: {
-                            router.back()
-                        }
-                    )
-                    .backViewStyle()
-                    .padding(.top, isHorizontal ? 32 : 16)
-                    .padding(.leading, 7)
-                    
-                }.frame(minWidth: 0,
-                        maxWidth: .infinity,
-                        alignment: .topLeading)
-                .zIndex(1)
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
                 
                 if let myEnrollments = viewModel.myEnrollments,
                    myEnrollments.courses.isEmpty,
@@ -51,16 +48,16 @@ public struct AllCoursesView: View {
                 }
                 // MARK: - Page body
                 VStack(alignment: .center) {
-                    learnTitleAndSearch()
+                    topHeader
                         .frameLimit(width: proxy.size.width)
                     ScrollView {
-                        VStack(spacing: 0) {
+                        VStack(spacing: AllCoursesLayout.sectionSpacing) {
                             CategoryFilterView(selectedOption: $viewModel.selectedMenu)
                                 .disabled(viewModel.fetchInProgress)
                                 .frameLimit(width: proxy.size.width)
                             if let myEnrollments = viewModel.myEnrollments {
                                 let useRelativeDates = viewModel.storage.useRelativeDates
-                                LazyVGrid(columns: columns(), spacing: 0) {
+                                LazyVGrid(columns: columns(), spacing: AllCoursesLayout.gridRowSpacing) {
                                     ForEach(
                                         Array(myEnrollments.courses.enumerated()),
                                         id: \.offset
@@ -92,9 +89,14 @@ public struct AllCoursesView: View {
                                                 courseEndDate: course.courseEnd,
                                                 hasAccess: course.hasAccess,
                                                 showProgress: true,
-                                                useRelativeDates: useRelativeDates
-                                            ).padding(8)
+                                                useRelativeDates: useRelativeDates,
+                                                visualStyle: .allCoursesCompact,
+                                                fillWidth: true
+                                            )
+                                            .clipped()
                                         })
+                                        .buttonStyle(.plain)
+                                        .frame(maxWidth: .infinity, alignment: .top)
                                         .accessibilityIdentifier("course_item")
                                         .onAppear {
                                             Task {
@@ -103,7 +105,7 @@ public struct AllCoursesView: View {
                                         }
                                     }
                                 }
-                                .padding(10)
+                                .padding(.horizontal, AllCoursesLayout.horizontalPadding)
                                 .frameLimit(width: proxy.size.width)
                             }
                             // MARK: - ProgressBar
@@ -116,6 +118,7 @@ public struct AllCoursesView: View {
                             }
                             VStack {}.frame(height: 40)
                         }
+                        .padding(.top, 4)
                     }
                     .refreshable {
                         Task {
@@ -124,7 +127,7 @@ public struct AllCoursesView: View {
                     }
                     .accessibilityAction {}
                 }
-                .padding(.top, 8)
+                .padding(.top, 4)
                 
                 // MARK: - Offline mode SnackBar
                 OfflineSnackBarView(
@@ -161,41 +164,71 @@ public struct AllCoursesView: View {
                     await viewModel.getCourses(page: 1, refresh: false)
                 }
             }
-            .background(
-                Theme.Colors.background
-                    .ignoresSafeArea()
-            )
             .navigationBarBackButtonHidden(true)
             .navigationBarHidden(true)
             .navigationTitle(DashboardLocalization.Learn.allCourses)
         }
     }
     
-    private func columns() -> [GridItem] {
-        isHorizontal || idiom == .pad
-        ? [
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0)
-        ]
-        : [
-            GridItem(.flexible(), spacing: 0),
-            GridItem(.flexible(), spacing: 0)
-        ]
+    private func columnCount() -> Int {
+        (isHorizontal || idiom == .pad) ? 3 : 2
     }
-    
+
+    private func columns() -> [GridItem] {
+        let count = columnCount()
+        return Array(
+            repeating: GridItem(
+                .flexible(minimum: 0, maximum: .infinity),
+                spacing: AllCoursesLayout.gridColumnSpacing,
+                alignment: .top
+            ),
+            count: count
+        )
+    }
+
     private func learnTitleAndSearch() -> some View {
-        HStack(alignment: .center) {
+        EmptyView()
+    }
+
+    private var topHeader: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 10) {
+                Button(action: {
+                    router.back()
+                }) {
+                    CoreAssets.arrowLeft.swiftUIImage
+                        .renderingMode(.template)
+                        .foregroundColor(Theme.Colors.brandGreen)
+                        .frame(width: AllCoursesLayout.headerButtonSize, height: AllCoursesLayout.headerButtonSize)
+                }
+                .accessibilityIdentifier("back_button")
+
+                Spacer(minLength: 0)
+
+                Button(action: {
+                    // Visual only for now.
+                }) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Theme.Colors.brandCardPrimary)
+                        .frame(width: AllCoursesLayout.headerButtonSize, height: AllCoursesLayout.headerButtonSize)
+                }
+                .accessibilityIdentifier("search_button")
+            }
+
             Text(DashboardLocalization.Learn.allCourses)
-                .font(Theme.Fonts.displaySmall)
-                .foregroundColor(Theme.Colors.textPrimary)
+                .font(Theme.Fonts.ttRoundsCompressedMedium(36))
+                .foregroundColor(Theme.Colors.brandCardPrimary)
                 .accessibilityIdentifier("all_courses_header_text")
-            Spacer()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .padding(.leading, 2)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 10)
-        .accessibilityElement(children: .ignore)
+        .padding(.horizontal, AllCoursesLayout.horizontalPadding)
+        .padding(.top, AllCoursesLayout.headerTopPadding)
+        .padding(.bottom, AllCoursesLayout.headerBottomPadding)
+        .background(Theme.Colors.brandCream)
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(DashboardLocalization.Learn.allCourses)
     }
 }
