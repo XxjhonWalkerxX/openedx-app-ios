@@ -19,10 +19,16 @@ struct CourseHeaderView: View {
     @Binding private var isAnimatingForTap: Bool
     @Binding private var headerHeight: CGFloat
     @Environment(\.isHorizontal) private var isHorizontal
+    private var idiom: UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
 
     private let collapsedHorizontalHeight: CGFloat = 230
     private let collapsedVerticalHeight: CGFloat = 260
-    private let bannerHeight: CGFloat = 450
+    private var bannerHeight: CGFloat {
+        if idiom == .pad {
+            return 380
+        }
+        return isHorizontal ? 300 : 340
+    }
     private let expandedContentHeight: CGFloat = 200
     private let imageOverlap: CGFloat = 40
     @State private var measuredContentHeight: CGFloat = 0
@@ -73,19 +79,22 @@ struct CourseHeaderView: View {
             ZStack {
                 if let banner = (courseRawImage ?? viewModel.courseStructure?.media.image.raw)?
                     .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                    KFImage(courseBannerURL(for: banner))
-                        .onFailureImage(CoreAssets.noCourseImage.image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .allowsHitTesting(false)
-                        .clipped()
-                        .background(Theme.Colors.background)
+                    GeometryReader { proxy in
+                        KFImage(courseBannerURL(for: banner))
+                            .onFailureImage(CoreAssets.noCourseImage.image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
+                            .allowsHitTesting(false)
+                            .clipped()
+                            .background(Theme.Colors.background)
+                    }
                 }
             }
             .frame(height: collapsed ? 0 : bannerHeight)
             .clipped()
             .opacity(collapsed ? 0 : 1)
-            .ignoresSafeArea()
+            .ignoresSafeArea(edges: .top)
 
             VStack(alignment: .leading) {
                 if collapsed {
