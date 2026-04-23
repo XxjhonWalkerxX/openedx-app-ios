@@ -204,7 +204,7 @@ struct CourseHeaderView: View {
                     ForEach(metadataChips, id: \.self) { label in
                         Text(label)
                             .font(Theme.Fonts.ttRoundsBody(11, weight: 700))
-                            .foregroundColor(Color(red: 0.333, green: 0.333, blue: 0.333))
+                            .foregroundColor(Theme.Colors.brandCardMedium)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
                             .background(

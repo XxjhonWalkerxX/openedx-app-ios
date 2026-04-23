@@ -227,7 +227,7 @@ struct CourseCardView: View {
                         .frame(width: 24, height: 24)
                     CoreAssets.lockIcon.swiftUIImage
                         .foregroundStyle(Theme.Colors.textPrimary)
-                        .font(.system(size: 10))
+                        .font(Theme.Fonts.ttRoundsBody(10))
                 }
                 .padding(8)
             }
