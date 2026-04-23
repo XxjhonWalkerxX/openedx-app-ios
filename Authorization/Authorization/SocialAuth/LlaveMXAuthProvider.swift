@@ -8,6 +8,7 @@
 import Foundation
 import AuthenticationServices
 import CryptoKit
+import Core
 
 // MARK: - Resultado
 
@@ -43,13 +44,19 @@ public enum LlaveMXError: LocalizedError {
 @MainActor
 public final class LlaveMXAuthProvider: NSObject {
 
-    // Configuración OAuth
-    private static let clientID          = "202602091646467055"
-    private static let authorizationURL  = "https://val-llave.infotec.mx/oauth.xhtml"
+    // Configuración OAuth — PRODUCCIÓN (Valores dinámicos vía EnvironmentConfig)
+    private static var clientID: String          { EnvironmentConfig.llaveMXClientID }
+    private static var authorizationURL: String  { EnvironmentConfig.llaveMXAuthorizationURL }
     // Custom scheme directo — LlaveMX redirige a mx.aprende.ios://oauth/callback
     // ASWebAuthenticationSession lo intercepta sin necesidad del HTTPS bridge
-    private static let redirectURI       = "mx.aprende.ios://oauth/callback"
-    private static let callbackScheme    = "mx.aprende.ios"
+    private static var redirectURI: String       { EnvironmentConfig.llaveMXRedirectURI }
+    private static var callbackScheme: String    { EnvironmentConfig.llaveMXCallbackScheme }
+
+    /*
+     DESARROLLO (sandbox):
+     clientID         = "202602091646467055"
+     authorizationURL = "https://val-llave.infotec.mx/oauth.xhtml"
+     */
 
     // UserDefaults keys (temporales durante el flujo)
     private static let keyCodeVerifier   = "llavemx_code_verifier"

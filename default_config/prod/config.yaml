@@ -1,18 +1,102 @@
-API_HOST_URL: 'http://localhost:8000'
-SSO_URL: 'http://localhost:8000'
-SSO_FINISHED_URL:  'http://localhost:8000'
-ENVIRONMENT_DISPLAY_NAME: 'Localhost'
+API_HOST_URL: '${API_HOST_URL}'
+SSO_URL: '${API_HOST_URL}'
+SSO_FINISHED_URL: '${API_HOST_URL}'
+ENVIRONMENT_DISPLAY_NAME: 'Cursos'
 FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
-OAUTH_CLIENT_ID: ''
+OAUTH_CLIENT_ID: '${OAUTH_CLIENT_ID}'
+
+PLATFORM_NAME: "OpenEdX"
+PLATFORM_FULL_NAME: "OpenEdX"
+TOKEN_TYPE: "JWT"
+
+AGREEMENT_URLS:
+  PRIVACY_POLICY_URL: ''
+  COOKIE_POLICY_URL: ''
+  DATA_SELL_CONSENT_URL: ''
+  TOS_URL: ''
+  EULA_URL: ''
+  SUPPORTED_LANGUAGES: []
+
+DISCOVERY:
+  TYPE: 'native'
+  WEBVIEW:
+    BASE_URL: ''
+    COURSE_DETAIL_TEMPLATE: ''
+    PROGRAM_DETAIL_TEMPLATE: ''
+
+PROGRAM:
+  TYPE: 'native'
+  WEBVIEW:
+    BASE_URL: ''
+    PROGRAM_DETAIL_TEMPLATE: ''
+
+DASHBOARD:
+  TYPE: 'gallery'
 
 SSO_BUTTON_TITLE:
-    ar: "الدخول عبر SSO"
-    en: "Sign in with SSO"
+  ar: "الدخول عبر SSO"
+  en: "Sign in with SSO"
 
+# ─── Firebase iOS ────────────────────────────────────────────────────
+# Pasos: Firebase Console → proyecto app-cursos-a5223 → Agregar app iOS
+# Bundle ID: com.diegonicolas.openedx → Descargar GoogleService-Info.plist
+# Los valores vienen de ese plist
+FIREBASE:
+  ENABLED: true
+  CLOUD_MESSAGING_ENABLED: false
+  PROJECT_ID: '${FIREBASE_PROJECT_ID}'
+  GCM_SENDER_ID: '${FIREBASE_GCM_SENDER_ID}'
+  API_KEY: '${FIREBASE_API_KEY}'
+  CLIENT_ID: ''
+  GOOGLE_APP_ID: '${FIREBASE_GOOGLE_APP_ID}'
+  REVERSED_CLIENT_ID: ''
+
+BRAZE:
+  ENABLED: false
+  PUSH_NOTIFICATIONS_ENABLED: false
+
+GOOGLE:
+  ENABLED: false
+  CLIENT_ID: ''
+
+MICROSOFT:
+  ENABLED: false
+  CLIENT_ID: ''
+
+FACEBOOK:
+  ENABLED: false
+  FACEBOOK_APP_ID: ''
+  CLIENT_TOKEN: ''
+
+BRANCH:
+  ENABLED: false
+  KEY: ''
+  URI_SCHEME: ''
+  HOST: ''
+  ALTERNATE_HOST: ''
+
+WHATS_NEW_ENABLED: false
+SOCIAL_AUTH_ENABLED: false
+REGISTRATION_ENABLED: true
+BROWSER_LOGIN: false
+BROWSER_REGISTRATION: false
+PRE_LOGIN_EXPERIENCE_ENABLED: true
+
+EXPERIMENTAL_FEATURES:
+  APP_LEVEL_DOWNLOADS:
+    ENABLED: false
 
 UI_COMPONENTS:
-    COURSE_UNIT_PROGRESS_ENABLED: false
-    COURSE_NESTED_LIST_ENABLED: false
-    LOGIN_REGISTRATION_ENABLED: true
-    SAML_SSO_LOGIN_ENABLED: false
-    SAML_SSO_DEFAULT_LOGIN_BUTTON: false
+  COURSE_UNIT_PROGRESS_ENABLED: false
+  COURSE_NESTED_LIST_ENABLED: false
+  COURSE_DROPDOWN_NAVIGATION_ENABLED: false
+  COURSE_DOWNLOAD_QUEUE_SCREEN: false
+  LOGIN_REGISTRATION_ENABLED: true
+  SAML_SSO_LOGIN_ENABLED: false
+  SAML_SSO_DEFAULT_LOGIN_BUTTON: false
+
+LLAVEMX:
+  ENABLED: true
+  CLIENT_ID: "${LLAVEMX_CLIENT_ID}"
+  AUTHORIZATION_ENDPOINT: "https://www.llave.gob.mx/oauth.xhtml"
+  REDIRECT_URI: "mx.aprende.ios://oauth/callback"

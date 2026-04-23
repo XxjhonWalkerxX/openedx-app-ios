@@ -40,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        print("Client ID cargado: \(EnvironmentConfig.llaveMXClientID)")
+        
         initDI()
         initPlugins()
         // Reset the value to false to get the actual status from the API
