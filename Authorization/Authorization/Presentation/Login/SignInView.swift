@@ -72,7 +72,7 @@ public struct SignInView: View {
                                     .fill(Color.white.opacity(0.15))
                                     .frame(width: 40, height: 40)
                                 Image(systemName: "arrow.left")
-                                    .font(.system(size: 17, weight: .medium))
+                                    .font(Theme.Fonts.ttRoundsMedium(17))
                                     .foregroundColor(.white)
                             }
                         }
@@ -140,8 +140,8 @@ public struct SignInView: View {
                     .frame(maxWidth: .infinity)
                     .background(
                         UnevenRoundedRectangle(
-                            topLeadingRadius: 32,
-                            topTrailingRadius: 32
+                            topLeadingRadius: Theme.Sizes.radiusSheet,
+                            topTrailingRadius: Theme.Sizes.radiusSheet
                         )
                         .fill(Theme.Colors.brandCream)
                     )
@@ -217,8 +217,8 @@ public struct SignInView: View {
     private var llaveMXCard: some View {
         VStack(spacing: 0) {
             Text("Inicia sesión con tu cuenta")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(Color(red: 0.18, green: 0.18, blue: 0.16))
+                .font(Theme.Fonts.ttRoundsSemibold(15))
+                .foregroundColor(Theme.Colors.brandCardPrimary)
 
             Spacer().frame(height: 18)
 
@@ -228,7 +228,7 @@ public struct SignInView: View {
                     image.resizable().aspectRatio(contentMode: .fit)
                 case .failure:
                     Text("LlaveMX")
-                        .font(.system(size: 18, weight: .bold))
+                        .font(Theme.Fonts.ttRoundsBody(18, weight: 700))
                         .foregroundColor(Theme.Colors.guindaColor)
                 default:
                     ProgressView()
@@ -254,7 +254,7 @@ public struct SignInView: View {
                     }
                 } label: {
                     Text("Iniciar sesión")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(Theme.Fonts.ttRoundsSemibold(15))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
@@ -267,7 +267,7 @@ public struct SignInView: View {
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: Theme.Sizes.radiusHero)
                 .fill(Color.white)
                 .shadow(color: .black.opacity(0.07), radius: 4, y: 2)
         )
@@ -284,31 +284,31 @@ public struct SignInView: View {
             } label: {
                 HStack {
                     Text("Iniciar sesión con correo y contraseña")
-                        .font(.system(size: 13))
-                        .foregroundColor(Color(red: 0.45, green: 0.42, blue: 0.37))
+                        .font(Theme.Fonts.ttRoundsBody(13))
+                        .foregroundColor(Theme.Colors.brandCardMedium)
                     Spacer()
                     Image(systemName: showTraditionalLogin ? "chevron.up" : "chevron.down")
-                        .font(.system(size: 13))
-                        .foregroundColor(Color(red: 0.6, green: 0.58, blue: 0.55))
+                        .font(Theme.Fonts.ttRoundsBody(13))
+                        .foregroundColor(Theme.Colors.brandCardSecondary)
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 15)
             }
 
             if showTraditionalLogin {
-                Divider().background(Color(red: 0.92, green: 0.90, blue: 0.87))
+                Divider().background(Theme.Colors.brandDivider)
 
                 VStack(alignment: .leading, spacing: 12) {
                     // Email
                     VStack(alignment: .leading, spacing: 5) {
                         Text(AuthLocalization.SignIn.emailOrUsername)
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(Theme.Fonts.ttRoundsSemibold(12))
                             .foregroundColor(Theme.Colors.brandGreen)
                             .accessibilityIdentifier("username_text")
 
                         TextField("", text: $email)
                             .font(Theme.Fonts.bodyLarge)
-                            .foregroundColor(Color(red: 0.11, green: 0.11, blue: 0.11))
+                            .foregroundColor(Theme.Colors.brandCardPrimary)
                             .keyboardType(.emailAddress)
                             .textContentType(.emailAddress)
                             .autocapitalization(.none)
@@ -316,10 +316,10 @@ public struct SignInView: View {
                             .padding(13)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(red: 0.97, green: 0.96, blue: 0.95))
+                                    .fill(Theme.Colors.brandInputBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .strokeBorder(Color(red: 0.86, green: 0.84, blue: 0.81), lineWidth: 1)
+                                            .strokeBorder(Theme.Colors.brandInputStroke, lineWidth: 1)
                                     )
                             )
                             .accessibilityIdentifier("username_textfield")
@@ -328,7 +328,7 @@ public struct SignInView: View {
                     // Password
                     VStack(alignment: .leading, spacing: 5) {
                         Text(AuthLocalization.SignIn.password)
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(Theme.Fonts.ttRoundsSemibold(12))
                             .foregroundColor(Theme.Colors.brandGreen)
                             .accessibilityIdentifier("password_text")
 
@@ -337,10 +337,10 @@ public struct SignInView: View {
                             .padding(13)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(red: 0.97, green: 0.96, blue: 0.95))
+                                    .fill(Theme.Colors.brandInputBackground)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .strokeBorder(Color(red: 0.86, green: 0.84, blue: 0.81), lineWidth: 1)
+                                            .strokeBorder(Theme.Colors.brandInputStroke, lineWidth: 1)
                                     )
                             )
                             .accessibilityIdentifier("password_textfield")
@@ -360,7 +360,7 @@ public struct SignInView: View {
                             viewModel.trackForgotPasswordClicked()
                             viewModel.router.showForgotPasswordScreen()
                         }
-                        .font(.system(size: 13, weight: .medium))
+                        .font(Theme.Fonts.ttRoundsMedium(13))
                         .foregroundColor(Theme.Colors.brandGreen)
                         .accessibilityIdentifier("forgot_password_button")
                     }
@@ -377,7 +377,7 @@ public struct SignInView: View {
                             Task { await viewModel.login(username: email, password: password) }
                         } label: {
                             Text(CoreLocalization.SignIn.logInBtn)
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(Theme.Fonts.ttRoundsSemibold(15))
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 50)

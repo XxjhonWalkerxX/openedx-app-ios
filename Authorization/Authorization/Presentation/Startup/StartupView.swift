@@ -92,8 +92,8 @@ public struct StartupView: View {
                     .frame(maxWidth: .infinity)
                     .background(
                         UnevenRoundedRectangle(
-                            topLeadingRadius: 32,
-                            topTrailingRadius: 32
+                            topLeadingRadius: Theme.Sizes.radiusSheet,
+                            topTrailingRadius: Theme.Sizes.radiusSheet
                         )
                         .fill(Theme.Colors.brandCream)
                     )
@@ -153,10 +153,10 @@ public struct StartupView: View {
             // Pill de estadísticas
             HStack(spacing: 8) {
                 Circle()
-                    .fill(Color(red: 0.722, green: 0.878, blue: 0.831))
+                    .fill(Theme.Colors.pillGreen)
                     .frame(width: 7, height: 7)
                 Text("95 instituciones  ·  1,359 cursos  ·  100% gratuito")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(Theme.Fonts.ttRoundsMedium(11))
                     .foregroundColor(.white.opacity(0.9))
                     .kerning(0.2)
             }
@@ -183,17 +183,17 @@ public struct StartupView: View {
         } label: {
             HStack(spacing: 10) {
                 Image(systemName: "magnifyingglass")
-                    .font(.system(size: 15))
-                    .foregroundColor(Color(red: 0.6, green: 0.58, blue: 0.55))
+                    .font(Theme.Fonts.ttRoundsBody(15))
+                    .foregroundColor(Theme.Colors.brandCardSecondary)
 
                 Text("Busca tu curso…")
-                    .font(.system(size: 14))
-                    .foregroundColor(Color(red: 0.65, green: 0.63, blue: 0.60))
+                    .font(Theme.Fonts.ttRoundsBody(14))
+                    .foregroundColor(Theme.Colors.brandCardSecondary)
 
                 Spacer()
 
                 Text("Buscar")
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(Theme.Fonts.ttRoundsSemibold(12))
                     .foregroundColor(.white)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 7)
@@ -215,8 +215,8 @@ public struct StartupView: View {
         let logoH = min(CGFloat(80), screenHeight * 0.094)
         return VStack(spacing: 0) {
             Text("Inicia sesión con tu cuenta")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(Color(red: 0.239, green: 0.227, blue: 0.212))
+                .font(Theme.Fonts.ttRoundsSemibold(15))
+                .foregroundColor(Theme.Colors.brandCardPrimary)
 
             Spacer().frame(height: 12)
 
@@ -226,7 +226,7 @@ public struct StartupView: View {
                     image.resizable().aspectRatio(contentMode: .fit)
                 case .failure:
                     Text("LlaveMX")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(Theme.Fonts.ttRoundsBody(16, weight: 700))
                         .foregroundColor(Theme.Colors.guindaColor)
                 default:
                     ProgressView()
@@ -252,7 +252,7 @@ public struct StartupView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .allowsHitTesting(false)
                 Text("Iniciar sesión")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(Theme.Fonts.ttRoundsSemibold(15))
                     .foregroundColor(.white)
             }
             .frame(maxWidth: .infinity)
@@ -265,13 +265,13 @@ public struct StartupView: View {
             Spacer().frame(height: 12)
 
             Divider()
-                .background(Color(red: 0.91, green: 0.89, blue: 0.863))
+                .background(Theme.Colors.brandDivider)
 
             Spacer().frame(height: 10)
 
             Text("¿Aún no tienes una cuenta LlaveMX?")
-                .font(.system(size: 12))
-                .foregroundColor(Color(red: 0.604, green: 0.584, blue: 0.565))
+                .font(Theme.Fonts.ttRoundsBody(12))
+                .foregroundColor(Theme.Colors.brandCardSecondary)
 
             Spacer().frame(height: 5)
 
@@ -281,7 +281,7 @@ public struct StartupView: View {
                 }
             } label: {
                 Text("Crear cuenta")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(Theme.Fonts.ttRoundsSemibold(13))
                     .foregroundColor(Theme.Colors.guindaColor)
             }
         }
@@ -303,21 +303,21 @@ public struct StartupView: View {
         } label: {
             HStack {
                 Text("Iniciar sesión con correo y contraseña")
-                    .font(.system(size: 13))
-                    .foregroundColor(Color(red: 0.45, green: 0.42, blue: 0.37))
+                    .font(Theme.Fonts.ttRoundsBody(13))
+                    .foregroundColor(Theme.Colors.brandCardMedium)
                 Spacer()
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(red: 0.6, green: 0.58, blue: 0.55))
+                    .font(Theme.Fonts.ttRoundsBody(12))
+                    .foregroundColor(Theme.Colors.brandCardSecondary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 13)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 1.0, green: 0.99, blue: 0.91))
+                RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard)
+                    .fill(Theme.Colors.brandHighlightSoft)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .strokeBorder(Color(red: 0.91, green: 0.85, blue: 0.48).opacity(0.5), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard)
+                            .strokeBorder(Theme.Colors.brandHighlightStroke.opacity(0.5), lineWidth: 1)
                     )
             )
         }
