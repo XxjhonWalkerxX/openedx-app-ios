@@ -110,6 +110,14 @@ public struct Theme: Sendable {
         public static let brandDivider       = Color(red: 0.941, green: 0.929, blue: 0.910) // #F0ECE8
         public static let brandProgressTrack = Color(red: 0.898, green: 0.878, blue: 0.847) // #E5E0D8
 
+        // Inputs (TextField / SecureField) — fondo cálido + stroke visible
+        public static let brandInputBackground = Color(red: 0.97, green: 0.96, blue: 0.95)  // #F7F6F2
+        public static let brandInputStroke     = Color(red: 0.86, green: 0.84, blue: 0.81)  // #DBD6CE
+
+        // Highlight amarillo suave (Startup traditional login, promoted rows)
+        public static let brandHighlightSoft   = Color(red: 1.0,  green: 0.99, blue: 0.91)  // #FFFCE8
+        public static let brandHighlightStroke = Color(red: 0.91, green: 0.85, blue: 0.48)  // #E8D97A
+
         // Colores de stat pills en el hero
         public static let pillGreen  = Color(red: 0.604, green: 0.859, blue: 0.784) // #9ADBC8
         public static let pillPink   = Color(red: 0.941, green: 0.627, blue: 0.690) // #F0A0B0
