@@ -150,7 +150,7 @@ struct CustomDisclosureGroup: View {
                                                     if let assignmentStatusText = assignmentStatusText(sequential: sequential) {
                                                         Text(assignmentStatusText)
                                                             .font(Theme.Fonts.ttRoundsBody(12, weight: 400))
-                                                            .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
+                                                            .foregroundColor(Theme.Colors.textSecondary)
                                                             .multilineTextAlignment(.leading)
                                                             .lineLimit(2)
                                                     }

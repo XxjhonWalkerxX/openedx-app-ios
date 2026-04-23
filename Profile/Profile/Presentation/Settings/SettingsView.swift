@@ -11,24 +11,27 @@ import Theme
 // MARK: - Layout Constants
 
 private enum SettingsLayout {
-    static let horizontalPadding: CGFloat = 20
-    static let topBandHeight: CGFloat = 4
-    static let headerVerticalPadding: CGFloat = 60
-    static let headerVerticalPaddingLandscape: CGFloat = 8
-    static let sectionSpacing: CGFloat = 20
-    static let contentTopPadding: CGFloat = 2
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat            = Theme.Sizes.horizontalPadding
+    static let headerVerticalPadding: CGFloat        = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat  = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat      = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat     = Theme.Sizes.headerLandscapeHeight
+    static let rowMinHeight: CGFloat                 = Theme.Sizes.settingsRowMinHeight
+
+    // Específicos de SettingsView
+    static let topBandHeight: CGFloat              = 4
+    static let sectionSpacing: CGFloat             = 20
+    static let contentTopPadding: CGFloat          = 2
     static let contentTopPaddingLandscape: CGFloat = 16
-    static let rowMinHeight: CGFloat = 66
-    static let rowCornerRadius: CGFloat = 18
-    static let versionCardCornerRadius: CGFloat = 14
-    static let logoutCornerRadius: CGFloat = 14
-    static let logoutBorderWidth: CGFloat = 2
-    static let backButtonSize: CGFloat = 54
-    static let backButtonCornerRadius: CGFloat = 14
-    static let headerMinHeightPortrait: CGFloat = 160
-    static let headerMinHeightLandscape: CGFloat = 96
-    static let headerBottomPaddingPortrait: CGFloat = 24
-    static let headerBottomPaddingLandscape: CGFloat = 10
+    static let rowCornerRadius: CGFloat            = 18
+    static let versionCardCornerRadius: CGFloat    = 14
+    static let logoutCornerRadius: CGFloat         = 14
+    static let logoutBorderWidth: CGFloat          = 2
+    static let backButtonSize: CGFloat             = 54
+    static let backButtonCornerRadius: CGFloat     = 14
 }
 
 // MARK: - SettingsView
@@ -142,7 +145,7 @@ public struct SettingsView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
                         .foregroundColor(.white)
                         .frame(width: SettingsLayout.backButtonSize, height: SettingsLayout.backButtonSize)
                         .background(
@@ -167,7 +170,7 @@ public struct SettingsView: View {
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, SettingsLayout.horizontalPadding)
-            .padding(.top, headerTopPadding + 10)
+            .padding(.top, headerTopPadding)
             .padding(.bottom, headerBottomPadding)
             .background(Theme.Colors.brandGreen)
         }
@@ -234,7 +237,7 @@ public struct SettingsView: View {
                 Image(systemName: "chevron.right")
                     .foregroundColor(Theme.Colors.brandGreen)
                     .flipsForRightToLeftLayoutDirection(true)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(Theme.Fonts.ttRoundsSemibold(15))
             }
             .padding(.horizontal, 18)
             .frame(maxWidth: .infinity, minHeight: SettingsLayout.rowMinHeight)
@@ -322,7 +325,7 @@ public struct SettingsView: View {
                 Text(ProfileLocalization.logout)
                     .font(Theme.Fonts.titleMedium)
                 Image(systemName: "rectangle.portrait.and.arrow.right")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(Theme.Fonts.ttRoundsSemibold(18))
             }
             .foregroundColor(Theme.Colors.guindaColor)
             .frame(maxWidth: .infinity)

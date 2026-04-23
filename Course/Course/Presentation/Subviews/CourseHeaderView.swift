@@ -9,6 +9,61 @@ import Kingfisher
 import Core
 import Theme
 
+private enum CourseHeaderLayout {
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat = Theme.Sizes.horizontalPadding
+
+    // Dimensiones banner (device-aware)
+    static let bannerHeightPad: CGFloat       = 380
+    static let bannerHeightLandscape: CGFloat = 300
+    static let bannerHeightPortrait: CGFloat  = 340
+
+    // Alturas colapsadas — requeridas por matchedGeometryEffect
+    static let collapsedHeightHorizontal: CGFloat = 230
+    static let collapsedHeightVertical: CGFloat   = 260
+
+    // Layout expandido
+    static let expandedContentHeightFallback: CGFloat = 200
+    static let imageOverlap: CGFloat                  = 40
+
+    // Radius legacy card cream — matchedGeometry requiere consistencia exacta.
+    // No migrar a Theme.Sizes.radiusSheet (32) sin rediseñar animación colapso.
+    static let expandedCardTopRadius: CGFloat = 28
+
+    // Franja guinda superior
+    static let guindaBandHeight: CGFloat = 4
+
+    // Collapsed content
+    static let collapsedContentTopPadding: CGFloat     = 46
+    static let collapsedContentLeadingPadding: CGFloat = 12
+    static let collapsedContentBottomPadding: CGFloat  = 12
+    static let collapsedBackButtonSize: CGFloat        = 30
+    static let collapsedBackButtonOffsetY: CGFloat     = 10
+
+    // Expanded content — paddings top condicionales
+    static let expandedOrgTopPadding: CGFloat          = 14
+    static let expandedTitleTopPaddingWithOrg: CGFloat = 10
+    static let expandedTitleTopPaddingNoOrg: CGFloat   = 14
+
+    // Chips metadata
+    static let chipsSpacing: CGFloat          = 8
+    static let chipsTopPadding: CGFloat       = 12
+    static let chipsBottomPadding: CGFloat    = 14
+    static let chipHorizontalPadding: CGFloat = 10
+    static let chipVerticalPadding: CGFloat   = 4
+    static let noChipsSpacerHeight: CGFloat   = 14
+
+    // Org badge
+    static let orgBadgeSpacing: CGFloat           = 5
+    static let orgBadgeDotSize: CGFloat           = 5
+    static let orgBadgeHorizontalPadding: CGFloat = 10
+    static let orgBadgeVerticalPadding: CGFloat   = 4
+    static let orgBadgeMaxWidthRatio: CGFloat     = 0.55
+
+    // Sync con CourseContainerView.coordinateBoundaryLower
+    static let coordinateBoundaryLower: CGFloat = 115
+}
+
 struct CourseHeaderView: View {
 
     @ObservedObject var viewModel: CourseContainerViewModel
@@ -21,21 +76,19 @@ struct CourseHeaderView: View {
     @Environment(\.isHorizontal) private var isHorizontal
     private var idiom: UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
 
-    private let collapsedHorizontalHeight: CGFloat = 230
-    private let collapsedVerticalHeight: CGFloat = 260
     private var bannerHeight: CGFloat {
         if idiom == .pad {
-            return 380
+            return CourseHeaderLayout.bannerHeightPad
         }
-        return isHorizontal ? 300 : 340
+        return isHorizontal
+            ? CourseHeaderLayout.bannerHeightLandscape
+            : CourseHeaderLayout.bannerHeightPortrait
     }
-    private let expandedContentHeight: CGFloat = 200
-    private let imageOverlap: CGFloat = 40
     @State private var measuredContentHeight: CGFloat = 0
     private var contentHeight: CGFloat {
-        measuredContentHeight > 0 ? measuredContentHeight : expandedContentHeight
+        measuredContentHeight > 0 ? measuredContentHeight : CourseHeaderLayout.expandedContentHeightFallback
     }
-    private var expandedHeight: CGFloat { bannerHeight + contentHeight - imageOverlap }
+    private var expandedHeight: CGFloat { bannerHeight + contentHeight - CourseHeaderLayout.imageOverlap }
 
     private let courseRawImage: String?
     private static let courseEndFormatter: DateFormatter = {
@@ -103,13 +156,15 @@ struct CourseHeaderView: View {
                     expandedContent
                 }
             }
-            .padding(.top, collapsed ? 0 : (bannerHeight - imageOverlap))
+            .padding(.top, collapsed ? 0 : (bannerHeight - CourseHeaderLayout.imageOverlap))
         }
         // Aplicamos fondo solamente en expansión para no bloquear la lista inferior
         .background(collapsed ? Color.clear : Theme.Colors.background)
         .frame(
             height: collapsed ? (
-                isHorizontal ? collapsedHorizontalHeight : collapsedVerticalHeight
+                isHorizontal
+                    ? CourseHeaderLayout.collapsedHeightHorizontal
+                    : CourseHeaderLayout.collapsedHeightVertical
             ) : expandedHeight,
             alignment: .top
         )
@@ -119,20 +174,20 @@ struct CourseHeaderView: View {
                 Color.clear
                     .onAppear {
                         // Reportar altura visible: cuando colapsado, el header sube
-                        // 115pt (coordinateBoundaryLower en CourseContainerView),
-                        // así que el spacer debe ser frame - 115 para no dejar hueco.
+                        // coordinateBoundaryLower (ver CourseContainerView),
+                        // spacer = frame - boundary para no dejar hueco.
                         headerHeight = collapsed
-                            ? max(0, proxy.size.height - 115)
+                            ? max(0, proxy.size.height - CourseHeaderLayout.coordinateBoundaryLower)
                             : proxy.size.height
                     }
                     .onChange(of: proxy.size.height) { newValue in
                         headerHeight = collapsed
-                            ? max(0, newValue - 115)
+                            ? max(0, newValue - CourseHeaderLayout.coordinateBoundaryLower)
                             : newValue
                     }
                     .onChange(of: collapsed) { newCollapsed in
                         headerHeight = newCollapsed
-                            ? max(0, proxy.size.height - 115)
+                            ? max(0, proxy.size.height - CourseHeaderLayout.coordinateBoundaryLower)
                             : proxy.size.height
                     }
             }
@@ -150,8 +205,11 @@ struct CourseHeaderView: View {
                 )
                 .backViewStyle()
                 .matchedGeometryEffect(id: GeometryName.backButton, in: animationNamespace)
-                .frame(width: 30, height: 30)
-                .offset(y: 10)
+                .frame(
+                    width: CourseHeaderLayout.collapsedBackButtonSize,
+                    height: CourseHeaderLayout.collapsedBackButtonSize
+                )
+                .offset(y: CourseHeaderLayout.collapsedBackButtonOffsetY)
                 Text(title)
                     .lineLimit(1)
                     .foregroundStyle(Theme.Colors.brandGreen)
@@ -160,11 +218,11 @@ struct CourseHeaderView: View {
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .clipped()
             }
-            .padding(.top, 46)
-            .padding(.leading, 12)
+            .padding(.top, CourseHeaderLayout.collapsedContentTopPadding)
+            .padding(.leading, CourseHeaderLayout.collapsedContentLeadingPadding)
             courseMenuBar(containerWidth: containerWidth)
                 .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
-                .padding(.bottom, 12)
+                .padding(.bottom, CourseHeaderLayout.collapsedContentBottomPadding)
         }
         .background(
             ZStack(alignment: .top) {
@@ -172,7 +230,7 @@ struct CourseHeaderView: View {
                     .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
                     .ignoresSafeArea(edges: .top) // Ignora top safe area para pintar detrás de la batería/notch
                 Theme.Colors.guindaColor
-                    .frame(height: 4)
+                    .frame(height: CourseHeaderLayout.guindaBandHeight)
                     .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
                     // La franja guinda queda contenida, pero el fondo crema sube a tapar todo
             }
@@ -186,7 +244,7 @@ struct CourseHeaderView: View {
             let hasOrg = (viewModel.courseStructure?.org.isEmpty == false)
             if let org = viewModel.courseStructure?.org {
                 orgBadge(org: org)
-                    .padding(.top, 14)
+                    .padding(.top, CourseHeaderLayout.expandedOrgTopPadding)
             }
             Text(title)
                 .lineLimit(3)
@@ -195,35 +253,37 @@ struct CourseHeaderView: View {
                 .kerning(-0.3)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .padding(.horizontal, 20)
-                .padding(.top, hasOrg ? 10 : 14)
+                .padding(.horizontal, CourseHeaderLayout.horizontalPadding)
+                .padding(.top, hasOrg
+                    ? CourseHeaderLayout.expandedTitleTopPaddingWithOrg
+                    : CourseHeaderLayout.expandedTitleTopPaddingNoOrg)
                 .allowsHitTesting(false)
                 .frameLimit(width: containerWidth)
             if !metadataChips.isEmpty {
-                HStack(spacing: 8) {
+                HStack(spacing: CourseHeaderLayout.chipsSpacing) {
                     ForEach(metadataChips, id: \.self) { label in
                         Text(label)
                             .font(Theme.Fonts.ttRoundsBody(11, weight: 700))
                             .foregroundColor(Theme.Colors.brandCardMedium)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, CourseHeaderLayout.chipHorizontalPadding)
+                            .padding(.vertical, CourseHeaderLayout.chipVerticalPadding)
                             .background(
                                 Capsule().fill(Theme.Colors.brandCreamStrong)
                             )
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 14)
+                .padding(.horizontal, CourseHeaderLayout.horizontalPadding)
+                .padding(.top, CourseHeaderLayout.chipsTopPadding)
+                .padding(.bottom, CourseHeaderLayout.chipsBottomPadding)
                 .allowsHitTesting(false)
                 .frameLimit(width: containerWidth)
             } else {
-                Spacer().frame(height: 14)
+                Spacer().frame(height: CourseHeaderLayout.noChipsSpacerHeight)
             }
             courseMenuBar(containerWidth: containerWidth)
                 .matchedGeometryEffect(id: GeometryName.topTabBar, in: animationNamespace)
-                .padding(.bottom, 12)
+                .padding(.bottom, CourseHeaderLayout.collapsedContentBottomPadding)
         }
         .background(
             GeometryReader { proxy in
@@ -238,12 +298,20 @@ struct CourseHeaderView: View {
         )
         .background {
             ZStack(alignment: .top) {
-                UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28)
-                    .fill(Theme.Colors.brandCream)
-                    .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
+                UnevenRoundedRectangle(
+                    topLeadingRadius: CourseHeaderLayout.expandedCardTopRadius,
+                    topTrailingRadius: CourseHeaderLayout.expandedCardTopRadius
+                )
+                .fill(Theme.Colors.brandCream)
+                .matchedGeometryEffect(id: GeometryName.blurPrimaryBg, in: animationNamespace)
                 Theme.Colors.guindaColor
-                    .frame(height: 4)
-                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28))
+                    .frame(height: CourseHeaderLayout.guindaBandHeight)
+                    .clipShape(
+                        UnevenRoundedRectangle(
+                            topLeadingRadius: CourseHeaderLayout.expandedCardTopRadius,
+                            topTrailingRadius: CourseHeaderLayout.expandedCardTopRadius
+                        )
+                    )
                     .matchedGeometryEffect(id: GeometryName.blurSecondaryBg, in: animationNamespace)
                 Color.clear
                     .matchedGeometryEffect(id: GeometryName.blurBg, in: animationNamespace)
@@ -256,18 +324,21 @@ struct CourseHeaderView: View {
     // MARK: - Org Badge
 
     private func orgBadge(org: String) -> some View {
-        HStack(spacing: 5) {
+        HStack(spacing: CourseHeaderLayout.orgBadgeSpacing) {
             Circle()
                 .fill(Theme.Colors.brandGreen)
-                .frame(width: 5, height: 5)
+                .frame(
+                    width: CourseHeaderLayout.orgBadgeDotSize,
+                    height: CourseHeaderLayout.orgBadgeDotSize
+                )
             Text(org)
                 .font(Theme.Fonts.ttRoundsBody(11, weight: 600))
                 .foregroundColor(Theme.Colors.brandGreen)
                 .lineLimit(1)
                 .truncationMode(.tail)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
+        .padding(.horizontal, CourseHeaderLayout.orgBadgeHorizontalPadding)
+        .padding(.vertical, CourseHeaderLayout.orgBadgeVerticalPadding)
         .background(
             Capsule()
                 .fill(Theme.Colors.brandGreen.opacity(0.1))
@@ -276,8 +347,8 @@ struct CourseHeaderView: View {
             Capsule()
                 .stroke(Theme.Colors.brandGreen.opacity(0.3), lineWidth: 0.5)
         )
-        .frame(maxWidth: containerWidth * 0.55, alignment: .leading)
-        .padding(.horizontal, 20)
+        .frame(maxWidth: containerWidth * CourseHeaderLayout.orgBadgeMaxWidthRatio, alignment: .leading)
+        .padding(.horizontal, CourseHeaderLayout.horizontalPadding)
         .allowsHitTesting(false)
         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
         .frameLimit(width: containerWidth)

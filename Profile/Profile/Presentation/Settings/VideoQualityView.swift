@@ -12,26 +12,29 @@ import Kingfisher
 import Theme
 
 private enum VideoQualityLayout {
-    static let topBandHeight: CGFloat = 4
-    static let horizontalPadding: CGFloat = 20
-    static let headerVerticalPaddingPortrait: CGFloat = 52
-    static let headerVerticalPaddingLandscape: CGFloat = 8
-    static let headerBottomPaddingPortrait: CGFloat = 18
-    static let headerBottomPaddingLandscape: CGFloat = 10
-    static let headerMinHeightPortrait: CGFloat = 152
-    static let headerMinHeightLandscape: CGFloat = 84
-    static let headerTitleSpacing: CGFloat = 12
-    static let sectionSpacing: CGFloat = 10
-    static let contentTopPaddingPortrait: CGFloat = 2
-    static let contentTopPaddingLandscape: CGFloat = 10
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat              = Theme.Sizes.horizontalPadding
+    static let headerVerticalPaddingPortrait: CGFloat  = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat    = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat   = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat        = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat       = Theme.Sizes.headerLandscapeHeight
+
+    // Específicos de VideoQualityView
+    static let topBandHeight: CGFloat                    = 4
+    static let headerTitleSpacing: CGFloat               = 12
+    static let sectionSpacing: CGFloat                   = 10
+    static let contentTopPaddingPortrait: CGFloat        = 2
+    static let contentTopPaddingLandscape: CGFloat       = 10
     static let contentHorizontalPaddingPortrait: CGFloat = 24
     static let contentHorizontalPaddingLandscape: CGFloat = 28
-    static let contentMaxWidthLandscape: CGFloat = 620
-    static let backButtonSize: CGFloat = 54
-    static let backButtonCornerRadius: CGFloat = 14
-    static let cardCornerRadius: CGFloat = 18
-    static let cardHorizontalPadding: CGFloat = 18
-    static let cardVerticalPadding: CGFloat = 16
+    static let contentMaxWidthLandscape: CGFloat         = 620
+    static let backButtonSize: CGFloat                   = 54
+    static let backButtonCornerRadius: CGFloat           = 14
+    static let cardCornerRadius: CGFloat                 = 18
+    static let cardHorizontalPadding: CGFloat            = 18
+    static let cardVerticalPadding: CGFloat              = 16
 }
 
 public struct VideoQualityView: View {
@@ -137,7 +140,7 @@ public struct VideoQualityView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
                         .foregroundColor(.white)
                         .frame(width: VideoQualityLayout.backButtonSize, height: VideoQualityLayout.backButtonSize)
                         .background(
@@ -198,7 +201,7 @@ public struct VideoQualityView: View {
             }
             .padding(.horizontal, VideoQualityLayout.cardHorizontalPadding)
             .padding(.vertical, VideoQualityLayout.cardVerticalPadding)
-            .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: Theme.Sizes.settingsRowMinHeight, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: VideoQualityLayout.cardCornerRadius, style: .continuous)
                     .fill(Theme.Colors.white)

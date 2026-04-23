@@ -33,7 +33,7 @@ struct ContentSegmentedControl: View {
     let analytics: CourseAnalytics
     let progress: CourseProgress?
 
-    private let unselectedColor = Color(red: 0.667, green: 0.667, blue: 0.667) // #AAAAAA
+    private let unselectedColor = Theme.Colors.textInactive
     private let progressBarWidth: CGFloat = 48
 
     init(

@@ -110,32 +110,16 @@ public struct PrimaryCardView: View {
                     .accessibilityIdentifier("course_image")
                     .onTapGesture { openCourseAction() }
 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(org)
-                        .font(Theme.Fonts.ttRoundsBody(9, weight: 600))
-                        .foregroundColor(Theme.Colors.brandCardSecondary)
-                        .kerning(0.3)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    Text(courseName)
-                        .font(Theme.Fonts.ttRoundsCompressedMedium(14))
-                        .foregroundColor(Theme.Colors.brandCardPrimary)
-                        .kerning(-0.2)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    Spacer()
-
-                    if let dateStr = formattedCourseDate {
-                        Text(dateStr)
-                            .font(Theme.Fonts.ttRoundsBody(10))
-                            .foregroundColor(Theme.Colors.brandCardSecondary)
-                            .lineLimit(1)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                ElasticTextBlock(
+                    org: org,
+                    title: courseName,
+                    meta: formattedCourseDate,
+                    height: 112,
+                    orgFont: Theme.Fonts.ttRoundsBody(9, weight: 600),
+                    titleFont: Theme.Fonts.ttRoundsCompressedMedium(14),
+                    metaFont: Theme.Fonts.ttRoundsBody(10)
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 14)
                 .onTapGesture { openCourseAction() }
@@ -206,7 +190,7 @@ public struct PrimaryCardView: View {
                 Button(action: { resumeAction() }) {
                     HStack(spacing: 5) {
                         Image(systemName: "play.fill")
-                            .font(.system(size: 10))
+                            .font(Theme.Fonts.ttRoundsBody(10))
                             .foregroundColor(.white)
                         Text(canResume ? "Continuar" : "Iniciar")
                             .font(Theme.Fonts.ttRoundsBody(11, weight: 500))

@@ -11,7 +11,7 @@ import OEXFoundation
 import Theme
 
 private enum AllCoursesLayout {
-    static let horizontalPadding: CGFloat = 20
+    // Usa token del sistema — Theme.Sizes.horizontalPadding (20pt).
     static let headerTopPadding: CGFloat = 2
     static let headerBottomPadding: CGFloat = 4
     static let headerButtonSize: CGFloat = 34
@@ -105,7 +105,7 @@ public struct AllCoursesView: View {
                                         }
                                     }
                                 }
-                                .padding(.horizontal, AllCoursesLayout.horizontalPadding)
+                                .padding(.horizontal, Theme.Sizes.horizontalPadding)
                                 .frameLimit(width: proxy.size.width)
                             }
                             // MARK: - ProgressBar
@@ -224,7 +224,7 @@ public struct AllCoursesView: View {
                 .minimumScaleFactor(0.7)
                 .padding(.leading, 2)
         }
-        .padding(.horizontal, AllCoursesLayout.horizontalPadding)
+        .padding(.horizontal, Theme.Sizes.horizontalPadding)
         .padding(.top, AllCoursesLayout.headerTopPadding)
         .padding(.bottom, AllCoursesLayout.headerBottomPadding)
         .background(Theme.Colors.brandCream)

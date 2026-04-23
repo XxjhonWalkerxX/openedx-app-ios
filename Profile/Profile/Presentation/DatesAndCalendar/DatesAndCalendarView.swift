@@ -10,23 +10,26 @@ import Theme
 import Core
 
 private enum DatesAndCalendarLayout {
-    static let horizontalPadding: CGFloat = 20
-    static let topBandHeight: CGFloat = 4
-    static let headerVerticalPadding: CGFloat = 60
-    static let headerVerticalPaddingLandscape: CGFloat = 8
-    static let headerMinHeightPortrait: CGFloat = 160
-    static let headerMinHeightLandscape: CGFloat = 96
-    static let headerBottomPaddingPortrait: CGFloat = 24
-    static let headerBottomPaddingLandscape: CGFloat = 10
-    static let sectionSpacing: CGFloat = 20
-    static let contentTopPadding: CGFloat = 2
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat            = Theme.Sizes.horizontalPadding
+    static let headerVerticalPadding: CGFloat        = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat  = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat      = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat     = Theme.Sizes.headerLandscapeHeight
+
+    // Específicos de DatesAndCalendarView
+    static let topBandHeight: CGFloat              = 4
+    static let sectionSpacing: CGFloat             = 20
+    static let contentTopPadding: CGFloat          = 2
     static let contentTopPaddingLandscape: CGFloat = 16
-    static let cardCornerRadius: CGFloat = 22
-    static let cardShadowRadius: CGFloat = 5
-    static let cardShadowYOffset: CGFloat = 2
-    static let cardStrokeOpacity: CGFloat = 0.04
-    static let cardShadowOpacity: CGFloat = 0.06
-    static let buttonCornerRadius: CGFloat = 14
+    static let cardCornerRadius: CGFloat           = 22
+    static let cardShadowRadius: CGFloat           = 5
+    static let cardShadowYOffset: CGFloat          = 2
+    static let cardStrokeOpacity: CGFloat          = 0.04
+    static let cardShadowOpacity: CGFloat          = 0.06
+    static let buttonCornerRadius: CGFloat         = 14
 }
 
 public struct DatesAndCalendarView: View {
@@ -151,7 +154,7 @@ public struct DatesAndCalendarView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
                         .foregroundColor(.white)
                         .frame(width: 54, height: 54)
                         .background(

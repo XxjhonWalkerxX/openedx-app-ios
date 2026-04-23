@@ -11,31 +11,32 @@ import OEXFoundation
 import Theme
 
 private enum ManageAccountLayout {
-    static let topBandHeight: CGFloat = 4
-    static let headerHorizontalPadding: CGFloat = 20
-    static let headerTopPaddingPortrait: CGFloat = 52
-    static let headerTopPaddingLandscape: CGFloat = 8
-    static let headerBottomPaddingPortrait: CGFloat = 18
-    static let headerBottomPaddingLandscape: CGFloat = 10
-    static let headerMinHeightPortrait: CGFloat = 152
-    static let headerMinHeightLandscape: CGFloat = 84
-    static let headerTitleSpacing: CGFloat = 12
-    static let backButtonSize: CGFloat = 54
-    static let backButtonCornerRadius: CGFloat = 14
+    // Tokens del sistema — ver Theme.Sizes
+    static let headerHorizontalPadding: CGFloat     = Theme.Sizes.horizontalPadding
+    static let headerTopPaddingPortrait: CGFloat    = Theme.Sizes.headerTopPadding
+    static let headerTopPaddingLandscape: CGFloat   = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat    = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat   = Theme.Sizes.headerLandscapeHeight
 
-    static let contentTopPaddingPortrait: CGFloat = 2
-    static let contentTopPaddingLandscape: CGFloat = 10
+    // Específicos de ManageAccountView
+    static let topBandHeight: CGFloat                    = 4
+    static let headerTitleSpacing: CGFloat               = 12
+    static let backButtonSize: CGFloat                   = 54
+    static let backButtonCornerRadius: CGFloat           = 14
+    static let contentTopPaddingPortrait: CGFloat        = 2
+    static let contentTopPaddingLandscape: CGFloat       = 10
     static let contentHorizontalPaddingPortrait: CGFloat = 24
     static let contentHorizontalPaddingLandscape: CGFloat = 28
-    static let contentMaxWidthLandscape: CGFloat = 620
-
-    static let sectionSpacing: CGFloat = 20
-    static let profileSpacing: CGFloat = 12
-    static let profileNameSpacing: CGFloat = 4
-    static let profileTopPaddingPortrait: CGFloat = 4
-    static let profileTopPaddingLandscape: CGFloat = 12
-    static let editButtonTopPadding: CGFloat = 4
-    static let deleteButtonTopPadding: CGFloat = 24
+    static let contentMaxWidthLandscape: CGFloat         = 620
+    static let sectionSpacing: CGFloat                   = 20
+    static let profileSpacing: CGFloat                   = 12
+    static let profileNameSpacing: CGFloat               = 4
+    static let profileTopPaddingPortrait: CGFloat        = 4
+    static let profileTopPaddingLandscape: CGFloat       = 12
+    static let editButtonTopPadding: CGFloat             = 4
+    static let deleteButtonTopPadding: CGFloat           = 24
 }
 
 public struct ManageAccountView: View {
@@ -127,7 +128,7 @@ public struct ManageAccountView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
                         .foregroundColor(.white)
                         .frame(width: ManageAccountLayout.backButtonSize, height: ManageAccountLayout.backButtonSize)
                         .background(

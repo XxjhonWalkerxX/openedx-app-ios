@@ -504,7 +504,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
             VStack(alignment: .center, spacing: 6) {
                 Spacer()
                 Image(systemName: "chevron.right.circle")
-                    .font(.system(size: 28))
+                    .font(Theme.Fonts.ttRoundsBody(28))
                     .foregroundColor(Theme.Colors.brandGreen)
                 Text(DashboardLocalization.Learn.viewAll)
                     .font(Theme.Fonts.ttRoundsBody(12, weight: 500))
@@ -538,7 +538,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                             .font(Theme.Fonts.ttRoundsBody(12, weight: 500))
                             .foregroundColor(Theme.Colors.brandGreen)
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 11))
+                            .font(Theme.Fonts.ttRoundsBody(11))
                             .foregroundColor(Theme.Colors.brandGreen)
                     }
                 }

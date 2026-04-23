@@ -131,7 +131,7 @@ public struct CourseVerticalView: View {
                                         
                                         CoreAssets.chevronRight.swiftUIImage
                                             .renderingMode(.template)
-                                            .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                            .foregroundColor(Theme.Colors.brandHandle)
                                             .frame(width: 12, height: 12)
                                     }
                                     .padding(.vertical, 14)
