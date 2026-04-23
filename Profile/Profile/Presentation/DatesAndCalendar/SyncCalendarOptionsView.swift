@@ -2,44 +2,116 @@
 //  SyncCalendarOptionsView.swift
 //  Profile
 //
-//  Created by  Stepanok Ivan on 15.05.2024.
+//  Created by  Stepanok Ivan on 15.05.2024.
 //
 
 import SwiftUI
 import Theme
 import Core
 
+private enum SyncCalendarLayout {
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat              = Theme.Sizes.horizontalPadding
+    static let headerVerticalPaddingPortrait: CGFloat  = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat    = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat   = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat        = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat       = Theme.Sizes.headerLandscapeHeight
+
+    // Específicos
+    static let topBandHeight: CGFloat          = 4
+    static let headerTitleSpacing: CGFloat     = 12
+    static let backButtonSize: CGFloat         = 54
+    static let backButtonCornerRadius: CGFloat = 14
+    static let contentHorizontalPadding: CGFloat = 24
+    static let contentTopPadding: CGFloat      = 8
+}
+
 public struct SyncCalendarOptionsView: View {
-    
+
     @ObservedObject
     private var viewModel: DatesAndCalendarViewModel
-    
+
     @State private var screenDimmed: Bool = false
-    
+
     @Environment(\.isHorizontal) private var isHorizontal
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     public init(viewModel: DatesAndCalendarViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    private var isLandscapeLike: Bool { verticalSizeClass == .compact }
+
+    private var headerTopPadding: CGFloat {
+        isLandscapeLike
+            ? SyncCalendarLayout.headerVerticalPaddingLandscape
+            : SyncCalendarLayout.headerVerticalPaddingPortrait
+    }
+
+    private var headerBottomPadding: CGFloat {
+        isLandscapeLike
+            ? SyncCalendarLayout.headerBottomPaddingLandscape
+            : SyncCalendarLayout.headerBottomPaddingPortrait
+    }
+
+    private var headerMinHeight: CGFloat {
+        isLandscapeLike
+            ? SyncCalendarLayout.headerMinHeightLandscape
+            : SyncCalendarLayout.headerMinHeightPortrait
+    }
+
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: SyncCalendarLayout.topBandHeight)
+
+            HStack(alignment: .top, spacing: SyncCalendarLayout.headerTitleSpacing) {
+                Button(action: { viewModel.router.back() }) {
+                    Image(systemName: "chevron.left")
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .foregroundColor(.white)
+                        .frame(
+                            width: SyncCalendarLayout.backButtonSize,
+                            height: SyncCalendarLayout.backButtonSize
+                        )
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: SyncCalendarLayout.backButtonCornerRadius,
+                                style: .continuous
+                            )
+                            .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                Text(ProfileLocalization.DatesAndCalendar.title)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, SyncCalendarLayout.horizontalPadding)
+            .padding(.top, headerTopPadding)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                ThemeAssets.headerBackground.swiftUIImage
-                    .resizable()
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(maxWidth: .infinity, maxHeight: 200)
-                    .accessibilityIdentifier("title_bg_image")
-                
-                VStack(spacing: 8) {
-                    // MARK: Navigation and Title
-                    NavigationTitle(
-                        title: ProfileLocalization.DatesAndCalendar.title,
-                        backAction: {
-                            viewModel.router.back()
-                        }
-                    )
-                    
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
                     // MARK: Body
                     ScrollView {
                         Group {
@@ -51,7 +123,7 @@ public struct SyncCalendarOptionsView: View {
                                     status: $viewModel.assignmentStatus,
                                     calendarColor: colorSelectionColor
                                 )
-                                .padding(.horizontal, 24)
+                                .padding(.horizontal, SyncCalendarLayout.contentHorizontalPadding)
                             }
                             ToggleWithDescriptionView(
                                 text: ProfileLocalization.CourseCalendarSync.title,
@@ -62,8 +134,8 @@ public struct SyncCalendarOptionsView: View {
                                 showAlertIcon: $viewModel.reconnectRequired
                             )
                             .padding(.vertical, 24)
-                            .padding(.horizontal, 24)
-                            
+                            .padding(.horizontal, SyncCalendarLayout.contentHorizontalPadding)
+
                             StyledButton(
                                 viewModel.reconnectRequired
                                 ? ProfileLocalization.CourseCalendarSync.Button.reconnect
@@ -79,16 +151,16 @@ public struct SyncCalendarOptionsView: View {
                                     }
                                 },
                                 color: viewModel.reconnectRequired
-                                ? Theme.Colors.accentColor
-                                : Theme.Colors.background,
+                                ? Theme.Colors.brandGreen
+                                : Theme.Colors.brandCream,
                                 textColor: viewModel.reconnectRequired
-                                ? Theme.Colors.styledButtonText
-                                : Theme.Colors.accentColor,
+                                ? Theme.Colors.primaryButtonTextColor
+                                : Theme.Colors.brandGreen,
                                 borderColor: viewModel.reconnectRequired
                                 ? .clear
-                                : Theme.Colors.accentColor
+                                : Theme.Colors.brandGreen
                             )
-                            .padding(.horizontal, 24)
+                            .padding(.horizontal, SyncCalendarLayout.contentHorizontalPadding)
                             if !viewModel.reconnectRequired {
                                 optionTitle(ProfileLocalization.CoursesToSync.title)
                                     .padding(.top, 24)
@@ -100,12 +172,13 @@ public struct SyncCalendarOptionsView: View {
                         .padding(.horizontal, isHorizontal ? 48 : 0)
                         .frameLimit(width: proxy.size.width)
                     }
-                    .roundedBackground(Theme.Colors.background)
+                    .padding(.top, SyncCalendarLayout.contentTopPadding)
+                    .frame(minHeight: 0, maxHeight: .infinity, alignment: .top)
                     .ignoresSafeArea(.all, edges: .bottom)
                 }
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
-                
+
                 if screenDimmed {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -119,12 +192,12 @@ public struct SyncCalendarOptionsView: View {
                             viewModel.colorSelection = viewModel.oldColorSelection
                         }
                 }
-                
+
                 // Error Alert if needed
                 if viewModel.showError {
                     ErrorAlertView(errorMessage: $viewModel.errorMessage)
                 }
-                
+
                 if viewModel.openChangeSyncView {
                     NewCalendarView(
                         title: .changeSyncOptions,
@@ -132,7 +205,7 @@ public struct SyncCalendarOptionsView: View {
                         beginSyncingTapped: {
                             viewModel.openChangeSyncView = false
                             screenDimmed = false
-                            
+
                             guard viewModel.isInternetAvaliable else {
                                 viewModel.calendarName = viewModel.oldCalendarName
                                 viewModel.colorSelection = viewModel.oldColorSelection
@@ -189,7 +262,7 @@ public struct SyncCalendarOptionsView: View {
                     .transition(.move(edge: .bottom))
                     .frame(alignment: .center)
                 }
-                
+
             }
             .ignoresSafeArea(.all, edges: .horizontal)
         }
@@ -210,26 +283,26 @@ public struct SyncCalendarOptionsView: View {
             }
         }
     }
-    
+
     // MARK: - Options Title
-    
+
     private func optionTitle(_ text: String) -> some View {
         Text(text)
             .multilineTextAlignment(.leading)
             .font(Theme.Fonts.labelLarge)
             .foregroundStyle(Theme.Colors.textPrimary)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, SyncCalendarLayout.contentHorizontalPadding)
             .frame(
                 minWidth: 0,
                 maxWidth: .infinity,
                 alignment: .leading
             )
     }
-    
+
     // MARK: - Courses to Sync
     @ViewBuilder
     private var coursesToSync: some View {
-        
+
         VStack(alignment: .leading, spacing: 27) {
             Button(action: {
                 //                viewModel.trackProfileVideoSettingsClicked()
@@ -251,7 +324,7 @@ public struct SyncCalendarOptionsView: View {
                 }
             })
             .accessibilityIdentifier("courses_to_sync_cell")
-            
+
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(ProfileLocalization.settingsVideo)

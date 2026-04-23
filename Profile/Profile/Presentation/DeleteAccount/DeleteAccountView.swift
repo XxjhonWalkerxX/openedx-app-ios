@@ -10,18 +10,105 @@ import Core
 import OEXFoundation
 import Theme
 
+private enum DeleteAccountLayout {
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat              = Theme.Sizes.horizontalPadding
+    static let headerVerticalPaddingPortrait: CGFloat  = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat    = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat   = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat        = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat       = Theme.Sizes.headerLandscapeHeight
+
+    // Específicos de DeleteAccountView
+    static let topBandHeight: CGFloat          = 4
+    static let headerTitleSpacing: CGFloat     = 12
+    static let backButtonSize: CGFloat         = 54
+    static let backButtonCornerRadius: CGFloat = 14
+    static let contentTopPadding: CGFloat      = 8
+    static let contentHorizontalPadding: CGFloat = 24
+}
+
 public struct DeleteAccountView: View {
-    
+
     @ObservedObject
     private var viewModel: DeleteAccountViewModel
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     public init(viewModel: DeleteAccountViewModel) {
         self.viewModel = viewModel
     }
     
+    private var isLandscapeLike: Bool { verticalSizeClass == .compact }
+
+    private var headerTopPadding: CGFloat {
+        isLandscapeLike
+            ? DeleteAccountLayout.headerVerticalPaddingLandscape
+            : DeleteAccountLayout.headerVerticalPaddingPortrait
+    }
+
+    private var headerBottomPadding: CGFloat {
+        isLandscapeLike
+            ? DeleteAccountLayout.headerBottomPaddingLandscape
+            : DeleteAccountLayout.headerBottomPaddingPortrait
+    }
+
+    private var headerMinHeight: CGFloat {
+        isLandscapeLike
+            ? DeleteAccountLayout.headerMinHeightLandscape
+            : DeleteAccountLayout.headerMinHeightPortrait
+    }
+
+    private var topHeader: some View {
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: DeleteAccountLayout.topBandHeight)
+
+            HStack(alignment: .top, spacing: DeleteAccountLayout.headerTitleSpacing) {
+                Button(action: { viewModel.router.back() }) {
+                    Image(systemName: "chevron.left")
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .foregroundColor(.white)
+                        .frame(
+                            width: DeleteAccountLayout.backButtonSize,
+                            height: DeleteAccountLayout.backButtonSize
+                        )
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: DeleteAccountLayout.backButtonCornerRadius,
+                                style: .continuous
+                            )
+                            .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
+
+                Text(ProfileLocalization.DeleteAccount.title)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, DeleteAccountLayout.horizontalPadding)
+            .padding(.top, headerTopPadding)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
+        }
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+    }
+
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    topHeader
+
                 // MARK: - Page Body
                 ScrollView {
                     VStack {
@@ -131,7 +218,7 @@ public struct DeleteAccountView: View {
                             action: {
                                 viewModel.router.back()
                             },
-                            color: Theme.Colors.accentColor,
+                            color: Theme.Colors.brandGreen,
                             textColor: Theme.Colors.primaryButtonTextColor,
                             iconImage: CoreAssets.arrowLeft.swiftUIImage,
                             iconPosition: .left
@@ -141,22 +228,15 @@ public struct DeleteAccountView: View {
                     }
                     .frameLimit(width: proxy.size.width)
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, DeleteAccountLayout.contentHorizontalPadding)
                 .frame(minHeight: 0,
                        maxHeight: .infinity,
                        alignment: .top)
-                .padding(.top, 8)
-                .navigationBarHidden(false)
+                .padding(.top, DeleteAccountLayout.contentTopPadding)
+                }
+                .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
                 .navigationTitle(ProfileLocalization.DeleteAccount.title)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        BackNavigationButton(color: Theme.Colors.accentColor) {
-                            viewModel.router.back()
-                        }
-                        .offset(x: -8, y: -1.5)
-                    }
-                }
                 // MARK: - Error Alert
                 if viewModel.showError {
                     VStack {
@@ -173,10 +253,6 @@ public struct DeleteAccountView: View {
                     }
                 }
             }
-            .background(
-                Theme.Colors.background
-                    .ignoresSafeArea()
-            )
         }
     }
 }

@@ -11,27 +11,37 @@ import OEXFoundation
 import Theme
 
 private enum EditProfileLayout {
-    static let horizontalPadding: CGFloat = 24
-    static let headerTopPadding: CGFloat = 14
-    static let headerBottomPadding: CGFloat = 10
-    static let headerSidePadding: CGFloat = 20
-    static let headerButtonSize: CGFloat = 44
-    static let avatarSize: CGFloat = 104
-    static let avatarBadgeSize: CGFloat = 34
-    static let avatarBadgeOffsetX: CGFloat = 34
-    static let avatarBadgeOffsetY: CGFloat = 42
-    static let summarySpacing: CGFloat = 12
-    static let sectionSpacing: CGFloat = 24
-    static let fieldSpacing: CGFloat = 18
-    static let contentTopPadding: CGFloat = 10
+    // Tokens del sistema — ver Theme.Sizes
+    static let horizontalPadding: CGFloat              = Theme.Sizes.horizontalPadding
+    static let headerVerticalPaddingPortrait: CGFloat  = Theme.Sizes.headerTopPadding
+    static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
+    static let headerBottomPaddingPortrait: CGFloat    = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingLandscape: CGFloat   = Theme.Sizes.headerLandscapeBottomPadding
+    static let headerMinHeightPortrait: CGFloat        = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat       = Theme.Sizes.headerLandscapeHeight
+
+    // Específicos de EditProfileView
+    static let topBandHeight: CGFloat        = 4
+    static let headerTitleSpacing: CGFloat   = 12
+    static let backButtonSize: CGFloat       = 54
+    static let backButtonCornerRadius: CGFloat = 14
+    static let avatarSize: CGFloat           = 104
+    static let avatarBadgeSize: CGFloat      = 34
+    static let avatarBadgeOffsetX: CGFloat   = 34
+    static let avatarBadgeOffsetY: CGFloat   = 42
+    static let summarySpacing: CGFloat       = 12
+    static let sectionSpacing: CGFloat       = 24
+    static let fieldSpacing: CGFloat         = 18
+    static let contentTopPadding: CGFloat    = 10
     static let contentBottomPadding: CGFloat = 48
 }
 
 public struct EditProfileView: View {
-    
+
     @ObservedObject public var viewModel: EditProfileViewModel
     @State private var showingImagePicker = false
     @State private var showingBottomSheet = false
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     public init(
         viewModel: EditProfileViewModel,
@@ -215,51 +225,82 @@ public struct EditProfileView: View {
         }
     }
 
+    private var isLandscapeLike: Bool { verticalSizeClass == .compact }
+
+    private var headerTopPadding: CGFloat {
+        isLandscapeLike
+            ? EditProfileLayout.headerVerticalPaddingLandscape
+            : EditProfileLayout.headerVerticalPaddingPortrait
+    }
+
+    private var headerBottomPadding: CGFloat {
+        isLandscapeLike
+            ? EditProfileLayout.headerBottomPaddingLandscape
+            : EditProfileLayout.headerBottomPaddingPortrait
+    }
+
+    private var headerMinHeight: CGFloat {
+        isLandscapeLike
+            ? EditProfileLayout.headerMinHeightLandscape
+            : EditProfileLayout.headerMinHeightPortrait
+    }
+
     private var topHeader: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Button(action: {
-                viewModel.backButtonTapped()
-            }) {
-                CoreAssets.arrowLeft.swiftUIImage
-                    .renderingMode(.template)
-                    .foregroundColor(Theme.Colors.brandGreen)
-                    .frame(width: EditProfileLayout.headerButtonSize, height: EditProfileLayout.headerButtonSize)
-            }
-            .accessibilityIdentifier("back_button")
+        VStack(spacing: 0) {
+            Theme.Colors.guindaColor
+                .frame(height: EditProfileLayout.topBandHeight)
 
-            Spacer(minLength: 0)
+            HStack(alignment: .center, spacing: EditProfileLayout.headerTitleSpacing) {
+                Button(action: {
+                    viewModel.backButtonTapped()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .foregroundColor(.white)
+                        .frame(width: EditProfileLayout.backButtonSize, height: EditProfileLayout.backButtonSize)
+                        .background(
+                            RoundedRectangle(cornerRadius: EditProfileLayout.backButtonCornerRadius, style: .continuous)
+                                .fill(Color.white.opacity(0.22))
+                        )
+                }
+                .accessibilityIdentifier("back_button")
 
-            Text(ProfileLocalization.editProfile)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(28))
-                .foregroundColor(Theme.Colors.brandGreen)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+                Spacer(minLength: 0)
 
-            Spacer(minLength: 0)
+                Text(ProfileLocalization.editProfile)
+                    .font(Theme.Fonts.ttRoundsCompressedMedium(28))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
 
-            Button(action: {
-                if viewModel.isChanged {
-                    Task {
-                        viewModel.trackProfileEditDoneClicked()
-                        await viewModel.saveProfileUpdates()
+                Spacer(minLength: 0)
+
+                Button(action: {
+                    if viewModel.isChanged {
+                        Task {
+                            viewModel.trackProfileEditDoneClicked()
+                            await viewModel.saveProfileUpdates()
+                        }
                     }
-                }
-            }, label: {
-                HStack(spacing: 4) {
-                    CoreAssets.done.swiftUIImage.renderingMode(.template)
-                        .foregroundColor(Theme.Colors.brandGreen)
-                    Text(CoreLocalization.done)
-                        .font(Theme.Fonts.labelLarge)
-                        .foregroundColor(Theme.Colors.brandGreen)
-                }
-            })
-            .opacity(viewModel.isChanged ? 1 : 0.3)
-            .accessibilityIdentifier("done_button")
+                }, label: {
+                    HStack(spacing: 4) {
+                        CoreAssets.done.swiftUIImage.renderingMode(.template)
+                            .foregroundColor(.white)
+                        Text(CoreLocalization.done)
+                            .font(Theme.Fonts.labelLarge)
+                            .foregroundColor(.white)
+                    }
+                })
+                .opacity(viewModel.isChanged ? 1 : 0.3)
+                .accessibilityIdentifier("done_button")
+            }
+            .padding(.horizontal, EditProfileLayout.horizontalPadding)
+            .padding(.top, headerTopPadding)
+            .padding(.bottom, headerBottomPadding)
+            .background(Theme.Colors.brandGreen)
         }
-        .padding(.horizontal, EditProfileLayout.headerSidePadding)
-        .padding(.top, EditProfileLayout.headerTopPadding)
-        .padding(.bottom, EditProfileLayout.headerBottomPadding)
-        .background(Theme.Colors.brandCream)
+        .frame(maxWidth: .infinity, minHeight: headerMinHeight, alignment: .top)
+        .ignoresSafeArea(edges: .top)
     }
 
     private var profileSummary: some View {
