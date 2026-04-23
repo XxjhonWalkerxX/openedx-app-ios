@@ -42,7 +42,7 @@ SSO_BUTTON_TITLE:
 # Bundle ID: com.diegonicolas.openedx → Descargar GoogleService-Info.plist
 # Los valores vienen de ese plist
 FIREBASE:
-  ENABLED: true
+  ENABLED: false
   CLOUD_MESSAGING_ENABLED: false
   PROJECT_ID: '${FIREBASE_PROJECT_ID}'
   GCM_SENDER_ID: '${FIREBASE_GCM_SENDER_ID}'

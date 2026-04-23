@@ -3,11 +3,11 @@ import Foundation
 public struct EnvironmentConfig {
     // Estas funciones leen directamente lo que inyectamos con el script de Build Phases
     public static var llaveMXClientID: String {
-        ProcessInfo.processInfo.environment["LLAVEMX_CLIENT_ID"] ?? "MISSING_ID"
+        ProcessInfo.processInfo.environment["LLAVEMX_CLIENT_ID"] ?? "202604061741155403"
     }
     
     public static var llaveMXAuthorizationURL: String {
-        ProcessInfo.processInfo.environment["LLAVEMX_AUTH_URL"] ?? "https://val-llave.infotec.mx/oauth.xhtml"
+        ProcessInfo.processInfo.environment["LLAVEMX_AUTH_URL"] ?? "https://www.llave.gob.mx/oauth.xhtml"
     }
 
     public static var llaveMXRedirectURI: String {
