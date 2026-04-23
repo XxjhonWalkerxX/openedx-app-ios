@@ -394,6 +394,7 @@
 			buildPhases = (
 				B2F937DF587D9697AF13B3F9 /* [CP] Check Pods Manifest.lock */,
 				0770DE2328D08647006D8A5D /* SwiftLint */,
+				9F1D213F2F99E84A008AD638 /* Load .env Variables */,
 				07D5DA2D28D075AA00752FD9 /* Sources */,
 				07D5DA2E28D075AA00752FD9 /* Frameworks */,
 				07D5DA2F28D075AA00752FD9 /* Resources */,
@@ -512,6 +513,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+		9F1D213F2F99E84A008AD638 /* Load .env Variables */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Load .env Variables";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Script para cargar variables del archivo .env al entorno de Xcode\nif [ -f \"${SRCROOT}/.env\" ]; then\n    set -a\n    source \"${SRCROOT}/.env\"\n    set +a\n    echo \".env file loaded successfully\"\nelse\n    echo \"Warning: .env file not found at ${SRCROOT}/.env\"\nfi\n";
 		};
 		B2F937DF587D9697AF13B3F9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
