@@ -49,6 +49,18 @@ public extension Theme.Fonts {
         ttRoundsVariant(wdth: 100, wght: weight, slnt: 0, size: size)
     }
 
+    /// Medium — wdth=100, wght=500
+    /// Uso: labels de settings rows, títulos pequeños
+    static func ttRoundsMedium(_ size: CGFloat) -> Font {
+        ttRoundsBody(size, weight: 500)
+    }
+
+    /// Semibold — wdth=100, wght=600
+    /// Uso: back buttons, chevrons, CTAs compactos (reemplaza .font(.system(size:, weight: .semibold)))
+    static func ttRoundsSemibold(_ size: CGFloat) -> Font {
+        ttRoundsBody(size, weight: 600)
+    }
+
     // MARK: - Core
 
     private static func ttRoundsVariant(wdth: Double, wght: Double, slnt: Double, size: CGFloat) -> Font {

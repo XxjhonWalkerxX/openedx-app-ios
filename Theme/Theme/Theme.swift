@@ -115,6 +115,17 @@ public struct Theme: Sendable {
         public static let pillPink   = Color(red: 0.941, green: 0.627, blue: 0.690) // #F0A0B0
         public static let pillYellow = Color(red: 0.961, green: 0.863, blue: 0.502) // #F5DC80
 
+        // MARK: - Tokens semánticos (texto, bordes y sombras)
+        // Texto secundario cálido, alineado al sistema de brandCard*
+        public static let textTertiary      = brandCardSecondary                         // #9A9590
+        // Neutral inactivo para controles (segmented, tabs) — gris neutro puro
+        public static let textInactive      = Color(red: 0.667, green: 0.667, blue: 0.667) // #AAAAAA
+        // Texto y chevrons sobre el hero verde / headers brand
+        public static let textOnHeader      = Color.white
+        // Stroke y sombra sutil para tarjetas cream
+        public static let cardStrokeSubtle  = Color.black.opacity(0.04)
+        public static let cardShadowSubtle  = Color.black.opacity(0.04)
+
         public static func update(
             accentColor: Color = ThemeAssets.accentColor.swiftUIColor,
             accentXColor: Color = ThemeAssets.accentXColor.swiftUIColor,
@@ -293,6 +304,27 @@ public struct Theme: Sendable {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
+
+        // Overlay de legibilidad sobre imágenes dinámicas.
+        // Curva U-invertida: oscurece top (texto título) y bottom (metadata),
+        // libera el centro para que la imagen respire. Cumple WCAG AA (≥4.5:1)
+        // en texto sobre imagen promedio del portal web.
+        public static let heroImageOverlay = LinearGradient(
+            stops: [
+                .init(color: .black.opacity(0.55), location: 0.0),
+                .init(color: .black.opacity(0.25), location: 0.45),
+                .init(color: .black.opacity(0.65), location: 1.0)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+
+        // Scrim full-bleed para modales / sheets sobre imagen.
+        public static let heroImageScrim = LinearGradient(
+            colors: [.black.opacity(0.7), .black.opacity(0.3)],
+            startPoint: .bottom,
+            endPoint: .top
+        )
     }
 
     public struct Shapes: Sendable {
@@ -322,6 +354,56 @@ public struct Theme: Sendable {
         public static let cardShape = RoundedCorners(tl: 12, tr: 12, bl: 12, br: 12)
     }
     
+    // MARK: - @prende.mx Sizes (paddings, radius, heights unificados)
+    // Escala definitiva UI Max: 4pt grid + radii Fibonacci reducido (ratio ~1.6x).
+    // Jerarquía z-axis: sheet(32) > hero(20) > card(12) > control(8).
+    public struct Sizes: Sendable {
+        // Paddings horizontales unificados (Discovery/Dashboard/Course/Profile)
+        public static let horizontalPadding: CGFloat        = 20
+        public static let horizontalPaddingCompact: CGFloat = 16
+        public static let horizontalPaddingTight: CGFloat   = 12
+
+        // Headers módulo Settings/Profile (portrait)
+        public static let headerTopPadding: CGFloat         = 60
+        public static let headerBottomPadding: CGFloat      = 24
+        public static let headerPortraitMinHeight: CGFloat  = 160
+        // Headers módulo Settings/Profile (landscape)
+        public static let headerLandscapeHeight: CGFloat        = 96
+        public static let headerLandscapeTopPadding: CGFloat    = 8
+        public static let headerLandscapeBottomPadding: CGFloat = 10
+
+        // Corner radius — escala Fibonacci reducida (0 → 8 → 12 → 20 → 32)
+        public static let radiusNone: CGFloat    = 0     // full-bleed
+        public static let radiusControl: CGFloat = 8     // button, chip, input
+        public static let radiusCard: CGFloat    = 12    // tarjetas internas
+        public static let radiusHero: CGFloat    = 20    // hero card, course thumb
+        public static let radiusSheet: CGFloat   = 32    // sheets / screen-level
+
+        // Aliases backwards-compat — deprecar progresivamente hacia radius*
+        public static let cardRadius: CGFloat   = radiusCard
+        public static let sheetRadius: CGFloat  = radiusSheet
+        public static let buttonRadius: CGFloat = radiusControl
+
+        // Alturas mínimas de filas
+        public static let settingsRowMinHeight: CGFloat = 66
+
+        // Controles interactivos del header brand
+        public static let headerButtonSize: CGFloat = 40
+        public static let backIconSize: CGFloat     = 18
+        public static let chevronSize: CGFloat      = 15
+
+        // Métricas de tarjeta — zonas de altura fija para alignment en grid/list.
+        // Altura total card = thumb(140) + divider(1) + action(56) = 197 (mín)
+        // Con past-assignment pill: +36 = 233 (máx).
+        public struct CardMetrics {
+            public static let thumbnailSize: CGFloat   = 140
+            public static let textZoneHeight: CGFloat  = 140
+            public static let actionRowHeight: CGFloat = 56
+            public static let cardMinHeight: CGFloat   = 197
+            public static let cardMaxHeight: CGFloat   = 233
+        }
+    }
+
     public struct Timeout {
         public static let snackbarMessageShortTimeout: TimeInterval = 3
         public static let snackbarMessageLongTimeout: TimeInterval = 5
