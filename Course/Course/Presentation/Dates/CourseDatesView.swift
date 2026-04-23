@@ -167,17 +167,17 @@ fileprivate extension BlockStatus {
         switch self {
         case .completed: return Color.white
         case .verifiedOnly: return Color.white
-        case .pastDue: return Color.black
+        case .pastDue: return Color.white
         case .dueNext: return Color.white
         default: return Color.white.opacity(0)
         }
     }
-    
+
     var backgroundColor: Color {
         switch self {
         case .completed: return Color.black.opacity(0.5)
         case .verifiedOnly: return Color.black.opacity(0.5)
-        case .pastDue: return Color.gray.opacity(0.4)
+        case .pastDue: return Theme.Colors.irreversibleAlert
         case .dueNext: return Color.black.opacity(0.5)
         default: return Color.white.opacity(0)
         }

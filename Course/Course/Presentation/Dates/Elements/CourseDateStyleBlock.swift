@@ -39,7 +39,7 @@ struct CourseDateStyleBlock: View {
             .lineLimit(1)
             .foregroundStyle({
                 if block.isAssignment {
-                    return block.isAvailable ? Theme.Colors.textPrimary : Color.gray.opacity(0.6)
+                    return block.isAvailable ? Theme.Colors.textPrimary : Theme.Colors.textSecondary
                 } else {
                     return Theme.Colors.textPrimary
                 }
