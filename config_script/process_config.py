@@ -1,9 +1,38 @@
 import plistlib
 import os
+import re
 import yaml
 from pathlib import Path
 import sys
 import json
+
+
+def load_dotenv(env_path):
+    """Carga variables del .env al entorno del proceso actual."""
+    try:
+        with open(env_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                key, _, value = line.partition('=')
+                key = key.strip()
+                value = value.strip()
+                if key and key not in os.environ:
+                    os.environ[key] = value
+    except FileNotFoundError:
+        print(f"Warning: .env file not found at {env_path}")
+
+
+def expand_env_vars(data):
+    """Sustituye ${VAR} en strings; recursivo para dicts y listas."""
+    if isinstance(data, str):
+        return re.sub(r'\$\{([^}]+)\}', lambda m: os.environ.get(m.group(1), m.group(0)), data)
+    if isinstance(data, dict):
+        return {k: expand_env_vars(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [expand_env_vars(item) for item in data]
+    return data
 
 class PlistManager:
     def __init__(self, config_dir, config_files):
@@ -68,7 +97,7 @@ class PlistManager:
                 with open(path, 'r') as file:
                     dict = yaml.safe_load(file)
                     if dict is not None:
-                        properties = merge_dicts(properties, dict)
+                        properties = merge_dicts(properties, expand_env_vars(dict))
             except FileNotFoundError:
                 print(f"{path} not found. Skipping.")
 
@@ -82,7 +111,7 @@ class PlistManager:
                 with open(path, 'r') as file:
                     yaml_data = yaml.safe_load(file)
                     if yaml_data is not None:
-                        plist_data = merge_dicts(plist_data, yaml_data)
+                        plist_data = merge_dicts(plist_data, expand_env_vars(yaml_data))
             except FileNotFoundError:
                 print(f"{path} not found. Skipping.")
             except yaml.YAMLError as e:
@@ -311,6 +340,9 @@ def process_plist_files(configuration_manager, plist_manager, config):
     plist_manager.write_to_plist_file(config_plist, bundle_config_path)
 
 def main(configuration, scheme_mappings):
+    srcroot = os.environ.get('SRCROOT', os.getcwd())
+    load_dotenv(os.path.join(srcroot, '.env'))
+
     current_config = get_current_config(configuration, scheme_mappings)
     
     if current_config is None:
