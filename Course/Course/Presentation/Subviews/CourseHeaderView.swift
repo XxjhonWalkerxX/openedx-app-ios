@@ -387,13 +387,20 @@ struct CourseHeaderView: View {
                             }
                         } label: {
                             Text(tab.title)
-                                .font(Theme.Fonts.notoSans(12, weight: isSelected ? .semibold : .regular))
-                                .foregroundColor(isSelected ? .white : Theme.Colors.brandCardPrimary)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 7)
+                                .font(Theme.Fonts.notoSans(13, weight: isSelected ? .semibold : .medium))
+                                .foregroundColor(isSelected ? .white : Theme.Colors.brandGreen)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 9)
                                 .background(
                                     Capsule()
-                                        .fill(isSelected ? Theme.Colors.brandGreen : Theme.Colors.brandCreamStrong)
+                                        .fill(isSelected ? Theme.Colors.brandGreen : Theme.Colors.surfaceWhite)
+                                )
+                                .overlay(
+                                    Capsule()
+                                        .strokeBorder(
+                                            isSelected ? Color.clear : Theme.Colors.brandCreamStrong,
+                                            lineWidth: 1
+                                        )
                                 )
                         }
                         .buttonStyle(.plain)
