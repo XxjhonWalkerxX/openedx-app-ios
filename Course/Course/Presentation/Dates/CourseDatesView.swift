@@ -16,7 +16,7 @@ public struct CourseDatesView: View {
     
     private let courseID: String
     
-    @StateObject
+    @ObservedObject
     private var viewModel: CourseDatesViewModel
     @Binding private var coordinate: CGFloat
     @Binding private var collapsed: Bool
@@ -33,7 +33,7 @@ public struct CourseDatesView: View {
         self._coordinate = coordinate
         self._collapsed = collapsed
         self._viewHeight = viewHeight
-        self._viewModel = StateObject(wrappedValue: viewModel)
+        self.viewModel = viewModel
     }
     
     public var body: some View {

@@ -58,7 +58,7 @@ struct OfflineView: View {
     @Binding private var collapsed: Bool
     @Binding private var viewHeight: CGFloat
     
-    @StateObject
+    @ObservedObject
     private var viewModel: CourseContainerViewModel
     
     public init(
@@ -72,7 +72,7 @@ struct OfflineView: View {
         self._coordinate = coordinate
         self._collapsed = collapsed
         self._viewHeight = viewHeight
-        self._viewModel = StateObject(wrappedValue: { viewModel }())
+        self.viewModel = viewModel
     }
     
     public var body: some View {

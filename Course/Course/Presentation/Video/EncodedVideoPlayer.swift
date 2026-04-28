@@ -18,7 +18,7 @@ public enum VideoPlayerState: Sendable {
 
 public struct EncodedVideoPlayer: View {
     
-    @StateObject
+    @ObservedObject
     private var viewModel: EncodedVideoPlayerViewModel
     
     private var isOnScreen: Bool
@@ -45,7 +45,7 @@ public struct EncodedVideoPlayer: View {
         viewModel: EncodedVideoPlayerViewModel,
         isOnScreen: Bool
     ) {
-        self._viewModel = StateObject(wrappedValue: { viewModel }())
+        self.viewModel = viewModel
         self.isOnScreen = isOnScreen
     }
     

@@ -13,7 +13,7 @@ import Swinject
 
 public struct YouTubeVideoPlayer: View {
     
-    @StateObject
+    @ObservedObject
     private var viewModel: YouTubeVideoPlayerViewModel
     private var isOnScreen: Bool
     @State
@@ -30,7 +30,7 @@ public struct YouTubeVideoPlayer: View {
     @Environment(\.isHorizontal) private var isHorizontal
 
     public init(viewModel: YouTubeVideoPlayerViewModel, isOnScreen: Bool) {
-        self._viewModel = StateObject(wrappedValue: { viewModel }())
+        self.viewModel = viewModel
         self.isOnScreen = isOnScreen
     }
     
