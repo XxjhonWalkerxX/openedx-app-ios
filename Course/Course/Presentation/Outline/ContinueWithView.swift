@@ -32,7 +32,7 @@ struct ContinueWithView: View {
         Button(action: action) {
             HStack {
                 Text(courseContinueUnit.displayName)
-                    .font(Theme.Fonts.ttRoundsBody(14, weight: 500))
+                    .font(Theme.Fonts.notoSans(13))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.leading)
                     .lineLimit(2)
@@ -41,7 +41,7 @@ struct ContinueWithView: View {
 
                 HStack(spacing: 8) {
                     Text(CoreLocalization.Courseware.continue)
-                        .font(Theme.Fonts.ttRoundsBody(14, weight: 700))
+                        .font(Theme.Fonts.notoSans(14, weight: .semibold))
                         .foregroundColor(.white)
 
                     CoreAssets.arrowLeft.swiftUIImage

@@ -81,6 +81,18 @@ public struct CourseContainerView: View {
     public var body: some View {
         ZStack(alignment: .top) {
             content
+
+            // Floating CTA "Continuar" — solo cuando hay bloque de reanudación
+            if viewModel.continueWith != nil && viewModel.selection == CourseTab.course.rawValue {
+                VStack {
+                    Spacer()
+                    BrandFloatingCTA(
+                        label: CourseLocalization.Courseware.continue,
+                        action: { viewModel.openLastVisitedBlock() }
+                    )
+                }
+                .ignoresSafeArea(edges: .bottom)
+            }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

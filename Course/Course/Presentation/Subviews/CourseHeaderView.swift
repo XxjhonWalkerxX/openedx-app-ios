@@ -14,9 +14,9 @@ private enum CourseHeaderLayout {
     static let horizontalPadding: CGFloat = Theme.Sizes.horizontalPadding
 
     // Dimensiones banner (device-aware)
-    static let bannerHeightPad: CGFloat       = 380
-    static let bannerHeightLandscape: CGFloat = 300
-    static let bannerHeightPortrait: CGFloat  = 340
+    static let bannerHeightPad: CGFloat       = 360
+    static let bannerHeightLandscape: CGFloat = 280
+    static let bannerHeightPortrait: CGFloat  = 300
 
     // Alturas colapsadas — requeridas por matchedGeometryEffect
     static let collapsedHeightHorizontal: CGFloat = 230
@@ -213,8 +213,7 @@ struct CourseHeaderView: View {
                 Text(title)
                     .lineLimit(1)
                     .foregroundStyle(Theme.Colors.brandGreen)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(15))
-                    .kerning(-0.2)
+                    .font(Theme.Fonts.notoSans(14, weight: .semibold))
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                     .clipped()
             }
@@ -248,9 +247,8 @@ struct CourseHeaderView: View {
             }
             Text(title)
                 .lineLimit(3)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(18))
+                .font(Theme.Fonts.notoSans(17, weight: .bold))
                 .foregroundColor(Theme.Colors.brandCardPrimary)
-                .kerning(-0.3)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
                 .padding(.horizontal, CourseHeaderLayout.horizontalPadding)
@@ -263,7 +261,7 @@ struct CourseHeaderView: View {
                 HStack(spacing: CourseHeaderLayout.chipsSpacing) {
                     ForEach(metadataChips, id: \.self) { label in
                         Text(label)
-                            .font(Theme.Fonts.ttRoundsBody(11, weight: 700))
+                            .font(Theme.Fonts.notoSans(11, weight: .semibold))
                             .foregroundColor(Theme.Colors.brandCardMedium)
                             .padding(.horizontal, CourseHeaderLayout.chipHorizontalPadding)
                             .padding(.vertical, CourseHeaderLayout.chipVerticalPadding)
@@ -332,7 +330,7 @@ struct CourseHeaderView: View {
                     height: CourseHeaderLayout.orgBadgeDotSize
                 )
             Text(org)
-                .font(Theme.Fonts.ttRoundsBody(11, weight: 600))
+                .font(Theme.Fonts.notoSans(11, weight: .semibold))
                 .foregroundColor(Theme.Colors.brandGreen)
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -375,28 +373,46 @@ struct CourseHeaderView: View {
     }
 
     private func courseMenuBar(containerWidth: CGFloat) -> some View {
-        ScrollSlidingTabBar(
-            selection: $viewModel.selection,
-            tabs: CourseTab.allCases.map { ($0.title, $0.image) },
-            style: ScrollSlidingTabBar.Style(
-                font: Theme.Fonts.titleSmall,
-                selectedFont: Theme.Fonts.titleSmall,
-                activeAccentColor: Theme.Colors.brandGreen,
-                inactiveAccentColor: Theme.Colors.background,
-                indicatorHeight: 0,
-                borderColor: Theme.Colors.brandGreen,
-                borderHeight: 1,
-                buttonHInset: 4,
-                buttonVInset: 2,
-                buttonLeadingPadding: 8,
-                buttonTrailingPadding: 8
-            ),
-            containerWidth: containerWidth
-        ) { newValue in
-            isAnimatingForTap = true
-            viewModel.selection = newValue
-            DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(300))) {
-                isAnimatingForTap = false
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(CourseTab.allCases, id: \.id) { tab in
+                        let isSelected = viewModel.selection == tab.rawValue
+                        Button {
+                            HapticFeedback.selection()
+                            isAnimatingForTap = true
+                            viewModel.selection = tab.rawValue
+                            DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(300))) {
+                                isAnimatingForTap = false
+                            }
+                        } label: {
+                            Text(tab.title)
+                                .font(Theme.Fonts.notoSans(12, weight: isSelected ? .semibold : .regular))
+                                .foregroundColor(isSelected ? .white : Theme.Colors.brandCardPrimary)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 7)
+                                .background(
+                                    Capsule()
+                                        .fill(isSelected ? Theme.Colors.brandGreen : Theme.Colors.brandCreamStrong)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .id(tab.rawValue)
+                    }
+                }
+                .padding(.horizontal, CourseHeaderLayout.horizontalPadding)
+                .padding(.vertical, 8)
+            }
+            .background(Theme.Colors.brandCream)
+            .overlay(
+                Rectangle()
+                    .fill(Theme.Colors.brandDivider)
+                    .frame(height: 1),
+                alignment: .bottom
+            )
+            .frame(height: 48)
+            .onChange(of: viewModel.selection) { newValue in
+                withAnimation { proxy.scrollTo(newValue, anchor: .center) }
             }
         }
     }
