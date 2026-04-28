@@ -2,8 +2,7 @@
 //  PrimaryCourseDashboardView.swift
 //  Dashboard
 //
-//  Pantalla principal de cursos — @prende.mx
-//  Hero gradiente + Card crema con handle
+//  Fase 1: hero guinda + DecorativeRings + BrandStatTile + BrandSectionHeader + Noto Sans
 //
 
 import SwiftUI
@@ -15,39 +14,20 @@ import Swinject
 // MARK: - Design Constants
 
 private enum DashboardLayout {
-    // Padding general
     static let horizontalPadding: CGFloat = 20
-
-    // Hero
     static let heroTopPadding: CGFloat = 8
     static let heroElementSpacing: CGFloat = 16
     static let heroBottomSpacing: CGFloat = 24
-
-    // Drag handle
     static let handleWidth: CGFloat = 36
     static let handleHeight: CGFloat = 4
     static let handleTopPadding: CGFloat = 8
     static let handleBottomPadding: CGFloat = 8
-
-    // Section header
-    static let sectionHeaderTopPadding: CGFloat = 20
-    static let sectionHeaderBottomPadding: CGFloat = 12
-
-    // Carousel
     static let carouselSpacing: CGFloat = 16
     static let carouselVerticalPadding: CGFloat = 8
-    static let courseCardWidth: CGFloat = 144
-
-    // Miscelánea
+    static let courseCardWidth: CGFloat = 200
     static let settingsButtonSize: CGFloat = 40
-    static let guindaBandHeight: CGFloat = 4
     static let contentBottomPadding: CGFloat = 60
     static let dropdownBottomPadding: CGFloat = 12
-
-    // Círculos decorativos del hero
-    static let circleLargeSize: CGFloat = 210
-    static let circleMediumSize: CGFloat = 110
-    static let circleSmallSize: CGFloat = 70
 }
 
 public struct PrimaryCourseDashboardView<ProgramView: View>: View {
@@ -74,56 +54,33 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-
-                // Fondo base
-                Theme.Colors.brandGreenDark
+                Theme.Colors.guindaDeep
                     .ignoresSafeArea()
 
-                // Banda guinda — fija en el borde físico (igual que pre-login)
-                Theme.Colors.guindaColor
-                    .frame(height: DashboardLayout.guindaBandHeight)
-                    .ignoresSafeArea(edges: .top)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                    .zIndex(10)
-
-                // NoCoursesView — visible solo cuando no hay cursos
                 if viewModel.enrollments?.primaryCourse == nil
                     && !viewModel.fetchInProgress
                     && selectedMenu == .courses {
-                    NoCoursesView(openDiscovery: {
-                        openDiscoveryPage()
-                    }).zIndex(1)
+                    NoCoursesView(openDiscovery: { openDiscoveryPage() }).zIndex(1)
                 }
 
-                // Contenido scrollable
                 ScrollView {
                     VStack(spacing: 0) {
-
-                        // HERO
                         dashboardHero(proxy: proxy)
-
-                        // CARD CREMA — offset -15 igual que Android
                         creamCard(proxy: proxy)
                             .offset(y: -15)
                     }
                 }
                 .refreshable {
-                    Task {
-                        await viewModel.getEnrollments(showProgress: false)
-                    }
+                    Task { await viewModel.getEnrollments(showProgress: false) }
                 }
                 .accessibilityAction {}
                 .zIndex(1)
 
-                // Offline snackbar
                 OfflineSnackBarView(
                     connectivity: viewModel.connectivity,
-                    reloadAction: {
-                        await viewModel.getEnrollments(showProgress: false)
-                    }
+                    reloadAction: { await viewModel.getEnrollments(showProgress: false) }
                 ).zIndex(2)
 
-                // Error snackbar
                 if viewModel.showError {
                     VStack {
                         Spacer()
@@ -143,76 +100,69 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                 }
             }
             .onFirstAppear {
-                Task {
-                    await viewModel.getEnrollments()
-                }
+                Task { await viewModel.getEnrollments() }
                 viewModel.setupNotifications()
             }
-            .onAppear {
-                viewModel.updateNeeded = true
-            }
+            .onAppear { viewModel.updateNeeded = true }
             .navigationBarBackButtonHidden(true)
             .navigationBarHidden(true)
             .navigationTitle(DashboardLocalization.title)
         }
     }
 
-    // MARK: - Hero
+    // MARK: - Hero guinda
 
     @ViewBuilder
     private func dashboardHero(proxy: GeometryProxy) -> some View {
         ZStack(alignment: .top) {
+            // Gradiente guinda
+            Theme.Gradients.guindaHeroGradient
 
-            // Gradiente
-            Theme.Gradients.heroGradient
-
-            // Círculos decorativos
-            dashboardCircles
-                .allowsHitTesting(false)
+            // Anillos animados detrás del contenido
+            DecorativeRings()
 
             VStack(spacing: DashboardLayout.heroElementSpacing) {
                 // Settings button top-right
                 HStack {
                     Spacer()
-                    Button(action: {
-                        viewModel.router.showSettings()
-                    }) {
+                    Button(action: { viewModel.router.showSettings() }) {
                         CoreAssets.settings.swiftUIImage
                             .renderingMode(.template)
                             .foregroundColor(.white)
-                            .frame(width: DashboardLayout.settingsButtonSize,
-                                   height: DashboardLayout.settingsButtonSize)
+                            .frame(
+                                width: DashboardLayout.settingsButtonSize,
+                                height: DashboardLayout.settingsButtonSize
+                            )
                             .background(Circle().fill(Color.white.opacity(0.14)))
                             .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
                     }
                     .padding(.trailing, DashboardLayout.horizontalPadding)
+                    .accessibilityLabel("Configuración")
                 }
 
                 // Saludo
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Bienvenido de vuelta")
-                        .font(Theme.Fonts.ttRoundsCompressedThinItalic(13))
+                        .font(Theme.Fonts.notoSans(13, weight: .medium, italic: true))
                         .foregroundColor(.white.opacity(0.65))
-                        .kerning(0.3)
 
                     let nombre = viewModel.userName
                     Text(nombre.isEmpty ? "¡Hola!" : "¡Hola, \(nombre)!")
-                        .font(Theme.Fonts.ttRoundsCompressedMedium(30))
+                        .font(Theme.Fonts.display(30))
                         .foregroundColor(.white)
-                        .kerning(-0.3)
                         .lineLimit(1)
                         .accessibilityIdentifier("courses_header_text")
 
                     Text("Continúa donde lo dejaste")
-                        .font(Theme.Fonts.ttRoundsBody(13))
+                        .font(Theme.Fonts.body(13))
                         .foregroundColor(.white.opacity(0.58))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, DashboardLayout.horizontalPadding)
 
-                // Stat pills — conteo de cursos
+                // Stat tiles
                 if let enrollments = viewModel.enrollments {
-                    scrollStatPills(enrollments)
+                    statTiles(enrollments)
                         .padding(.horizontal, DashboardLayout.horizontalPadding)
                 }
 
@@ -220,7 +170,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
             }
             .padding(.top, DashboardLayout.heroTopPadding)
 
-            // Dropdown menu si hay programas habilitados
+            // Dropdown si hay programas
             if viewModel.config.program.enabled && viewModel.config.program.isWebViewConfigured {
                 VStack {
                     Spacer()
@@ -236,15 +186,14 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
         .frame(minHeight: viewModel.config.program.enabled && viewModel.config.program.isWebViewConfigured ? 220 : 200)
     }
 
+    // MARK: - Stat Tiles
+
     private func courseStats(_ enrollments: PrimaryEnrollment) -> (total: Int, inProgress: Int, notStarted: Int) {
-        // Progreso del curso primario
         var progresses: [(earned: Int, possible: Int)] = []
         if let p = enrollments.primaryCourse {
             progresses.append((p.progressEarned, p.progressPossible))
         }
-        for c in enrollments.courses {
-            progresses.append((c.progressEarned, c.progressPossible))
-        }
+        for c in enrollments.courses { progresses.append((c.progressEarned, c.progressPossible)) }
         let total = progresses.count
         let inProgress = progresses.filter { $0.earned > 0 && $0.earned < $0.possible }.count
         let notStarted = progresses.filter { $0.earned == 0 }.count
@@ -252,56 +201,18 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     }
 
     @ViewBuilder
-    private func scrollStatPills(_ enrollments: PrimaryEnrollment) -> some View {
+    private func statTiles(_ enrollments: PrimaryEnrollment) -> some View {
         let stats = courseStats(enrollments)
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                if stats.total > 0 {
-                    statPill(color: Theme.Colors.pillGreen, label: "\(stats.total) cursos")
-                }
-                if stats.inProgress > 0 {
-                    statPill(color: Theme.Colors.pillPink, label: "\(stats.inProgress) en progreso")
-                }
-                if stats.notStarted > 0 {
-                    statPill(color: Theme.Colors.pillYellow, label: "\(stats.notStarted) por iniciar")
-                }
+        HStack(spacing: 8) {
+            if stats.total > 0 {
+                BrandStatTile(value: "\(stats.total)", label: "cursos")
             }
-        }
-    }
-
-    private func statPill(color: Color, label: String) -> some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(color)
-                .frame(width: 6, height: 6)
-            Text(label)
-                .font(Theme.Fonts.ttRoundsBody(11, weight: 500))
-                .foregroundColor(.white.opacity(0.88))
-                .kerning(0.2)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 5)
-        .background(Capsule().fill(Color.white.opacity(0.11)))
-        .overlay(Capsule().strokeBorder(Color.white.opacity(0.18), lineWidth: 1))
-    }
-
-    private var dashboardCircles: some View {
-        ZStack {
-            // Grande — esquina superior derecha
-            Circle()
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 34)
-                .frame(width: DashboardLayout.circleLargeSize, height: DashboardLayout.circleLargeSize)
-                .offset(x: 130, y: -40)
-            // Mediano — zona inferior izquierda
-            Circle()
-                .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(width: DashboardLayout.circleMediumSize, height: DashboardLayout.circleMediumSize)
-                .offset(x: -120, y: 130)
-            // Pequeño — zona central
-            Circle()
-                .strokeBorder(Color.white.opacity(0.07), lineWidth: 13)
-                .frame(width: DashboardLayout.circleSmallSize, height: DashboardLayout.circleSmallSize)
-                .offset(x: -70, y: 20)
+            if stats.inProgress > 0 {
+                BrandStatTile(value: "\(stats.inProgress)", label: "en progreso")
+            }
+            if stats.notStarted > 0 {
+                BrandStatTile(value: "\(stats.notStarted)", label: "por iniciar")
+            }
         }
     }
 
@@ -310,14 +221,12 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     @ViewBuilder
     private func creamCard(proxy: GeometryProxy) -> some View {
         VStack(spacing: 0) {
-            // Drag handle
             Capsule()
                 .fill(Theme.Colors.brandHandle)
                 .frame(width: DashboardLayout.handleWidth, height: DashboardLayout.handleHeight)
                 .padding(.top, DashboardLayout.handleTopPadding)
                 .padding(.bottom, DashboardLayout.handleBottomPadding)
 
-            // Contenido según tab seleccionado
             switch selectedMenu {
             case .courses:
                 coursesContent(proxy: proxy)
@@ -327,11 +236,8 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .top)
         .background(
-            UnevenRoundedRectangle(
-                topLeadingRadius: 32,
-                topTrailingRadius: 32
-            )
-            .fill(Theme.Colors.brandCream)
+            UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32)
+                .fill(Theme.Colors.brandCream)
         )
     }
 
@@ -339,15 +245,14 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     private func coursesContent(proxy: GeometryProxy) -> some View {
         if viewModel.fetchInProgress {
             VStack(alignment: .center) {
-                ProgressBar(size: 40, lineWidth: 8)
-                    .padding(.top, 10)
+                ProgressBar(size: 40, lineWidth: 8).padding(.top, 10)
             }
             .frame(maxWidth: .infinity, minHeight: 300)
         } else {
             LazyVStack(spacing: 0) {
                 if let enrollments = viewModel.enrollments {
                     if let primary = enrollments.primaryCourse {
-                        sectionHeader(title: "Continuar aprendiendo")
+                        BrandSectionHeader("Continuar aprendiendo")
                         PrimaryCardView(
                             courseName: primary.name,
                             org: primary.org,
@@ -368,8 +273,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                                     hasAccess: primary.hasAccess,
                                     courseStart: primary.courseStart,
                                     courseEnd: primary.courseEnd,
-                                    enrollmentStart: nil,
-                                    enrollmentEnd: nil,
+                                    enrollmentStart: nil, enrollmentEnd: nil,
                                     title: primary.name,
                                     courseRawImage: primary.courseBanner,
                                     showDates: lastVisitedBlockID == nil,
@@ -382,12 +286,10 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                                     hasAccess: primary.hasAccess,
                                     courseStart: primary.courseStart,
                                     courseEnd: primary.courseEnd,
-                                    enrollmentStart: nil,
-                                    enrollmentEnd: nil,
+                                    enrollmentStart: nil, enrollmentEnd: nil,
                                     title: primary.name,
                                     courseRawImage: primary.courseBanner,
-                                    showDates: false,
-                                    lastVisitedBlockID: nil
+                                    showDates: false, lastVisitedBlockID: nil
                                 )
                             },
                             resumeAction: {
@@ -396,8 +298,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                                     hasAccess: primary.hasAccess,
                                     courseStart: primary.courseStart,
                                     courseEnd: primary.courseEnd,
-                                    enrollmentStart: nil,
-                                    enrollmentEnd: nil,
+                                    enrollmentStart: nil, enrollmentEnd: nil,
                                     title: primary.name,
                                     courseRawImage: primary.courseBanner,
                                     showDates: false,
@@ -406,17 +307,18 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                             }
                         )
                     }
+
                     if !enrollments.courses.isEmpty {
-                        sectionHeader(
-                            title: "Mis cursos",
-                            linkText: "Ver todos (\(enrollments.count + 1))",
-                            onLinkTap: { viewModel.router.showAllCourses(courses: enrollments.courses) }
+                        BrandSectionHeader(
+                            "Mis cursos",
+                            actionLabel: "Ver todos (\(enrollments.count + 1))",
+                            onAction: { viewModel.router.showAllCourses(courses: enrollments.courses) }
                         )
                     }
+
                     if idiom == .pad {
                         LazyVGrid(
                             columns: [
-                                GridItem(.flexible(), spacing: 16),
                                 GridItem(.flexible(), spacing: 16),
                                 GridItem(.flexible(), spacing: 16),
                                 GridItem(.flexible(), spacing: 16)
@@ -437,6 +339,12 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
                             .padding(.vertical, DashboardLayout.carouselVerticalPadding)
                         }
                     }
+
+                    // Weekly Goal card
+                    weeklyGoalCard(enrollments: enrollments)
+                        .padding(.horizontal, DashboardLayout.horizontalPadding)
+                        .padding(.top, 20)
+
                     Spacer(minLength: DashboardLayout.contentBottomPadding)
                 }
             }
@@ -445,7 +353,52 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
         }
     }
 
-    // MARK: - Colores de acento para tarjetas del carrusel
+    // MARK: - Weekly Goal Card (1.5)
+
+    @ViewBuilder
+    private func weeklyGoalCard(enrollments: PrimaryEnrollment) -> some View {
+        let stats = courseStats(enrollments)
+        let weeklyProgress: Double = stats.total > 0
+            ? Double(stats.total - stats.notStarted) / Double(stats.total)
+            : 0
+
+        ZStack {
+            Theme.Gradients.guindaHeroGradient
+            DecorativeRings()
+
+            HStack(spacing: 16) {
+                BrandProgressRing(
+                    progress: weeklyProgress,
+                    size: 72,
+                    lineWidth: 6,
+                    trackColor: Color.white.opacity(0.2),
+                    fillColor: .white,
+                    label: nil
+                )
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Meta semanal")
+                        .font(Theme.Fonts.notoSans(11, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.65))
+                        .tracking(0.5)
+                    Text(weeklyProgress >= 1.0 ? "¡Semana completada!" : "Sigue aprendiendo")
+                        .font(Theme.Fonts.title(16))
+                        .foregroundStyle(Color.white)
+                    Text("\(stats.total - stats.notStarted) de \(stats.total) cursos activos")
+                        .font(Theme.Fonts.body(13))
+                        .foregroundStyle(Color.white.opacity(0.75))
+                }
+                Spacer()
+            }
+            .padding(20)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard))
+        .shadow(color: Theme.Colors.guindaColor.opacity(0.3), radius: 8, x: 0, y: 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Meta semanal: \(stats.total - stats.notStarted) de \(stats.total) cursos activos")
+    }
+
+    // MARK: - Courses helpers
 
     private let accentColors: [Color] = [
         Theme.Colors.guindaColor,
@@ -454,8 +407,6 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
         Theme.Colors.brandGreenDark,
     ]
 
-    // MARK: - Courses helpers
-
     @ViewBuilder
     private func courses(_ enrollments: PrimaryEnrollment) -> some View {
         ForEach(
@@ -463,6 +414,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
             id: \.offset
         ) { index, course in
             Button(action: {
+                HapticFeedback.impact(.soft)
                 viewModel.router.showCourseScreens(
                     courseID: course.courseID,
                     hasAccess: course.hasAccess,
@@ -498,16 +450,14 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     }
 
     private func viewAllButton(_ enrollments: PrimaryEnrollment) -> some View {
-        Button(action: {
-            viewModel.router.showAllCourses(courses: enrollments.courses)
-        }, label: {
+        Button(action: { viewModel.router.showAllCourses(courses: enrollments.courses) }, label: {
             VStack(alignment: .center, spacing: 6) {
                 Spacer()
                 Image(systemName: "chevron.right.circle")
-                    .font(Theme.Fonts.ttRoundsBody(28))
+                    .font(.system(size: 28))
                     .foregroundColor(Theme.Colors.brandGreen)
                 Text(DashboardLocalization.Learn.viewAll)
-                    .font(Theme.Fonts.ttRoundsBody(12, weight: 500))
+                    .font(Theme.Fonts.body(12))
                     .foregroundStyle(Theme.Colors.textPrimary)
                 Spacer()
             }
@@ -516,37 +466,6 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
             .shadow(color: Theme.Colors.courseCardShadow, radius: 4, x: 1, y: 2)
         })
         .frame(width: idiom == .pad ? nil : DashboardLayout.courseCardWidth)
-    }
-
-    // MARK: - Section Header
-
-    private func sectionHeader(
-        title: String,
-        linkText: String? = nil,
-        onLinkTap: (() -> Void)? = nil
-    ) -> some View {
-        HStack {
-            Text(title)
-                .font(Theme.Fonts.ttRoundsCompressedMedium(20))
-                .foregroundColor(Theme.Colors.brandCardPrimary)
-                .kerning(-0.2)
-            Spacer()
-            if let linkText, let onLinkTap {
-                Button(action: onLinkTap) {
-                    HStack(spacing: 2) {
-                        Text(linkText)
-                            .font(Theme.Fonts.ttRoundsBody(12, weight: 500))
-                            .foregroundColor(Theme.Colors.brandGreen)
-                        Image(systemName: "chevron.right")
-                            .font(Theme.Fonts.ttRoundsBody(11))
-                            .foregroundColor(Theme.Colors.brandGreen)
-                    }
-                }
-            }
-        }
-        .padding(.horizontal, DashboardLayout.horizontalPadding)
-        .padding(.top, DashboardLayout.sectionHeaderTopPadding)
-        .padding(.bottom, DashboardLayout.sectionHeaderBottomPadding)
     }
 }
 
@@ -568,15 +487,7 @@ struct PrimaryCourseDashboardView_Previews: PreviewProvider {
             openDiscoveryPage: {}
         )
         .preferredColorScheme(.light)
-        .previewDisplayName("DashboardView Light")
-
-        PrimaryCourseDashboardView(
-            viewModel: vm,
-            programView: EmptyView(),
-            openDiscoveryPage: {}
-        )
-        .preferredColorScheme(.dark)
-        .previewDisplayName("DashboardView Dark")
+        .previewDisplayName("Dashboard — Fase 1")
     }
 }
 #endif

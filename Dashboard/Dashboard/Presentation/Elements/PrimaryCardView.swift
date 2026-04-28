@@ -2,7 +2,7 @@
 //  PrimaryCardView.swift
 //  Dashboard
 //
-//  Tarjeta del curso primario — replica PrimaryCourseCard de Android
+//  Fase 1: imagen 72pt compacta, Noto Sans, háptico .medium en CTA
 //
 
 import SwiftUI
@@ -73,8 +73,6 @@ public struct PrimaryCardView: View {
 
     private var hasPastAssignment: Bool { !pastAssignments.isEmpty }
 
-    /// Fecha formateada igual que Android TimeUtils.getCourseFormattedDate:
-    /// "A tu ritmo · Ends Nov 29, 2026" / "Con fechas · Ended Nov 29, 2026"
     private var formattedCourseDate: String? {
         let fmt = DateFormatter()
         fmt.locale = Locale(identifier: "en_US")
@@ -91,44 +89,49 @@ public struct PrimaryCardView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            // ── Bloque superior: imagen + info ────────────────────────────────
-            HStack(spacing: 0) {
+            // ── Fila superior: imagen 72pt + info ─────────────────────────────
+            HStack(spacing: 12) {
                 KFImage(URL(string: courseImage))
                     .onFailureImage(CoreAssets.noCourseImage.image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 140, height: 140)
+                    .frame(width: 72, height: 72)
                     .clipped()
-                    .clipShape(
-                        UnevenRoundedRectangle(
-                            topLeadingRadius: 20,
-                            bottomLeadingRadius: 0,
-                            bottomTrailingRadius: 0,
-                            topTrailingRadius: 0
-                        )
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard))
                     .accessibilityIdentifier("course_image")
+                    .accessibilityLabel(courseName)
                     .onTapGesture { openCourseAction() }
 
-                ElasticTextBlock(
-                    org: org,
-                    title: courseName,
-                    meta: formattedCourseDate,
-                    height: 112,
-                    orgFont: Theme.Fonts.ttRoundsBody(9, weight: 600),
-                    titleFont: Theme.Fonts.ttRoundsCompressedMedium(14),
-                    metaFont: Theme.Fonts.ttRoundsBody(10)
-                )
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(org)
+                        .font(Theme.Fonts.notoSans(9, weight: .medium))
+                        .foregroundStyle(Theme.Colors.brandCardSecondary)
+                        .lineLimit(1)
+
+                    Text(courseName)
+                        .font(Theme.Fonts.notoSans(14, weight: .semibold))
+                        .foregroundStyle(Theme.Colors.brandCardPrimary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if let meta = formattedCourseDate {
+                        Text(meta)
+                            .font(Theme.Fonts.notoSans(10))
+                            .foregroundStyle(Theme.Colors.brandCardSecondary)
+                            .lineLimit(1)
+                    }
+                }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 14)
                 .onTapGesture { openCourseAction() }
             }
-            .frame(height: 140)
+            .padding(.horizontal, 14)
+            .padding(.top, 14)
+            .padding(.bottom, 10)
 
             // ── Divisor ───────────────────────────────────────────────────────
             Theme.Colors.brandDivider
                 .frame(height: 1)
+                .padding(.horizontal, 14)
 
             // ── Pill de tarea pendiente ───────────────────────────────────────
             if hasPastAssignment {
@@ -146,23 +149,20 @@ public struct PrimaryCardView: View {
                         Text(pastAssignments.count == 1
                              ? "1 tarea pendiente"
                              : "\(pastAssignments.count) tareas pendientes")
-                            .font(Theme.Fonts.ttRoundsBody(10, weight: 600))
+                            .font(Theme.Fonts.notoSans(10, weight: .semibold))
                             .foregroundColor(Theme.Colors.guindaColor)
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(
-                        Capsule().fill(Theme.Colors.guindaColor.opacity(0.08))
-                    )
+                    .background(Capsule().fill(Theme.Colors.guindaColor.opacity(0.08)))
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 14)
                 .padding(.top, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            // ── Barra de progreso + % + botón ─────────────────────────────────
+            // ── Barra progreso + % + botón ────────────────────────────────────
             HStack(spacing: 10) {
-                // Barra de progreso
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 2)
@@ -172,8 +172,7 @@ public struct PrimaryCardView: View {
                             .fill(
                                 LinearGradient(
                                     colors: [Theme.Colors.brandGreen, Theme.Colors.brandGreenLighter],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                                    startPoint: .leading, endPoint: .trailing
                                 )
                             )
                             .frame(width: geo.size.width * CGFloat(progressValue), height: 4)
@@ -182,34 +181,34 @@ public struct PrimaryCardView: View {
                 .frame(height: 4)
 
                 Text("\(Int(progressValue * 100))%")
-                    .font(Theme.Fonts.ttRoundsBody(10, weight: 700))
-                    .foregroundColor(Theme.Colors.brandCardMedium)
+                    .font(Theme.Fonts.notoSans(10, weight: .bold))
+                    .foregroundStyle(Theme.Colors.brandCardMedium)
                     .fixedSize()
 
-                // Botón Continuar / Iniciar
-                Button(action: { resumeAction() }) {
+                Button(action: {
+                    HapticFeedback.impact(.medium)
+                    resumeAction()
+                }) {
                     HStack(spacing: 5) {
                         Image(systemName: "play.fill")
-                            .font(Theme.Fonts.ttRoundsBody(10))
+                            .font(.system(size: 10, weight: .bold))
                             .foregroundColor(.white)
                         Text(canResume ? "Continuar" : "Iniciar")
-                            .font(Theme.Fonts.ttRoundsBody(11, weight: 500))
+                            .font(Theme.Fonts.notoSans(11, weight: .medium))
                             .foregroundColor(.white)
                     }
                     .padding(.horizontal, 14)
                     .frame(height: 34)
-                    .background(
-                        RoundedRectangle(cornerRadius: 9)
-                            .fill(Theme.Colors.brandGreen)
-                    )
+                    .background(RoundedRectangle(cornerRadius: 9).fill(Theme.Colors.brandGreen))
                 }
+                .accessibilityLabel((canResume ? "Continuar curso" : "Iniciar curso") + " \(courseName)")
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 14)
             .padding(.top, 10)
-            .padding(.bottom, 12)
+            .padding(.bottom, 14)
         }
-        .background(Color.white)
-        .cornerRadius(20)
+        .background(Theme.Colors.surfaceWhite)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusHero))
         .shadow(color: Theme.Colors.courseCardShadow, radius: 4, x: 1, y: 2)
         .padding(.horizontal, 20)
     }
@@ -240,6 +239,7 @@ struct PrimaryCardView_Previews: PreviewProvider {
             )
             .loadFonts()
         }
+        .previewDisplayName("PrimaryCardView — Fase 1 (72pt image)")
     }
 }
 #endif

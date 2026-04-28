@@ -19,13 +19,13 @@ struct CourseCardView: View {
     }
 
     private enum Layout {
-        static let compactCardWidth: CGFloat = 144
-        static let compactImageHeight: CGFloat = 132
-        static let compactCardHeight: CGFloat = 214
-        static let allCoursesCompactImageHeight: CGFloat = 132
-        static let allCoursesCompactCardHeight: CGFloat = 214
-        static let imageHeight: CGFloat = 124
-        static let cardHeight: CGFloat = 286
+        static let compactCardWidth: CGFloat = 200
+        static let compactImageHeight: CGFloat = 170
+        static let compactCardHeight: CGFloat = 252
+        static let allCoursesCompactImageHeight: CGFloat = 170
+        static let allCoursesCompactCardHeight: CGFloat = 252
+        static let imageHeight: CGFloat = 140
+        static let cardHeight: CGFloat = 300
         static let dateRowHeight: CGFloat = 20
         static let titleRowHeight: CGFloat = 70
         static let statusRowHeight: CGFloat = 18
@@ -192,7 +192,7 @@ struct CourseCardView: View {
                             Spacer()
 
                             Text(statusText)
-                                .font(Theme.Fonts.ttRoundsCompressedThinItalic(10))
+                                .font(Theme.Fonts.notoSans(10, weight: .medium, italic: true))
                                 .foregroundColor(statusColor)
                                 .lineLimit(1)
                         }
@@ -200,7 +200,7 @@ struct CourseCardView: View {
                     }
 
                     Text(courseName)
-                        .font(visualStyle == .allCoursesGrid ? Theme.Fonts.titleMedium : Theme.Fonts.ttRoundsCompressedMedium(13))
+                        .font(visualStyle == .allCoursesGrid ? Theme.Fonts.titleMedium : Theme.Fonts.notoSans(13, weight: .semibold))
                         .foregroundColor(Theme.Colors.brandCardPrimary)
                         .lineLimit(2)
                         .truncationMode(.tail)
@@ -227,7 +227,7 @@ struct CourseCardView: View {
                         .frame(width: 24, height: 24)
                     CoreAssets.lockIcon.swiftUIImage
                         .foregroundStyle(Theme.Colors.textPrimary)
-                        .font(Theme.Fonts.ttRoundsBody(10))
+                        .font(.system(size: 10))
                 }
                 .padding(8)
             }
@@ -259,7 +259,7 @@ struct ProgressRingView: View {
                 .stroke(Color.white, style: StrokeStyle(lineWidth: 3.5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             Text("\(Int(progress * 100))%")
-                .font(Theme.Fonts.ttRoundsBody(7, weight: 700))
+                .font(Theme.Fonts.notoSans(7, weight: .bold))
                 .foregroundColor(.white)
         }
         .background(Circle().fill(Color.black.opacity(0.15)))

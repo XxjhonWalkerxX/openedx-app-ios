@@ -320,6 +320,13 @@ public struct Theme: Sendable {
             endPoint: .bottomTrailing
         )
 
+        /// Gradiente guinda — hero Dashboard, hero Profile, featured Discovery card
+        public static let guindaHeroGradient = LinearGradient(
+            colors: [Colors.guindaDeep, Colors.guindaColor],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+
         // Overlay de legibilidad sobre imágenes dinámicas.
         // Curva U-invertida: oscurece top (texto título) y bottom (metadata),
         // libera el centro para que la imagen respire. Cumple WCAG AA (≥4.5:1)
