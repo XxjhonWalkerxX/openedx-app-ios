@@ -93,7 +93,7 @@ struct CourseVideoDownloadBarView: View {
                 let title = viewModel.title
                 Text(title)
                     .lineLimit(1)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundColor(Theme.Colors.textPrimary)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(title)
@@ -121,7 +121,7 @@ struct CourseVideoDownloadBarView: View {
                                 .accessibilityIdentifier("total_size_text")
                         }
                     }
-                    .font(Theme.Fonts.labelLarge)
+                    .font(Theme.Fonts.notoSans(13, weight: .medium))
                     .foregroundColor(Theme.Colors.textSecondary)
                 }
             }

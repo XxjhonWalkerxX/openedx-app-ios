@@ -23,7 +23,7 @@ public struct LargestDownloadsView: View {
         VStack(alignment: .leading) {
             HStack {
                 Text(CourseLocalization.Course.LargestDownloads.title)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundColor(Theme.Colors.textPrimary)
                 Spacer()
                 if viewModel.downloadAllButtonState == .start {
@@ -35,7 +35,7 @@ public struct LargestDownloadsView: View {
                             ? CourseLocalization.Course.LargestDownloads.done
                             : CourseLocalization.Course.LargestDownloads.edit
                         )
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                         .foregroundColor(Theme.Colors.accentColor)
                     }
                 }
@@ -47,7 +47,7 @@ public struct LargestDownloadsView: View {
                     block.type.image
                     VStack(alignment: .leading) {
                         Text(block.displayName)
-                            .font(Theme.Fonts.labelLarge)
+                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                             .foregroundColor(Theme.Colors.textPrimary)
                         if let fileSize = block.fileSize {
                             Text(fileSize.formattedFileSize())

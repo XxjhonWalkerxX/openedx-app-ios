@@ -61,7 +61,7 @@ public struct TotalDownloadedProgressView: View {
                          : CourseLocalization.Course.TotalProgress.readyToDownload)
                 }
             }
-            .font(Theme.Fonts.labelLarge)
+            .font(Theme.Fonts.notoSans(13, weight: .medium))
             .padding(.bottom, 10)
             if totalFilesSize != 0 {
                 ZStack(alignment: .leading) {
