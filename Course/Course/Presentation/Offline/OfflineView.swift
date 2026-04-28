@@ -110,13 +110,13 @@ struct OfflineView: View {
                                 
                                 if viewModel.downloadedFilesSize == 0 && viewModel.totalFilesSize != 0 {
                                     Text(CourseLocalization.Course.Offline.youCanDownload)
-                                        .font(Theme.Fonts.labelLarge)
+                                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                         .padding(.top, 8)
                                         .padding(.bottom, 16)
                                 } else if viewModel.downloadedFilesSize == 0 && viewModel.totalFilesSize == 0 {
                                     Text(CourseLocalization.Course.Offline.youCantDownload)
-                                        .font(Theme.Fonts.labelLarge)
+                                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                         .padding(.top, 8)
                                         .padding(.bottom, 16)
@@ -158,7 +158,7 @@ struct OfflineView: View {
                 }
             }
             .background(
-                Theme.Colors.background
+                Theme.Colors.brandCream
                     .ignoresSafeArea()
             )
         }
@@ -184,7 +184,7 @@ struct OfflineView: View {
                     viewModel.downloadAllButtonState.image
                         .renderingMode(.template)
                     Text(viewModel.downloadAllButtonState.title)
-                        .font(Theme.Fonts.bodyMedium)
+                        .font(Theme.Fonts.notoSans(14, weight: .regular))
                 }
                 .foregroundStyle(
                     viewModel.totalFilesSize == 0
@@ -224,7 +224,7 @@ struct OfflineView: View {
                     HStack {
                         CoreAssets.remove.swiftUIImage
                         Text(CourseLocalization.Course.LargestDownloads.removeDownloads)
-                            .font(Theme.Fonts.bodyMedium)
+                            .font(Theme.Fonts.notoSans(14, weight: .regular))
                     }
                     .foregroundStyle(Theme.Colors.snackbarErrorColor)
                     .frame(maxWidth: .infinity)

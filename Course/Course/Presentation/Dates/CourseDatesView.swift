@@ -125,9 +125,9 @@ public struct CourseDatesView: View {
             }
         }
         .background(
-            Theme.Colors.background
-                .ignoresSafeArea()
-        )
+                Theme.Colors.brandCream
+                    .ignoresSafeArea()
+            )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     

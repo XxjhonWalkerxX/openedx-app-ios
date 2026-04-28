@@ -108,7 +108,7 @@ struct CourseProgressScreenView: View {
                 }
             }
             .background(
-                Theme.Colors.background
+                Theme.Colors.brandCream
                     .ignoresSafeArea()
             )
             .onFirstAppear {
@@ -128,12 +128,12 @@ struct CourseProgressScreenView: View {
                     HStack(alignment: .top, spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(CourseLocalization.CourseContainer.Progress.title)
-                                .font(Theme.Fonts.titleMedium)
+                                .font(Theme.Fonts.notoSans(15, weight: .medium))
                                 .foregroundColor(Theme.Colors.textPrimary)
                                 .accessibilityAddTraits(.isHeader)
                             
                             Text(CourseLocalization.CourseContainer.Progress.description)
-                                .font(Theme.Fonts.bodySmall)
+                                .font(Theme.Fonts.notoSans(12, weight: .regular))
                                 .foregroundColor(Theme.Colors.textPrimary)
                                 .lineLimit(nil)
                         }
@@ -186,7 +186,7 @@ struct CourseProgressScreenView: View {
                             .foregroundColor(Theme.Colors.textSecondary)
                         
                         Text(CourseLocalization.CourseContainer.Progress.noGradedAssignments)
-                            .font(Theme.Fonts.titleMedium)
+                            .font(Theme.Fonts.notoSans(15, weight: .medium))
                             .foregroundColor(Theme.Colors.textPrimary)
                             .multilineTextAlignment(.center)
                     }
@@ -205,12 +205,12 @@ struct CourseProgressScreenView: View {
                         .foregroundColor(Theme.Colors.textSecondary)
                     
                     Text(CourseLocalization.CourseContainer.Progress.noProgressAvailable)
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                         .foregroundColor(Theme.Colors.textPrimary)
                         .multilineTextAlignment(.center)
                     
                     Text(CourseLocalization.CourseContainer.Progress.startLearning)
-                        .font(Theme.Fonts.bodyMedium)
+                        .font(Theme.Fonts.notoSans(14, weight: .regular))
                         .foregroundColor(Theme.Colors.textSecondary)
                         .multilineTextAlignment(.center)
                 }

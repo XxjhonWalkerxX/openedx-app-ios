@@ -110,7 +110,7 @@ struct HandoutsView: View {
                 }
             }
             .background(
-                Theme.Colors.background
+                Theme.Colors.brandCream
                     .ignoresSafeArea()
             )
         }
