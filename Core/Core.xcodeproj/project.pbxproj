@@ -88,6 +88,7 @@
 		02EBC7592C19DE1100BE182C /* CalendarManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EBC7582C19DE1100BE182C /* CalendarManagerProtocol.swift */; };
 		02EBC75B2C19DE3D00BE182C /* CourseForSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EBC75A2C19DE3D00BE182C /* CourseForSync.swift */; };
 		02F6EF3B28D9B8EC00835477 /* CourseCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F6EF3A28D9B8EC00835477 /* CourseCellView.swift */; };
+		D7A1F3C2B4E569781122AABB /* CourseImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A2F3C2B4E569781122AABB /* CourseImageView.swift */; };
 		02F6EF4A28D9F0A700835477 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F6EF4928D9F0A700835477 /* DateExtension.swift */; };
 		0604C9AA2B22FACF00AD5DBF /* UIComponentsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0604C9A92B22FACF00AD5DBF /* UIComponentsConfig.swift */; };
 		064987932B4D69FF0071642A /* DragAndDropCssInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0649878A2B4D69FE0071642A /* DragAndDropCssInjection.swift */; };
@@ -290,6 +291,7 @@
 		02EBC7582C19DE1100BE182C /* CalendarManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManagerProtocol.swift; sourceTree = "<group>"; };
 		02EBC75A2C19DE3D00BE182C /* CourseForSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseForSync.swift; sourceTree = "<group>"; };
 		02F6EF3A28D9B8EC00835477 /* CourseCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCellView.swift; sourceTree = "<group>"; };
+		D7A2F3C2B4E569781122AABB /* CourseImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseImageView.swift; sourceTree = "<group>"; };
 		02F6EF4928D9F0A700835477 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		043DD0B526F919DFA1C5E600 /* Pods-App-Core-CoreTests.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Core-CoreTests.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-Core-CoreTests/Pods-App-Core-CoreTests.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		0604C9A92B22FACF00AD5DBF /* UIComponentsConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIComponentsConfig.swift; sourceTree = "<group>"; };
@@ -743,6 +745,7 @@
 				025A204F2C071EB0003EA08D /* ErrorAlertView.swift */,
 				0727878028D25EFD002E9142 /* SnackBarView.swift */,
 				02F6EF3A28D9B8EC00835477 /* CourseCellView.swift */,
+				D7A2F3C2B4E569781122AABB /* CourseImageView.swift */,
 				02EBC7582C19DE1100BE182C /* CalendarManagerProtocol.swift */,
 				024FCCFF28EF1CD300232339 /* WebBrowser.swift */,
 				028CE96829858ECC00B6B1C3 /* FlexibleKeyboardInputView.swift */,
@@ -1282,6 +1285,7 @@
 				02935B752BCEE6D600B22F66 /* PrimaryEnrollment.swift in Sources */,
 				020C31C9290AC3F700D6DEA2 /* PickerFields.swift in Sources */,
 				02F6EF3B28D9B8EC00835477 /* CourseCellView.swift in Sources */,
+				D7A1F3C2B4E569781122AABB /* CourseImageView.swift in Sources */,
 				023A1138291432FD00D0D354 /* FieldConfiguration.swift in Sources */,
 				DBF6F24A2B0380E00098414B /* FeaturesConfig.swift in Sources */,
 				0231CDBE2922422D00032416 /* CSSInjector.swift in Sources */,

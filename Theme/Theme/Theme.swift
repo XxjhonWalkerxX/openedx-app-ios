@@ -92,6 +92,7 @@ public struct Theme: Sendable {
         nonisolated(unsafe) public private(set) static var guindaColor = ThemeAssets.guindaColor.swiftUIColor
 
         // MARK: - @prende.mx Brand Colors
+        public static let guindaDeep        = Color(red: 0.243, green: 0.039, blue: 0.125)  // #3E0A20
         public static let brandGreenDark    = Color(red: 0.114, green: 0.302, blue: 0.259)  // #1D4D42
         public static let brandGreen        = Color(red: 0.169, green: 0.412, blue: 0.349)  // #2B6959
         public static let brandGreenLight   = Color(red: 0.239, green: 0.541, blue: 0.447)  // #3D8A72
@@ -117,6 +118,12 @@ public struct Theme: Sendable {
         // Highlight amarillo suave (Startup traditional login, promoted rows)
         public static let brandHighlightSoft   = Color(red: 1.0,  green: 0.99, blue: 0.91)  // #FFFCE8
         public static let brandHighlightStroke = Color(red: 0.91, green: 0.85, blue: 0.48)  // #E8D97A
+
+        // Tokens extendidos para el sistema de diseño post-login
+        public static let brandGreenTint       = Color(red: 0.169, green: 0.412, blue: 0.349).opacity(0.12)
+        public static let brandGreenSoft       = Color(red: 0.169, green: 0.412, blue: 0.349).opacity(0.06)
+        public static let surfaceWhite         = Color.white
+        public static let semanticDestructive  = Color(red: 0.55, green: 0.08, blue: 0.18)  // guinda saturado
 
         // Colores de stat pills en el hero
         public static let pillGreen  = Color(red: 0.604, green: 0.859, blue: 0.784) // #9ADBC8
@@ -466,6 +473,21 @@ public extension Theme.Fonts {
         if let url = bundle.url(forResource: "tt_rounds_neue_variable", withExtension: "ttf") {
             CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         }
+        // Noto Sans — familia principal post-login
+        let notoFiles = [
+            "NotoSans-Regular", "NotoSans-Medium", "NotoSans-SemiBold", "NotoSans-Bold",
+            "NotoSans-Italic", "NotoSans-MediumItalic", "NotoSans-SemiBoldItalic", "NotoSans-BoldItalic"
+        ]
+        for name in notoFiles {
+            if let url = bundle.url(forResource: name, withExtension: "ttf") {
+                CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+            }
+        }
+        #if DEBUG
+        if UIFont.fontNames(forFamilyName: "Noto Sans").isEmpty {
+            print("⚠️ Noto Sans no cargó — descargar TTF de fonts.google.com/noto y agregar a Theme/Theme/Fonts/")
+        }
+        #endif
     }
     // swiftlint:enable type_name
 }

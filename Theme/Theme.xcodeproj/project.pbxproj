@@ -21,6 +21,15 @@
 		E0D6E69F2B161BD70089F9C9 /* ThemeAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D6E69E2B161BD70089F9C9 /* ThemeAssets.swift */; };
 		E0D6E6A72B16DD4E0089F9C9 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D6E6A62B16DD4E0089F9C9 /* RoundedCorners.swift */; };
 		D4B1F3C2B4E569781122AABB /* BrandComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B2F3C2B4E569781122AABB /* BrandComponents.swift */; };
+		D5A1F3C2B4E569781122AABB /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A2F3C2B4E569781122AABB /* HapticFeedback.swift */; };
+		D5B1F3C2B4E569781122AABB /* BrandChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B2F3C2B4E569781122AABB /* BrandChip.swift */; };
+		D5C1F3C2B4E569781122AABB /* BrandProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C2F3C2B4E569781122AABB /* BrandProgressRing.swift */; };
+		D5D1F3C2B4E569781122AABB /* BrandStatTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2F3C2B4E569781122AABB /* BrandStatTile.swift */; };
+		D5E1F3C2B4E569781122AABB /* BrandSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E2F3C2B4E569781122AABB /* BrandSectionHeader.swift */; };
+		D5F1F3C2B4E569781122AABB /* BrandFactTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F2F3C2B4E569781122AABB /* BrandFactTile.swift */; };
+		D6A1F3C2B4E569781122AABB /* PatternCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A2F3C2B4E569781122AABB /* PatternCover.swift */; };
+		D6B1F3C2B4E569781122AABB /* DecorativeRings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */; };
+		D6C1F3C2B4E569781122AABB /* NotoSansFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C2F3C2B4E569781122AABB /* NotoSansFonts.swift */; };
 		E0D6E6B22B16EA380089F9C9 /* Theme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0770DE0828D07831006D8A5D /* Theme.framework */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
@@ -74,6 +83,15 @@
 		E0D6E69E2B161BD70089F9C9 /* ThemeAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeAssets.swift; sourceTree = "<group>"; };
 		E0D6E6A62B16DD4E0089F9C9 /* RoundedCorners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
 		D4B2F3C2B4E569781122AABB /* BrandComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandComponents.swift; sourceTree = "<group>"; };
+		D5A2F3C2B4E569781122AABB /* HapticFeedback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		D5B2F3C2B4E569781122AABB /* BrandChip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandChip.swift; sourceTree = "<group>"; };
+		D5C2F3C2B4E569781122AABB /* BrandProgressRing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandProgressRing.swift; sourceTree = "<group>"; };
+		D5D2F3C2B4E569781122AABB /* BrandStatTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandStatTile.swift; sourceTree = "<group>"; };
+		D5E2F3C2B4E569781122AABB /* BrandSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandSectionHeader.swift; sourceTree = "<group>"; };
+		D5F2F3C2B4E569781122AABB /* BrandFactTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandFactTile.swift; sourceTree = "<group>"; };
+		D6A2F3C2B4E569781122AABB /* PatternCover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternCover.swift; sourceTree = "<group>"; };
+		D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecorativeRings.swift; sourceTree = "<group>"; };
+		D6C2F3C2B4E569781122AABB /* NotoSansFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotoSansFonts.swift; sourceTree = "<group>"; };
 		E0D6E6AE2B16EA380089F9C9 /* ThemeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6E09DC289758CE811EF93D8 /* Pods-App-Theme-ThemeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Theme-ThemeTests.release.xcconfig"; path = "Target Support Files/Pods-App-Theme-ThemeTests/Pods-App-Theme-ThemeTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +125,7 @@
 				E0C716A62B0B05BA00858BAB /* fonts.json */,
 				E0C716A82B0B065600858BAB /* FontParser.swift */,
 				D3A1F3C2B4E569781122AABB /* TTRoundsFonts.swift */,
+				D6C2F3C2B4E569781122AABB /* NotoSansFonts.swift */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -150,6 +169,14 @@
 			isa = PBXGroup;
 			children = (
 				D4B2F3C2B4E569781122AABB /* BrandComponents.swift */,
+				D5A2F3C2B4E569781122AABB /* HapticFeedback.swift */,
+				D5B2F3C2B4E569781122AABB /* BrandChip.swift */,
+				D5C2F3C2B4E569781122AABB /* BrandProgressRing.swift */,
+				D5D2F3C2B4E569781122AABB /* BrandStatTile.swift */,
+				D5E2F3C2B4E569781122AABB /* BrandSectionHeader.swift */,
+				D5F2F3C2B4E569781122AABB /* BrandFactTile.swift */,
+				D6A2F3C2B4E569781122AABB /* PatternCover.swift */,
+				D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -424,7 +451,16 @@
 				E0D6E6A72B16DD4E0089F9C9 /* RoundedCorners.swift in Sources */,
 				E0C716A92B0B065600858BAB /* FontParser.swift in Sources */,
 				D2A1F3C2B4E569781122AABB /* TTRoundsFonts.swift in Sources */,
+				D6C1F3C2B4E569781122AABB /* NotoSansFonts.swift in Sources */,
 				D4B1F3C2B4E569781122AABB /* BrandComponents.swift in Sources */,
+				D5A1F3C2B4E569781122AABB /* HapticFeedback.swift in Sources */,
+				D5B1F3C2B4E569781122AABB /* BrandChip.swift in Sources */,
+				D5C1F3C2B4E569781122AABB /* BrandProgressRing.swift in Sources */,
+				D5D1F3C2B4E569781122AABB /* BrandStatTile.swift in Sources */,
+				D5E1F3C2B4E569781122AABB /* BrandSectionHeader.swift in Sources */,
+				D5F1F3C2B4E569781122AABB /* BrandFactTile.swift in Sources */,
+				D6A1F3C2B4E569781122AABB /* PatternCover.swift in Sources */,
+				D6B1F3C2B4E569781122AABB /* DecorativeRings.swift in Sources */,
 				0770DE7B28D0C78C006D8A5D /* Theme.swift in Sources */,
 				E0D6E69F2B161BD70089F9C9 /* ThemeAssets.swift in Sources */,
 			);
