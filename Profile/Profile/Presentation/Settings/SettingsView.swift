@@ -2,6 +2,9 @@
 //  SettingsView.swift
 //  Profile
 //
+//  Fase 7 — Settings rediseño completo
+//  7.1 InnerNavBar back pill + grupos card uppercase guinda + version card brandCreamStrong + logout outline destructive
+//
 
 import SwiftUI
 import Core
@@ -11,27 +14,24 @@ import Theme
 // MARK: - Layout Constants
 
 private enum SettingsLayout {
-    // Tokens del sistema — ver Theme.Sizes
-    static let horizontalPadding: CGFloat            = Theme.Sizes.horizontalPadding
-    static let headerVerticalPadding: CGFloat        = Theme.Sizes.headerTopPadding
+    static let horizontalPadding: CGFloat = Theme.Sizes.horizontalPadding
+    static let headerVerticalPadding: CGFloat = Theme.Sizes.headerTopPadding
     static let headerVerticalPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeTopPadding
-    static let headerBottomPaddingPortrait: CGFloat  = Theme.Sizes.headerBottomPadding
+    static let headerBottomPaddingPortrait: CGFloat = Theme.Sizes.headerBottomPadding
     static let headerBottomPaddingLandscape: CGFloat = Theme.Sizes.headerLandscapeBottomPadding
-    static let headerMinHeightPortrait: CGFloat      = Theme.Sizes.headerPortraitMinHeight
-    static let headerMinHeightLandscape: CGFloat     = Theme.Sizes.headerLandscapeHeight
-    static let rowMinHeight: CGFloat                 = Theme.Sizes.settingsRowMinHeight
+    static let headerMinHeightPortrait: CGFloat = Theme.Sizes.headerPortraitMinHeight
+    static let headerMinHeightLandscape: CGFloat = Theme.Sizes.headerLandscapeHeight
+    static let rowMinHeight: CGFloat = Theme.Sizes.settingsRowMinHeight
 
-    // Específicos de SettingsView
-    static let topBandHeight: CGFloat              = 4
-    static let sectionSpacing: CGFloat             = 20
-    static let contentTopPadding: CGFloat          = 2
-    static let contentTopPaddingLandscape: CGFloat = 16
-    static let rowCornerRadius: CGFloat            = 18
-    static let versionCardCornerRadius: CGFloat    = 14
-    static let logoutCornerRadius: CGFloat         = 14
-    static let logoutBorderWidth: CGFloat          = 2
-    static let backButtonSize: CGFloat             = 54
-    static let backButtonCornerRadius: CGFloat     = 14
+    static let topBandHeight: CGFloat = 4
+    static let sectionSpacing: CGFloat = 6
+    static let groupSpacing: CGFloat = 20
+    static let rowCornerRadius: CGFloat = Theme.Sizes.radiusCard
+    static let versionCardCornerRadius: CGFloat = Theme.Sizes.radiusCard
+    static let logoutCornerRadius: CGFloat = Theme.Sizes.radiusCard
+    static let logoutBorderWidth: CGFloat = 1.5
+    static let backButtonSize: CGFloat = 40
+    static let backButtonCornerRadius: CGFloat = 20
 }
 
 // MARK: - SettingsView
@@ -62,48 +62,60 @@ public struct SettingsView: View {
                         .accessibilityIdentifier("progress_bar")
                 } else {
                     ScrollView {
-                        VStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
-                            sectionHeader(ProfileLocalization.manageAccount.uppercased())
-                            settingsRow(
-                                title: ProfileLocalization.manageAccount,
-                                accessibilityID: "manage_account_button",
-                                action: {
+                        VStack(alignment: .leading, spacing: SettingsLayout.groupSpacing) {
+
+                            // MARK: Grupo Cuenta
+                            settingsGroup(header: ProfileLocalization.manageAccount.uppercased()) {
+                                settingsRow(
+                                    icon: "person.text.rectangle",
+                                    title: ProfileLocalization.manageAccount,
+                                    accessibilityID: "manage_account_button"
+                                ) {
+                                    HapticFeedback.selection()
                                     viewModel.trackProfileVideoSettingsClicked()
                                     viewModel.router.showManageAccount()
                                 }
-                            )
+                            }
 
-                            sectionHeader(ProfileLocalization.settings.uppercased())
-                            settingsRow(
-                                title: ProfileLocalization.settingsVideo.replacingOccurrences(of: " settings", with: ""),
-                                accessibilityID: "video_settings_button",
-                                action: {
+                            // MARK: Grupo Configuración
+                            settingsGroup(header: ProfileLocalization.settings.uppercased()) {
+                                settingsRow(
+                                    icon: "play.rectangle",
+                                    title: ProfileLocalization.settingsVideo.replacingOccurrences(of: " settings", with: ""),
+                                    accessibilityID: "video_settings_button"
+                                ) {
+                                    HapticFeedback.selection()
                                     viewModel.trackProfileVideoSettingsClicked()
                                     viewModel.router.showVideoSettings()
                                 }
-                            )
-                            settingsRow(
-                                title: ProfileLocalization.datesAndCalendar,
-                                accessibilityID: "dates_and_calendar_cell",
-                                action: {
+                                rowDivider
+                                settingsRow(
+                                    icon: "calendar",
+                                    title: ProfileLocalization.datesAndCalendar,
+                                    accessibilityID: "dates_and_calendar_cell"
+                                ) {
+                                    HapticFeedback.selection()
                                     viewModel.router.showDatesAndCalendar()
                                 }
-                            )
+                            }
 
-                            sectionHeader(ProfileLocalization.supportInfo.uppercased())
-                            settingsRow(
-                                title: ProfileLocalization.contact,
-                                accessibilityID: "contact_support",
-                                action: {
+                            // MARK: Grupo Soporte
+                            settingsGroup(header: ProfileLocalization.supportInfo.uppercased()) {
+                                settingsRow(
+                                    icon: "envelope",
+                                    title: ProfileLocalization.contact,
+                                    accessibilityID: "contact_support"
+                                ) {
                                     guard let emailURL = viewModel.contactSupport(),
                                           UIApplication.shared.canOpenURL(emailURL) else {
                                         viewModel.errorMessage = ProfileLocalization.Error.cannotSendEmail
                                         return
                                     }
+                                    HapticFeedback.selection()
                                     viewModel.trackEmailSupportClicked()
                                     UIApplication.shared.open(emailURL)
                                 }
-                            )
+                            }
 
                             versionCard
                             logoutButton
@@ -135,6 +147,8 @@ public struct SettingsView: View {
         .navigationTitle(ProfileLocalization.settings)
     }
 
+    // MARK: - Header
+
     private var topHeader: some View {
         VStack(spacing: 0) {
             Theme.Colors.guindaColor
@@ -145,27 +159,34 @@ public struct SettingsView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
-                        .foregroundColor(.white)
-                        .frame(width: SettingsLayout.backButtonSize, height: SettingsLayout.backButtonSize)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Color.white)
+                        .frame(
+                            width: SettingsLayout.backButtonSize,
+                            height: SettingsLayout.backButtonSize
+                        )
                         .background(
-                            RoundedRectangle(cornerRadius: SettingsLayout.backButtonCornerRadius, style: .continuous)
-                                .fill(Color.white.opacity(0.22))
+                            Capsule()
+                                .fill(Color.white.opacity(0.2))
+                        )
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(Color.white.opacity(0.3), lineWidth: 1)
                         )
                 }
                 .accessibilityIdentifier("back_button")
+                .accessibilityLabel("Volver")
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(ProfileLocalization.settings)
-                        .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                        .font(Theme.Fonts.notoSans(30, weight: .bold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                     Text("Personaliza tu experiencia")
-                        .font(Theme.Fonts.labelLarge)
-                        .fontWeight(.semibold)
-                        .opacity(0.95)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
+                        .opacity(0.85)
                 }
-                .foregroundColor(.white)
+                .foregroundStyle(Color.white)
 
                 Spacer(minLength: 0)
             }
@@ -178,83 +199,88 @@ public struct SettingsView: View {
         .ignoresSafeArea(edges: .top)
     }
 
+    // MARK: - Helpers dimensiones
+
+    private var isLandscapeLike: Bool { verticalSizeClass == .compact }
+
     private var headerTopPadding: CGFloat {
-        if isLandscapeLike {
-            return SettingsLayout.headerVerticalPaddingLandscape
-        } else {
-            return SettingsLayout.headerVerticalPadding
-        }
+        isLandscapeLike ? SettingsLayout.headerVerticalPaddingLandscape : SettingsLayout.headerVerticalPadding
     }
 
     private var headerBottomPadding: CGFloat {
-        if isLandscapeLike {
-            return SettingsLayout.headerBottomPaddingLandscape
-        } else {
-            return SettingsLayout.headerBottomPaddingPortrait
-        }
+        isLandscapeLike ? SettingsLayout.headerBottomPaddingLandscape : SettingsLayout.headerBottomPaddingPortrait
     }
 
     private var headerMinHeight: CGFloat {
-        if isLandscapeLike {
-            return SettingsLayout.headerMinHeightLandscape
-        } else {
-            return SettingsLayout.headerMinHeightPortrait
-        }
-    }
-
-    private var isLandscapeLike: Bool {
-        verticalSizeClass == .compact
+        isLandscapeLike ? SettingsLayout.headerMinHeightLandscape : SettingsLayout.headerMinHeightPortrait
     }
 
     private var contentTopPadding: CGFloat {
-        if isLandscapeLike {
-            return SettingsLayout.contentTopPaddingLandscape
-        } else {
-            return SettingsLayout.contentTopPadding
+        isLandscapeLike ? 16 : 2
+    }
+
+    // MARK: - Componentes internos
+
+    @ViewBuilder
+    private func settingsGroup(header: String, @ViewBuilder rows: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
+            Text(header)
+                .font(Theme.Fonts.notoSans(11, weight: .semibold))
+                .tracking(0.5)
+                .foregroundStyle(Theme.Colors.guindaColor)
+                .padding(.leading, 2)
+
+            VStack(spacing: 0) {
+                rows()
+            }
+            .background(Theme.Colors.surfaceWhite)
+            .clipShape(RoundedRectangle(cornerRadius: SettingsLayout.rowCornerRadius, style: .continuous))
+            .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
         }
     }
 
-    private func sectionHeader(_ title: String) -> some View {
-        Text(title)
-            .font(Theme.Fonts.labelLarge)
-            .fontWeight(.semibold)
-            .tracking(0.3)
-            .foregroundColor(Theme.Colors.brandGreen)
-            .padding(.leading, 2)
+    private var rowDivider: some View {
+        Rectangle()
+            .fill(Theme.Colors.brandCreamStrong)
+            .frame(height: 1)
+            .padding(.leading, 52)
     }
 
     private func settingsRow(
+        icon: String,
         title: String,
         accessibilityID: String,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(Theme.Colors.brandGreen)
+                    .frame(width: 34, height: 34)
+                    .background(Theme.Colors.brandGreenTint)
+                    .clipShape(Circle())
+
                 Text(title)
-                    .font(Theme.Fonts.titleMedium)
-                    .foregroundColor(Theme.Colors.brandCardPrimary)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
+                    .foregroundStyle(Theme.Colors.textPrimary)
+
                 Spacer()
+
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Theme.Colors.brandGreen)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Theme.Colors.textSecondary.opacity(0.45))
                     .flipsForRightToLeftLayoutDirection(true)
-                    .font(Theme.Fonts.ttRoundsSemibold(15))
             }
-            .padding(.horizontal, 18)
+            .padding(.horizontal, 14)
             .frame(maxWidth: .infinity, minHeight: SettingsLayout.rowMinHeight)
-            .background(
-                RoundedRectangle(cornerRadius: SettingsLayout.rowCornerRadius, style: .continuous)
-                    .fill(Theme.Colors.white)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: SettingsLayout.rowCornerRadius, style: .continuous)
-                    .stroke(Color.black.opacity(0.04), lineWidth: 1)
-            )
-            .shadow(color: .black.opacity(0.06), radius: 5, x: 0, y: 2)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityIdentifier(accessibilityID)
     }
+
+    // MARK: - Version card
 
     private var versionCard: some View {
         Button(action: {
@@ -262,40 +288,60 @@ public struct SettingsView: View {
                 viewModel.openAppStore()
             }
         }) {
-            VStack(spacing: 8) {
-                Text("\(ProfileLocalization.Settings.version) \(viewModel.currentVersion)")
-                    .font(Theme.Fonts.titleMedium)
-                    .foregroundColor(Theme.Colors.brandCardPrimary)
+            HStack(spacing: 12) {
+                Image(systemName: "app.badge.checkmark")
+                    .font(.system(size: 22, weight: .light))
+                    .foregroundStyle(
+                        viewModel.versionState == .actual
+                            ? Theme.Colors.brandGreen
+                            : Theme.Colors.guindaColor
+                    )
 
-                switch viewModel.versionState {
-                case .actual:
-                    HStack(spacing: 6) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Theme.Colors.brandGreen)
-                        Text(ProfileLocalization.Settings.upToDate)
-                            .font(Theme.Fonts.labelLarge)
-                            .foregroundColor(Theme.Colors.brandCardMedium)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(ProfileLocalization.Settings.version) \(viewModel.currentVersion)")
+                        .font(Theme.Fonts.notoSans(14, weight: .medium))
+                        .foregroundStyle(Theme.Colors.textPrimary)
+
+                    switch viewModel.versionState {
+                    case .actual:
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.Colors.brandGreen)
+                            Text(ProfileLocalization.Settings.upToDate)
+                                .font(Theme.Fonts.notoSans(12, weight: .regular))
+                                .foregroundStyle(Theme.Colors.textSecondary)
+                        }
+                    case .updateNeeded:
+                        Text("\(ProfileLocalization.Settings.tapToUpdate) \(viewModel.latestVersion)")
+                            .font(Theme.Fonts.notoSans(12, weight: .regular))
+                            .foregroundStyle(Theme.Colors.guindaColor)
+                    case .updateRequired:
+                        Text(ProfileLocalization.Settings.tapToInstall)
+                            .font(Theme.Fonts.notoSans(12, weight: .medium))
+                            .foregroundStyle(Theme.Colors.guindaColor)
                     }
-                case .updateNeeded:
-                    Text("\(ProfileLocalization.Settings.tapToUpdate) \(viewModel.latestVersion)")
-                        .font(Theme.Fonts.labelLarge)
-                        .foregroundColor(Theme.Colors.accentColor)
-                case .updateRequired:
-                    Text(ProfileLocalization.Settings.tapToInstall)
-                        .font(Theme.Fonts.labelLarge)
-                        .foregroundColor(Theme.Colors.accentColor)
+                }
+
+                Spacer()
+
+                if viewModel.versionState != .actual {
+                    Image(systemName: "arrow.up.circle")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Theme.Colors.guindaColor)
                 }
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 20)
-            .background(
-                RoundedRectangle(cornerRadius: SettingsLayout.versionCardCornerRadius, style: .continuous)
-                    .fill(Theme.Colors.brandCreamStrong)
-            )
+            .background(Theme.Colors.brandCreamStrong)
+            .clipShape(RoundedRectangle(cornerRadius: SettingsLayout.versionCardCornerRadius, style: .continuous))
         }
         .disabled(viewModel.versionState == .actual)
         .accessibilityIdentifier("version_button")
     }
+
+    // MARK: - Logout button
 
     private var logoutButton: some View {
         Button(action: {
@@ -313,30 +359,24 @@ public struct SettingsView: View {
                     },
                     firstButtonTapped: {
                         viewModel.router.dismiss(animated: true)
-                        Task {
-                            await viewModel.logOut()
-                        }
+                        Task { await viewModel.logOut() }
                     },
                     type: .logOut
                 )
             }
         }) {
             HStack(spacing: 8) {
-                Text(ProfileLocalization.logout)
-                    .font(Theme.Fonts.titleMedium)
                 Image(systemName: "rectangle.portrait.and.arrow.right")
-                    .font(Theme.Fonts.ttRoundsSemibold(18))
+                    .font(.system(size: 16, weight: .medium))
+                Text(ProfileLocalization.logout)
+                    .font(Theme.Fonts.notoSans(15, weight: .semibold))
             }
-            .foregroundColor(Theme.Colors.guindaColor)
+            .foregroundStyle(Theme.Colors.semanticDestructive)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(
-                RoundedRectangle(cornerRadius: SettingsLayout.logoutCornerRadius, style: .continuous)
-                    .fill(Color.clear)
-            )
             .overlay(
                 RoundedRectangle(cornerRadius: SettingsLayout.logoutCornerRadius, style: .continuous)
-                    .stroke(Theme.Colors.guindaColor, lineWidth: SettingsLayout.logoutBorderWidth)
+                    .strokeBorder(Theme.Colors.semanticDestructive, lineWidth: SettingsLayout.logoutBorderWidth)
             )
         }
         .accessibilityElement(children: .ignore)
@@ -362,10 +402,11 @@ public struct SettingsView: View {
         coreStorage: CoreStorageMock()
     )
     SettingsView(viewModel: vm)
+        .loadFonts()
 }
 #endif
 
-// MARK: - SettingsCell (sin cambios)
+// MARK: - SettingsCell (retrocompatibilidad)
 
 public struct SettingsCell: View {
 
@@ -380,16 +421,16 @@ public struct SettingsCell: View {
     public var body: some View {
         VStack(alignment: .leading) {
             Text(title)
-                .font(Theme.Fonts.titleMedium)
+                .font(Theme.Fonts.notoSans(15, weight: .medium))
                 .accessibilityIdentifier("video_settings_text")
             if let description {
                 Text(description)
-                    .font(Theme.Fonts.bodySmall)
-                    .foregroundColor(Theme.Colors.textSecondary)
+                    .font(Theme.Fonts.notoSans(12, weight: .regular))
+                    .foregroundStyle(Theme.Colors.textSecondary)
                     .accessibilityIdentifier("video_settings_sub_text")
             }
         }
-        .foregroundColor(Theme.Colors.textPrimary)
+        .foregroundStyle(Theme.Colors.textPrimary)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
