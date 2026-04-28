@@ -2,6 +2,12 @@
 //  ProfileView.swift
 //  Profile
 //
+//  Fase 6 — Rediseño completo Profile
+//  6.1 Hero verde profundo + DecorativeRings + icon buttons + avatar 78pt
+//  6.2 Stats card flotante (-70pt overlap)
+//  6.3 "Mis constancias" carousel + BrandCertificateCard
+//  6.4 Menu rows (editar perfil, administrar cuenta, configuración)
+//
 
 import SwiftUI
 import Core
@@ -14,21 +20,13 @@ import OEXFoundation
 private enum ProfileLayout {
     static let horizontalPadding: CGFloat = 20
     static let heroTopPadding: CGFloat = 8
-    static let heroElementSpacing: CGFloat = 16
-    static let heroBottomSpacing: CGFloat = 16
-    static let heroMinHeight: CGFloat = 240
-    static let guindaBandHeight: CGFloat = 4
-    static let settingsButtonSize: CGFloat = 40
-    static let avatarSize: CGFloat = 90
-    static let handleWidth: CGFloat = 36
-    static let handleHeight: CGFloat = 4
-    static let handleTopPadding: CGFloat = 12
-    static let handleBottomPadding: CGFloat = 16
-    static let contentBottomPadding: CGFloat = 60
-    static let heroOverlap: CGFloat = 15
-    static let circleLargeSize: CGFloat = 210
-    static let circleMediumSize: CGFloat = 110
-    static let circleSmallSize: CGFloat = 70
+    static let heroElementSpacing: CGFloat = 12
+    static let heroMinHeight: CGFloat = 270
+    static let avatarSize: CGFloat = 78
+    static let iconButtonSize: CGFloat = 38
+    static let statsCardOverlap: CGFloat = 70
+    static let certCardWidth: CGFloat = 160
+    static let certCardHeight: CGFloat = 160
 }
 
 // MARK: - ProfileView
@@ -45,67 +43,36 @@ public struct ProfileView: View {
         GeometryReader { _ in
             ZStack(alignment: .top) {
 
-                // Fondo base
-                Theme.Colors.brandGreenDark
+                Theme.Colors.brandCream
                     .ignoresSafeArea()
 
-                // Banda guinda
-                Theme.Colors.guindaColor
-                    .frame(height: ProfileLayout.guindaBandHeight)
-                    .ignoresSafeArea(edges: .top)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .zIndex(10)
-
-                // Contenido scrollable
                 ScrollView {
                     VStack(spacing: 0) {
                         profileHero
-                        creamCard
-                            .padding(.top, -ProfileLayout.heroOverlap)
+
+                        statsCard
+                            .padding(.top, -ProfileLayout.statsCardOverlap)
+                            .padding(.horizontal, ProfileLayout.horizontalPadding)
+                            .zIndex(5)
+
+                        creamContent
+                            .padding(.top, 20)
                     }
                 }
                 .refreshable {
-                    Task {
-                        await viewModel.getMyProfile(withProgress: false)
-                    }
+                    Task { await viewModel.getMyProfile(withProgress: false) }
                 }
                 .accessibilityAction {}
                 .zIndex(1)
 
-                // Settings button — overlay fijo sobre el hero
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            viewModel.router.showSettings()
-                        }) {
-                            CoreAssets.settings.swiftUIImage
-                                .renderingMode(.template)
-                                .foregroundColor(.white)
-                                .frame(
-                                    width: ProfileLayout.settingsButtonSize,
-                                    height: ProfileLayout.settingsButtonSize
-                                )
-                                .background(Circle().fill(Color.white.opacity(0.14)))
-                                .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
-                        }
-                        .accessibilityIdentifier("settings_button")
-                    }
-                    .padding(.horizontal, ProfileLayout.horizontalPadding)
-                    .padding(.top, ProfileLayout.heroTopPadding)
-                    Spacer()
-                }
-                .zIndex(5)
+                topBar
+                    .zIndex(10)
 
-                // Offline snackbar
                 OfflineSnackBarView(
                     connectivity: viewModel.connectivity,
-                    reloadAction: {
-                        await viewModel.getMyProfile(withProgress: false)
-                    }
+                    reloadAction: { await viewModel.getMyProfile(withProgress: false) }
                 ).zIndex(2)
 
-                // Error snackbar
                 if viewModel.showError {
                     VStack {
                         Spacer()
@@ -125,141 +92,298 @@ public struct ProfileView: View {
                 }
             }
             .onAppear {
-                Task {
-                    await viewModel.getMyProfile()
-                }
+                Task { await viewModel.getMyProfile() }
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarHidden(true)
             .navigationTitle(ProfileLocalization.title)
             .onReceive(NotificationCenter.default.publisher(for: .profileUpdated)) { _ in
-                Task {
-                    await viewModel.getMyProfile()
-                }
+                Task { await viewModel.getMyProfile() }
             }
         }
     }
 
-    // MARK: - Hero
+    // MARK: - 6.1 Hero
 
     private var profileHero: some View {
         ZStack(alignment: .top) {
-
             Theme.Gradients.heroGradient
 
-            profileCircles
-                .allowsHitTesting(false)
+            DecorativeRings()
 
             VStack(spacing: ProfileLayout.heroElementSpacing) {
-
-                // Espacio para el settings button flotante
                 Color.clear
-                    .frame(height: ProfileLayout.settingsButtonSize)
+                    .frame(height: ProfileLayout.iconButtonSize + 8)
 
-                // Avatar
                 UserAvatar(
                     url: viewModel.userModel?.isFullProfile == true
                         ? (viewModel.userModel?.avatarUrl ?? "") : "",
                     image: viewModel.userModel?.isFullProfile == true
                         ? $viewModel.updatedAvatar : .constant(nil),
                     size: ProfileLayout.avatarSize,
-                    borderColor: .white.opacity(0.7)
+                    borderColor: .white.opacity(0.85)
                 )
                 .accessibilityIdentifier("user_avatar_image")
 
-                // Nombre + username
-                VStack(spacing: 4) {
+                VStack(spacing: 3) {
                     Text(viewModel.userModel?.name ?? "")
-                        .font(Theme.Fonts.ttRoundsCompressedMedium(24))
-                        .foregroundColor(.white)
+                        .font(Theme.Fonts.notoSans(24, weight: .bold))
+                        .foregroundStyle(Color.white)
                         .kerning(-0.3)
                         .accessibilityIdentifier("user_name_text")
 
                     Text("@\(viewModel.userModel?.username ?? "")")
-                        .font(Theme.Fonts.ttRoundsCompressedThinItalic(13))
-                        .foregroundColor(.white.opacity(0.7))
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.65))
                         .accessibilityIdentifier("user_username_text")
                 }
 
-                Spacer().frame(height: ProfileLayout.heroBottomSpacing)
+                Spacer().frame(height: ProfileLayout.statsCardOverlap + 4)
             }
             .padding(.top, ProfileLayout.heroTopPadding)
         }
         .frame(minHeight: ProfileLayout.heroMinHeight)
     }
 
-    private var profileCircles: some View {
-        ZStack {
-            Circle()
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 34)
-                .frame(width: ProfileLayout.circleLargeSize, height: ProfileLayout.circleLargeSize)
-                .offset(x: 130, y: -40)
-            Circle()
-                .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(width: ProfileLayout.circleMediumSize, height: ProfileLayout.circleMediumSize)
-                .offset(x: -120, y: 130)
-            Circle()
-                .strokeBorder(Color.white.opacity(0.07), lineWidth: 13)
-                .frame(width: ProfileLayout.circleSmallSize, height: ProfileLayout.circleSmallSize)
-                .offset(x: -70, y: 20)
+    // MARK: - Top bar (bell + settings)
+
+    private var topBar: some View {
+        VStack {
+            HStack {
+                Spacer()
+                HStack(spacing: 10) {
+                    profileIconButton(
+                        systemName: "bell",
+                        accessibilityLabel: "Notificaciones"
+                    ) {}
+
+                    profileIconButton(
+                        systemName: "gearshape",
+                        accessibilityLabel: ProfileLocalization.settings
+                    ) {
+                        HapticFeedback.selection()
+                        viewModel.router.showSettings()
+                    }
+                    .accessibilityIdentifier("settings_button")
+                }
+            }
+            .padding(.horizontal, ProfileLayout.horizontalPadding)
+            .padding(.top, ProfileLayout.heroTopPadding)
+            Spacer()
         }
     }
 
-    // MARK: - Cream Card
+    private func profileIconButton(
+        systemName: String,
+        accessibilityLabel: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(Color.white)
+                .frame(width: ProfileLayout.iconButtonSize, height: ProfileLayout.iconButtonSize)
+                .background(Circle().fill(Color.white.opacity(0.14)))
+                .overlay(Circle().strokeBorder(Color.white.opacity(0.22), lineWidth: 1))
+        }
+        .accessibilityLabel(accessibilityLabel)
+    }
 
-    private var creamCard: some View {
+    // MARK: - 6.2 Stats card flotante
+
+    private var statsCard: some View {
+        HStack(spacing: 0) {
+            Spacer()
+            profileStatColumn(value: "—", unit: nil, label: "Racha actual")
+            Spacer()
+            statDivider
+            Spacer()
+            profileStatColumn(value: "—", unit: nil, label: "Constancias")
+            Spacer()
+            statDivider
+            Spacer()
+            profileStatColumn(value: "—", unit: nil, label: "Esta semana")
+            Spacer()
+        }
+        .padding(.vertical, 20)
+        .background(Theme.Colors.surfaceWhite)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard))
+        .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 4)
+    }
+
+    private var statDivider: some View {
+        Rectangle()
+            .fill(Theme.Colors.brandCreamStrong)
+            .frame(width: 1, height: 36)
+    }
+
+    private func profileStatColumn(value: String, unit: String?, label: String) -> some View {
+        VStack(alignment: .center, spacing: 2) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text(value)
+                    .font(Theme.Fonts.notoSans(22, weight: .bold))
+                    .foregroundStyle(Theme.Colors.guindaColor)
+                if let unit {
+                    Text(unit)
+                        .font(Theme.Fonts.notoSans(12, weight: .medium))
+                        .foregroundStyle(Theme.Colors.textSecondary)
+                }
+            }
+            Text(label.uppercased())
+                .font(Theme.Fonts.notoSans(9, weight: .medium))
+                .tracking(0.5)
+                .foregroundStyle(Theme.Colors.textSecondary)
+                .lineLimit(1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(value)\(unit ?? ""), \(label)")
+    }
+
+    // MARK: - Cream content
+
+    private var creamContent: some View {
         VStack(spacing: 0) {
-
-            // Drag handle
-            Capsule()
-                .fill(Theme.Colors.brandHandle)
-                .frame(width: ProfileLayout.handleWidth, height: ProfileLayout.handleHeight)
-                .padding(.top, ProfileLayout.handleTopPadding)
-                .padding(.bottom, ProfileLayout.handleBottomPadding)
-
             if viewModel.isShowProgress {
                 ProgressBar(size: 40, lineWidth: 8)
                     .padding(.top, 60)
                     .padding(.horizontal)
-                    .frame(maxWidth: .infinity, minHeight: 300)
+                    .frame(maxWidth: .infinity, minHeight: 200)
                     .accessibilityIdentifier("progress_bar")
             } else {
-                VStack(spacing: 16) {
-
-                    // Edit Profile button — colores del proyecto
-                    StyledButton(
-                        ProfileLocalization.editProfile,
-                        action: {
-                            let userModel = viewModel.userModel ?? UserProfile()
-                            viewModel.trackProfileEditClicked()
-                            viewModel.router.showEditProfile(
-                                userModel: userModel,
-                                avatar: viewModel.updatedAvatar,
-                                profileDidEdit: { updatedProfile, updatedImage in
-                                    if let updatedProfile { viewModel.userModel = updatedProfile }
-                                    if let updatedImage { viewModel.updatedAvatar = updatedImage }
-                                }
-                            )
-                        },
-                        color: Theme.Colors.background,
-                        textColor: Theme.Colors.accentColor,
-                        borderColor: Theme.Colors.accentColor
-                    )
-                    .padding(.horizontal, ProfileLayout.horizontalPadding)
-
-                    // Bio (opcional)
+                VStack(spacing: 24) {
+                    certificatesSection
+                    menuSection
                     profileInfo
+                    Spacer().frame(height: 40)
                 }
                 .padding(.top, 8)
             }
-
-            // Filler — extiende el fondo crema hasta el borde inferior
-            Theme.Colors.brandCream
-                .frame(maxWidth: .infinity, minHeight: 300)
         }
         .frame(maxWidth: .infinity)
-        .background(Theme.Colors.brandCream)
-        .clipShape(ProfileSheetShape(radius: 32))
+    }
+
+    // MARK: - 6.3 Certificates carousel
+
+    private var certificatesSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            BrandSectionHeader("Mis constancias")
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    dashedCertPlaceholder
+                }
+                .padding(.horizontal, ProfileLayout.horizontalPadding)
+                .padding(.vertical, 2)
+            }
+        }
+    }
+
+    private var dashedCertPlaceholder: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "rosette")
+                .font(.system(size: 32, weight: .ultraLight))
+                .foregroundStyle(Theme.Colors.brandGreen.opacity(0.4))
+            Text("Continúa cursos para\nobtener constancias")
+                .font(Theme.Fonts.notoSans(12, weight: .regular))
+                .foregroundStyle(Theme.Colors.textSecondary)
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+        }
+        .padding(14)
+        .frame(width: ProfileLayout.certCardWidth, height: ProfileLayout.certCardHeight)
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard)
+                .strokeBorder(
+                    style: StrokeStyle(lineWidth: 1.5, dash: [6, 4])
+                )
+                .foregroundStyle(Theme.Colors.brandCreamStrong)
+        )
+        .accessibilityLabel("Completa cursos para obtener constancias")
+    }
+
+    // MARK: - 6.4 Menu rows
+
+    private var menuSection: some View {
+        VStack(spacing: 0) {
+            profileMenuRow(
+                icon: "person.crop.circle",
+                label: ProfileLocalization.editProfile
+            ) {
+                HapticFeedback.selection()
+                let userModel = viewModel.userModel ?? UserProfile()
+                viewModel.trackProfileEditClicked()
+                viewModel.router.showEditProfile(
+                    userModel: userModel,
+                    avatar: viewModel.updatedAvatar,
+                    profileDidEdit: { updatedProfile, updatedImage in
+                        if let updatedProfile { viewModel.userModel = updatedProfile }
+                        if let updatedImage { viewModel.updatedAvatar = updatedImage }
+                    }
+                )
+            }
+
+            menuDivider
+
+            profileMenuRow(
+                icon: "person.text.rectangle",
+                label: ProfileLocalization.manageAccount
+            ) {
+                HapticFeedback.selection()
+                viewModel.router.showManageAccount()
+            }
+
+            menuDivider
+
+            profileMenuRow(
+                icon: "gearshape",
+                label: ProfileLocalization.settings
+            ) {
+                HapticFeedback.selection()
+                viewModel.router.showSettings()
+            }
+        }
+        .background(Theme.Colors.surfaceWhite)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard))
+        .padding(.horizontal, ProfileLayout.horizontalPadding)
+    }
+
+    private var menuDivider: some View {
+        Rectangle()
+            .fill(Theme.Colors.brandCreamStrong)
+            .frame(height: 1)
+            .padding(.leading, 56)
+    }
+
+    private func profileMenuRow(
+        icon: String,
+        label: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Theme.Colors.brandGreen)
+                    .frame(width: 36, height: 36)
+                    .background(Theme.Colors.brandGreenTint)
+                    .clipShape(Circle())
+
+                Text(label)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
+                    .foregroundStyle(Theme.Colors.textPrimary)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Theme.Colors.textSecondary.opacity(0.5))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(.isButton)
     }
 
     // MARK: - Profile Info (bio)
@@ -267,14 +391,15 @@ public struct ProfileView: View {
     @ViewBuilder
     private var profileInfo: some View {
         if let bio = viewModel.userModel?.shortBiography, !bio.isEmpty {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(ProfileLocalization.about)
-                    .font(Theme.Fonts.titleSmall)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .font(Theme.Fonts.notoSans(11, weight: .semibold))
+                    .tracking(0.5)
+                    .foregroundStyle(Theme.Colors.brandGreen)
                     .accessibilityIdentifier("profile_info_text")
                 Text(bio)
-                    .font(Theme.Fonts.bodyMedium)
-                    .foregroundColor(Theme.Colors.textPrimary)
+                    .font(Theme.Fonts.notoSans(14, weight: .regular))
+                    .foregroundStyle(Theme.Colors.textPrimary)
                     .accessibilityIdentifier("bio_text")
             }
             .accessibilityElement(children: .ignore)
@@ -289,21 +414,6 @@ public struct ProfileView: View {
             .cardStyle(bgColor: Theme.Colors.textInputUnfocusedBackground, strokeColor: .clear)
             .padding(.horizontal, ProfileLayout.horizontalPadding)
         }
-    }
-}
-
-// MARK: - Shape para esquinas redondeadas solo arriba
-
-private struct ProfileSheetShape: Shape {
-    let radius: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: [.topLeft, .topRight],
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
     }
 }
 
@@ -323,11 +433,6 @@ struct ProfileView_Previews: PreviewProvider {
         ProfileView(viewModel: vm)
             .preferredColorScheme(.light)
             .previewDisplayName("ProfileView Light")
-            .loadFonts()
-
-        ProfileView(viewModel: vm)
-            .preferredColorScheme(.dark)
-            .previewDisplayName("ProfileView Dark")
             .loadFonts()
     }
 }
