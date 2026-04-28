@@ -31,6 +31,7 @@ public struct DynamicOffsetView: View {
     @Environment(\.isHorizontal) private var isHorizontal
     
     @State private var isOnTheScreen: Bool = false
+    @State private var hasSettled: Bool = false
     public init(
         coordinate: Binding<CGFloat>,
         collapsed: Binding<Bool>,
@@ -71,6 +72,12 @@ public struct DynamicOffsetView: View {
                     return .clear
                 }
                 DispatchQueue.main.async {
+                    // Skip first geometry read after mount to avoid spurious
+                    // "estoy al inicio" signal that re-expands the collapsed header.
+                    guard hasSettled else {
+                        hasSettled = true
+                        return
+                    }
                     coordinate = geometry.frame(in: .global).minY
                 }
                 return .clear
@@ -87,6 +94,7 @@ public struct DynamicOffsetView: View {
         }
         .onDisappear {
             isOnTheScreen = false
+            hasSettled = false
         }
         .onChange(of: collapsed) { collapsed in
             if externalHeightValue > 0 {
