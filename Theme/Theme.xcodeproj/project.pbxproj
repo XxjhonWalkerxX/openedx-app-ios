@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		0295B1DC297FF114003B0C65 /* fonts_file.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0295B1DA297FF0E9003B0C65 /* fonts_file.ttf */; };
 		D1A1F3C2B4E569781122AABB /* tt_rounds_neue_variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0A1F3C2B4E569781122AABB /* tt_rounds_neue_variable.ttf */; };
+		N001F3C2B4E569781122AABB /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N001F3C2B4E569781122BBBB /* NotoSans-Regular.ttf */; };
+		N002F3C2B4E569781122AABB /* NotoSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N002F3C2B4E569781122BBBB /* NotoSans-Medium.ttf */; };
+		N003F3C2B4E569781122AABB /* NotoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N003F3C2B4E569781122BBBB /* NotoSans-SemiBold.ttf */; };
+		N004F3C2B4E569781122AABB /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N004F3C2B4E569781122BBBB /* NotoSans-Bold.ttf */; };
+		N005F3C2B4E569781122AABB /* NotoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N005F3C2B4E569781122BBBB /* NotoSans-Italic.ttf */; };
+		N006F3C2B4E569781122AABB /* NotoSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N006F3C2B4E569781122BBBB /* NotoSans-MediumItalic.ttf */; };
+		N007F3C2B4E569781122AABB /* NotoSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N007F3C2B4E569781122BBBB /* NotoSans-SemiBoldItalic.ttf */; };
+		N008F3C2B4E569781122AABB /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = N008F3C2B4E569781122BBBB /* NotoSans-BoldItalic.ttf */; };
 		049A2F1F1CE68BB8A9373D0D /* Pods_App_Theme_ThemeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EBBA416BC61CD2B78879B7 /* Pods_App_Theme_ThemeTests.framework */; };
 		0770DE5428D0B00C006D8A5D /* swiftgen.yml in Resources */ = {isa = PBXBuildFile; fileRef = 0770DE5328D0B00C006D8A5D /* swiftgen.yml */; };
 		0770DE7B28D0C78C006D8A5D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0770DE7A28D0C78C006D8A5D /* Theme.swift */; };
@@ -46,6 +54,14 @@
 /* Begin PBXFileReference section */
 		0295B1DA297FF0E9003B0C65 /* fonts_file.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fonts_file.ttf; sourceTree = "<group>"; };
 		D0A1F3C2B4E569781122AABB /* tt_rounds_neue_variable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = tt_rounds_neue_variable.ttf; sourceTree = "<group>"; };
+		N001F3C2B4E569781122BBBB /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		N002F3C2B4E569781122BBBB /* NotoSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Medium.ttf"; sourceTree = "<group>"; };
+		N003F3C2B4E569781122BBBB /* NotoSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		N004F3C2B4E569781122BBBB /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		N005F3C2B4E569781122BBBB /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Italic.ttf"; sourceTree = "<group>"; };
+		N006F3C2B4E569781122BBBB /* NotoSans-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-MediumItalic.ttf"; sourceTree = "<group>"; };
+		N007F3C2B4E569781122BBBB /* NotoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		N008F3C2B4E569781122BBBB /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		D3A1F3C2B4E569781122AABB /* TTRoundsFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTRoundsFonts.swift; sourceTree = "<group>"; };
 		0754BB7841E3C0F8D6464951 /* Pods-App-Core.releasestage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Core.releasestage.xcconfig"; path = "Target Support Files/Pods-App-Core/Pods-App-Core.releasestage.xcconfig"; sourceTree = "<group>"; };
 		0770DE0828D07831006D8A5D /* Theme.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theme.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +138,14 @@
 			children = (
 				0295B1DA297FF0E9003B0C65 /* fonts_file.ttf */,
 				D0A1F3C2B4E569781122AABB /* tt_rounds_neue_variable.ttf */,
+				N001F3C2B4E569781122BBBB /* NotoSans-Regular.ttf */,
+				N002F3C2B4E569781122BBBB /* NotoSans-Medium.ttf */,
+				N003F3C2B4E569781122BBBB /* NotoSans-SemiBold.ttf */,
+				N004F3C2B4E569781122BBBB /* NotoSans-Bold.ttf */,
+				N005F3C2B4E569781122BBBB /* NotoSans-Italic.ttf */,
+				N006F3C2B4E569781122BBBB /* NotoSans-MediumItalic.ttf */,
+				N007F3C2B4E569781122BBBB /* NotoSans-SemiBoldItalic.ttf */,
+				N008F3C2B4E569781122BBBB /* NotoSans-BoldItalic.ttf */,
 				E0C716A62B0B05BA00858BAB /* fonts.json */,
 				E0C716A82B0B065600858BAB /* FontParser.swift */,
 				D3A1F3C2B4E569781122AABB /* TTRoundsFonts.swift */,
@@ -346,6 +370,14 @@
 				E0C716AB2B0B0B8E00858BAB /* Assets.xcassets in Resources */,
 				0295B1DC297FF114003B0C65 /* fonts_file.ttf in Resources */,
 				D1A1F3C2B4E569781122AABB /* tt_rounds_neue_variable.ttf in Resources */,
+				N001F3C2B4E569781122AABB /* NotoSans-Regular.ttf in Resources */,
+				N002F3C2B4E569781122AABB /* NotoSans-Medium.ttf in Resources */,
+				N003F3C2B4E569781122AABB /* NotoSans-SemiBold.ttf in Resources */,
+				N004F3C2B4E569781122AABB /* NotoSans-Bold.ttf in Resources */,
+				N005F3C2B4E569781122AABB /* NotoSans-Italic.ttf in Resources */,
+				N006F3C2B4E569781122AABB /* NotoSans-MediumItalic.ttf in Resources */,
+				N007F3C2B4E569781122AABB /* NotoSans-SemiBoldItalic.ttf in Resources */,
+				N008F3C2B4E569781122AABB /* NotoSans-BoldItalic.ttf in Resources */,
 				0770DE5428D0B00C006D8A5D /* swiftgen.yml in Resources */,
 				E0C716A72B0B05BA00858BAB /* fonts.json in Resources */,
 			);
