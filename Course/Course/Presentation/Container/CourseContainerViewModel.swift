@@ -1349,26 +1349,27 @@ public final class CourseContainerViewModel: BaseCourseViewModel {
     
     func assignmentTypeWeight(for assignmentType: String) -> Double? {
         guard let progressDetails = courseProgressDetails else { return nil }
-        
-        return progressDetails.gradingPolicy.assignmentPolicies
+
+        return progressDetails.gradingPolicy?.assignmentPolicies
             .first { $0.type == assignmentType }?
             .weight
     }
-    
+
     func assignmentTypeLabel(for assignmentType: String) -> String? {
         guard let progressDetails = courseProgressDetails else { return nil }
-        
-        return progressDetails.gradingPolicy.assignmentPolicies
+
+        return progressDetails.gradingPolicy?.assignmentPolicies
             .first { $0.type == assignmentType }?
             .type
     }
-    
+
     func assignmentTypeColor(for assignmentType: String) -> String? {
-        guard let progressDetails = courseProgressDetails else { return nil }
-        
-        if let index = progressDetails.gradingPolicy.assignmentPolicies
+        guard let progressDetails = courseProgressDetails,
+              let gradingPolicy = progressDetails.gradingPolicy else { return nil }
+
+        if let index = gradingPolicy.assignmentPolicies
             .firstIndex(where: { $0.type == assignmentType }) {
-            let colors = progressDetails.gradingPolicy.assignmentColors
+            let colors = gradingPolicy.assignmentColors
             return index < colors.count ? colors[index] : nil
         }
         return nil
@@ -1462,7 +1463,7 @@ public final class CourseContainerViewModel: BaseCourseViewModel {
             subsection.assignmentType ?? "unknown"
         }
 
-        assignmentSectionsData = progressDetails.gradingPolicy.assignmentPolicies.compactMap { policy in
+        assignmentSectionsData = (progressDetails.gradingPolicy?.assignmentPolicies ?? []).compactMap { policy in
             guard
                 let subsections = subsectionsByType[policy.type],
                 !subsections.isEmpty

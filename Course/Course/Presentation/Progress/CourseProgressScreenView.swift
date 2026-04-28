@@ -164,7 +164,7 @@ struct CourseProgressScreenView: View {
                         requiredGrade: viewModel.requiredGradePercentage,
                         assignmentPolicies: viewModel.assignmentPolicies,
                         assignmentProgressData: $viewModel.assignmentProgressData,
-                        assignmentColors: viewModel.courseProgress?.gradingPolicy.assignmentColors ?? []
+                        assignmentColors: viewModel.courseProgress?.gradingPolicy?.assignmentColors ?? []
                     )
                     .accessibilityElement(children: .contain)
                     .accessibilityLabel(CourseLocalization.Accessibility.overallGradeSection)

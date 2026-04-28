@@ -113,56 +113,56 @@ public class CourseOutlineAndProgressViewModel: ObservableObject {
     public var isProgressEmpty: Bool {
         guard let progress = courseProgress else { return true }
         return progress.sectionScores.isEmpty &&
-               progress.completionSummary.completeCount == 0 &&
-               progress.completionSummary.incompleteCount == 0
+               (progress.completionSummary?.completeCount ?? 0) == 0 &&
+               (progress.completionSummary?.incompleteCount ?? 0) == 0
     }
-    
+
     public var hasGradedAssignments: Bool {
         guard let progress = courseProgress else { return false }
-        
+
         // Check if there are any graded sections
         let hasGradedSections = progress.sectionScores.contains { section in
             section.subsections.contains { $0.hasGradedAssignment }
         }
-        
+
         // Check if there are any assignment policies
-        let hasAssignmentPolicies = !progress.gradingPolicy.assignmentPolicies.isEmpty
-        
+        let hasAssignmentPolicies = !(progress.gradingPolicy?.assignmentPolicies.isEmpty ?? true)
+
         return hasGradedSections && hasAssignmentPolicies
     }
-    
+
     public var overallProgressPercentage: Double {
         guard let progress = courseProgress else { return 0.0 }
-        return progress.completionSummary.completionPercentage
+        return progress.completionSummary?.completionPercentage ?? 0.0
     }
-    
+
     public var gradePercentage: Double {
-        courseProgress?.courseGrade.percent ?? 0.0
+        courseProgress?.courseGrade?.percent ?? 0.0
     }
-    
+
     public var isPassing: Bool {
-        courseProgress?.courseGrade.isPassing ?? false
+        courseProgress?.courseGrade?.isPassing ?? false
     }
-    
+
     public var hasCertificate: Bool {
-        guard let certStatus = courseProgress?.certificateData.certStatus else { return false }
+        guard let certStatus = courseProgress?.certificateData?.certStatus else { return false }
         return certStatus.contains("passing") || certStatus.contains("downloadable")
     }
-    
+
     public var certificateUrl: String? {
-        courseProgress?.certificateData.downloadUrl
+        courseProgress?.certificateData?.downloadUrl
     }
-    
+
     public var requiredGradePercentage: Double {
-        guard let gradeRange = courseProgress?.gradingPolicy.gradeRange,
+        guard let gradeRange = courseProgress?.gradingPolicy?.gradeRange,
               let passGrade = gradeRange["Pass"] else { return 0.0 }
         return passGrade
     }
-    
+
     public var assignmentPolicies: [CourseProgressAssignmentPolicy] {
-        courseProgress?.gradingPolicy.assignmentPolicies ?? []
+        courseProgress?.gradingPolicy?.assignmentPolicies ?? []
     }
-    
+
     public func getAssignmentProgress(for assignmentType: String) -> AssignmentProgressData {
         guard let courseProgress = courseProgress else {
             return AssignmentProgressData(
@@ -173,8 +173,8 @@ public class CourseOutlineAndProgressViewModel: ObservableObject {
                 percentGraded: 0.0
             )
         }
-        
-        guard let policy = courseProgress.gradingPolicy.assignmentPolicies
+
+        guard let policy = courseProgress.gradingPolicy?.assignmentPolicies
             .first(where: { $0.type == assignmentType }) else {
             return AssignmentProgressData(
                 completed: 0,
@@ -227,7 +227,7 @@ public class CourseOutlineAndProgressViewModel: ObservableObject {
         
         var progressData: [String: AssignmentProgressData] = [:]
         
-        for policy in courseProgress.gradingPolicy.assignmentPolicies {
+        for policy in courseProgress.gradingPolicy?.assignmentPolicies ?? [] {
             let data = getAssignmentProgress(for: policy.type)
             progressData[policy.type] = data
         }

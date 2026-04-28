@@ -394,40 +394,48 @@ public final class CoursePersistence: CoursePersistenceProtocol {
             newProgress.end = courseProgress.end
             newProgress.enrollmentMode = courseProgress.enrollmentMode
             newProgress.hasScheduledContent = courseProgress.hasScheduledContent
-            newProgress.assignmentColors = courseProgress.gradingPolicy.assignmentColors
-            
-            let certificateData = CDCertificateData(context: context)
-            certificateData.certStatus = courseProgress.certificateData.certStatus
-            certificateData.certWebViewUrl = courseProgress.certificateData.certWebViewUrl
-            certificateData.downloadUrl = courseProgress.certificateData.downloadUrl
-            certificateData.certificateAvailableDate = courseProgress.certificateData.certificateAvailableDate
-            newProgress.certificateData = certificateData
-            
-            let completionSummary = CDCompletionSummary(context: context)
-            completionSummary.completeCount = Int32(courseProgress.completionSummary.completeCount)
-            completionSummary.incompleteCount = Int32(courseProgress.completionSummary.incompleteCount)
-            completionSummary.lockedCount = Int32(courseProgress.completionSummary.lockedCount)
-            newProgress.completionSummary = completionSummary
-            
-            let courseGrade = CDCourseGrade(context: context)
-            courseGrade.letterGrade = courseProgress.courseGrade.letterGrade
-            courseGrade.percent = courseProgress.courseGrade.percent
-            courseGrade.isPassing = courseProgress.courseGrade.isPassing
-            newProgress.courseGrade = courseGrade
-            
-            let gradingPolicy = CDGradingPolicy(context: context)
-            gradingPolicy.gradeRangeData = courseProgress.gradingPolicy.gradeRange
-            
-            for assignmentPolicy in courseProgress.gradingPolicy.assignmentPolicies {
-                let cdAssignmentPolicy = CDAssignmentPolicy(context: context)
-                cdAssignmentPolicy.numDroppable = Int32(assignmentPolicy.numDroppable)
-                cdAssignmentPolicy.numTotal = Int32(assignmentPolicy.numTotal)
-                cdAssignmentPolicy.shortLabel = assignmentPolicy.shortLabel
-                cdAssignmentPolicy.type = assignmentPolicy.type
-                cdAssignmentPolicy.weight = assignmentPolicy.weight
-                gradingPolicy.addToAssignmentPolicies(cdAssignmentPolicy)
+            newProgress.assignmentColors = courseProgress.gradingPolicy?.assignmentColors ?? []
+
+            if let cert = courseProgress.certificateData {
+                let certificateData = CDCertificateData(context: context)
+                certificateData.certStatus = cert.certStatus
+                certificateData.certWebViewUrl = cert.certWebViewUrl
+                certificateData.downloadUrl = cert.downloadUrl
+                certificateData.certificateAvailableDate = cert.certificateAvailableDate
+                newProgress.certificateData = certificateData
             }
-            newProgress.gradingPolicy = gradingPolicy
+
+            if let summary = courseProgress.completionSummary {
+                let completionSummary = CDCompletionSummary(context: context)
+                completionSummary.completeCount = Int32(summary.completeCount)
+                completionSummary.incompleteCount = Int32(summary.incompleteCount)
+                completionSummary.lockedCount = Int32(summary.lockedCount)
+                newProgress.completionSummary = completionSummary
+            }
+
+            if let grade = courseProgress.courseGrade {
+                let courseGrade = CDCourseGrade(context: context)
+                courseGrade.letterGrade = grade.letterGrade
+                courseGrade.percent = grade.percent
+                courseGrade.isPassing = grade.isPassing
+                newProgress.courseGrade = courseGrade
+            }
+
+            if let policy = courseProgress.gradingPolicy {
+                let gradingPolicy = CDGradingPolicy(context: context)
+                gradingPolicy.gradeRangeData = policy.gradeRange
+
+                for assignmentPolicy in policy.assignmentPolicies {
+                    let cdAssignmentPolicy = CDAssignmentPolicy(context: context)
+                    cdAssignmentPolicy.numDroppable = Int32(assignmentPolicy.numDroppable)
+                    cdAssignmentPolicy.numTotal = Int32(assignmentPolicy.numTotal)
+                    cdAssignmentPolicy.shortLabel = assignmentPolicy.shortLabel
+                    cdAssignmentPolicy.type = assignmentPolicy.type
+                    cdAssignmentPolicy.weight = assignmentPolicy.weight
+                    gradingPolicy.addToAssignmentPolicies(cdAssignmentPolicy)
+                }
+                newProgress.gradingPolicy = gradingPolicy
+            }
             
             for sectionScore in courseProgress.sectionScores {
                 let cdSectionScore = CDSectionScore(context: context)

@@ -12,27 +12,27 @@ import Core
 public struct CourseProgressDetails: Sendable {
     public let verifiedMode: String?
     public let accessExpiration: String?
-    public let certificateData: CourseProgressCertificateData
-    public let completionSummary: CourseProgressCompletionSummary
-    public let courseGrade: CourseProgressGrade
+    public let certificateData: CourseProgressCertificateData?
+    public let completionSummary: CourseProgressCompletionSummary?
+    public let courseGrade: CourseProgressGrade?
     public let creditCourseRequirements: String?
     public let end: String?
     public let enrollmentMode: String
-    public let gradingPolicy: CourseProgressGradingPolicy
+    public let gradingPolicy: CourseProgressGradingPolicy?
     public let hasScheduledContent: Bool
     public let sectionScores: [CourseProgressSectionScore]
     public let verificationData: CourseProgressVerificationData?
-    
+
     public init(
         verifiedMode: String?,
         accessExpiration: String?,
-        certificateData: CourseProgressCertificateData,
-        completionSummary: CourseProgressCompletionSummary,
-        courseGrade: CourseProgressGrade,
+        certificateData: CourseProgressCertificateData?,
+        completionSummary: CourseProgressCompletionSummary?,
+        courseGrade: CourseProgressGrade?,
         creditCourseRequirements: String?,
         end: String?,
         enrollmentMode: String,
-        gradingPolicy: CourseProgressGradingPolicy,
+        gradingPolicy: CourseProgressGradingPolicy?,
         hasScheduledContent: Bool,
         sectionScores: [CourseProgressSectionScore],
         verificationData: CourseProgressVerificationData?
@@ -80,7 +80,7 @@ public struct CourseProgressDetails: Sendable {
     }
 
     public func getAssignmentProgress(for assignmentType: String) -> AssignmentProgressData {
-        guard let policy = self.gradingPolicy.assignmentPolicies
+        guard let policy = self.gradingPolicy?.assignmentPolicies
             .first(where: { $0.type == assignmentType }) else {
             return AssignmentProgressData(
                 completed: 0,

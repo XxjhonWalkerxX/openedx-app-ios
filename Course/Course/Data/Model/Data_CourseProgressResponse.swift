@@ -13,19 +13,19 @@ public extension DataLayer {
     struct CourseProgressResponse: Codable, Sendable {
         public let verifiedMode: String?
         public let accessExpiration: String?
-        public let certificateData: CertificateData
-        public let completionSummary: CompletionSummary
-        public let courseGrade: CourseGrade
+        public let certificateData: CertificateData?
+        public let completionSummary: CompletionSummary?
+        public let courseGrade: CourseGrade?
         public let creditCourseRequirements: String?
         public let end: String?
         public let enrollmentMode: String
-        public let gradingPolicy: GradingPolicy
+        public let gradingPolicy: GradingPolicy?
         public let hasScheduledContent: Bool?
         public let sectionScores: [SectionScore]
         public let studioUrl: String
         public let username: String
         public let userHasPassingGrade: Bool
-        public let verificationData: VerificationData
+        public let verificationData: VerificationData?
         public let disableProgressGraph: Bool
         
         enum CodingKeys: String, CodingKey {
@@ -50,19 +50,19 @@ public extension DataLayer {
         public init(
             verifiedMode: String?,
             accessExpiration: String?,
-            certificateData: CertificateData,
-            completionSummary: CompletionSummary,
-            courseGrade: CourseGrade,
+            certificateData: CertificateData?,
+            completionSummary: CompletionSummary?,
+            courseGrade: CourseGrade?,
             creditCourseRequirements: String?,
             end: String?,
             enrollmentMode: String,
-            gradingPolicy: GradingPolicy,
+            gradingPolicy: GradingPolicy?,
             hasScheduledContent: Bool?,
             sectionScores: [SectionScore],
             studioUrl: String,
             username: String,
             userHasPassingGrade: Bool,
-            verificationData: VerificationData,
+            verificationData: VerificationData?,
             disableProgressGraph: Bool
         ) {
             self.verifiedMode = verifiedMode
@@ -300,16 +300,16 @@ public extension DataLayer.CourseProgressResponse {
         CourseProgressDetails(
             verifiedMode: verifiedMode,
             accessExpiration: accessExpiration,
-            certificateData: certificateData.domain,
-            completionSummary: completionSummary.domain,
-            courseGrade: courseGrade.domain,
+            certificateData: certificateData?.domain,
+            completionSummary: completionSummary?.domain,
+            courseGrade: courseGrade?.domain,
             creditCourseRequirements: creditCourseRequirements,
             end: end,
             enrollmentMode: enrollmentMode,
-            gradingPolicy: gradingPolicy.domain,
+            gradingPolicy: gradingPolicy?.domain,
             hasScheduledContent: hasScheduledContent ?? false,
             sectionScores: sectionScores.map { $0.domain },
-            verificationData: verificationData.domain
+            verificationData: verificationData?.domain
         )
     }
 }

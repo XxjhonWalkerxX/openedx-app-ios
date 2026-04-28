@@ -71,7 +71,7 @@ struct CourseGradeCarouselSlideView: View {
                 requiredGrade: viewModelProgress.requiredGradePercentage,
                 assignmentPolicies: viewModelProgress.assignmentPolicies,
                 assignmentProgressData: $viewModelProgress.assignmentProgressData,
-                assignmentColors: viewModelProgress.courseProgress?.gradingPolicy.assignmentColors ?? [],
+                assignmentColors: viewModelProgress.courseProgress?.gradingPolicy?.assignmentColors ?? [],
                 isCarousel: true
             )
             .padding(.horizontal, 16)
