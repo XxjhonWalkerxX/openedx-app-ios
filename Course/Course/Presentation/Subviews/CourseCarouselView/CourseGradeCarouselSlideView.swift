@@ -45,7 +45,7 @@ struct CourseGradeCarouselSlideView: View {
     private var headerView: some View {
         Text(CourseLocalization.CourseCarousel.grades)
             .foregroundStyle(Theme.Colors.textPrimary)
-            .font(Theme.Fonts.titleLarge)
+            .font(Theme.Fonts.notoSans(18, weight: .semibold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipped()
             .padding(.bottom, 16)
@@ -56,7 +56,7 @@ struct CourseGradeCarouselSlideView: View {
     private var descriptionView: some View {
         Text(CourseLocalization.CourseCarousel.gradesDescription)
             .foregroundStyle(Theme.Colors.textSecondaryDark)
-            .font(Theme.Fonts.bodyMedium)
+            .font(Theme.Fonts.notoSans(14, weight: .regular))
             .lineLimit(2)
             .padding(.bottom, 12)
             .accessibilityLabel(CourseLocalization.CourseCarousel.gradesDescription)
@@ -112,7 +112,7 @@ struct CourseGradeCarouselSlideView: View {
             CoreAssets.iconWarning.swiftUIImage
 
             Text(CourseLocalization.CourseContainer.Progress.noGradedAssignments)
-                .font(Theme.Fonts.titleMedium)
+                .font(Theme.Fonts.notoSans(15, weight: .medium))
                 .foregroundColor(Theme.Colors.textPrimary)
                 .multilineTextAlignment(.center)
         }

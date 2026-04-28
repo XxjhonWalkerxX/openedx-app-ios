@@ -113,7 +113,7 @@ struct CourseVideoCarouselSlideView: View {
                         VStack(spacing: 8) {
                             CoreAssets.checkCircleCarousel.swiftUIImage
                             Text(CourseLocalization.CourseCarousel.allVideosCompleted)
-                                .font(Theme.Fonts.titleMedium)
+                                .font(Theme.Fonts.notoSans(15, weight: .medium))
                                 .foregroundColor(Theme.Colors.textPrimary)
                                 .multilineTextAlignment(.center)
                         }
@@ -150,7 +150,7 @@ struct CourseVideoCarouselSlideView: View {
     private var headerView: some View {
         Text(CourseLocalization.CourseContent.videos)
             .foregroundStyle(Theme.Colors.textPrimary)
-            .font(Theme.Fonts.titleLarge)
+            .font(Theme.Fonts.notoSans(18, weight: .semibold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipped()
             .padding(.bottom, 12)
@@ -178,7 +178,7 @@ struct CourseVideoCarouselSlideView: View {
                     }
 
                     Text(CourseLocalization.CourseCarousel.videosCompleted)
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                         .foregroundStyle(Theme.Colors.textSecondaryDark)
                         .frame(height: 44)
                 }
@@ -218,7 +218,7 @@ struct CourseVideoCarouselSlideView: View {
                     CourseLocalization.CourseCarousel.nextVideo :
                         CourseLocalization.CourseCarousel.continueWatching
                 )
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundStyle(Theme.Colors.textPrimary)
 
                 VStack {
@@ -238,7 +238,7 @@ struct CourseVideoCarouselSlideView: View {
 
                     HStack {
                         Text("")
-                            .font(Theme.Fonts.labelMedium)
+                            .font(Theme.Fonts.notoSans(12, weight: .medium))
                             .foregroundStyle(Theme.Colors.textPrimary)
 
                         Spacer()

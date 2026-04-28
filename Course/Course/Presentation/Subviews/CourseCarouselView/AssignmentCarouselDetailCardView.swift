@@ -36,7 +36,7 @@ struct AssignmentCarouselDetailCardView: View {
 
                         Text(detailData.subsectionUI.status == .pastDue ? CoreLocalization.CourseDates.pastDue
                              : CourseLocalization.CourseCarousel.nextAssignments)
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                         .foregroundStyle(Theme.Colors.textPrimary)
                     }
 
@@ -44,16 +44,16 @@ struct AssignmentCarouselDetailCardView: View {
                         VStack(alignment: .leading) {
                             if detailData.subsectionUI.date != nil {
                                 Text(statusText)
-                                    .font(Theme.Fonts.labelSmall)
+                                    .font(Theme.Fonts.notoSans(10, weight: .medium))
                                     .foregroundColor(Theme.Colors.accentColor)
                             }
 
                             Text(subsectionUI.subsection.displayName)
-                                .font(Theme.Fonts.titleSmall)
+                                .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                 .foregroundColor(Theme.Colors.textPrimary)
 
                             Text(sectionName)
-                                .font(Theme.Fonts.labelSmall)
+                                .font(Theme.Fonts.notoSans(10, weight: .medium))
                                 .foregroundColor(Theme.Colors.textSecondaryDark)
                         }
 

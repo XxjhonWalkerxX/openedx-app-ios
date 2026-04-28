@@ -129,7 +129,7 @@ struct CourseAssignmentsCarouselSlideView: View {
                         VStack(spacing: 8) {
                             CoreAssets.checkCircleCarousel.swiftUIImage
                             Text(CourseLocalization.CourseCarousel.allAssignmentsCompleted)
-                                .font(Theme.Fonts.titleMedium)
+                                .font(Theme.Fonts.notoSans(15, weight: .medium))
                                 .foregroundColor(Theme.Colors.textPrimary)
                                 .multilineTextAlignment(.center)
                         }
@@ -184,7 +184,7 @@ struct CourseAssignmentsCarouselSlideView: View {
     private var headerView: some View {
         Text(CourseLocalization.CourseContent.assignments)
             .foregroundStyle(Theme.Colors.textPrimary)
-            .font(Theme.Fonts.titleLarge)
+            .font(Theme.Fonts.notoSans(18, weight: .semibold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipped()
             .padding(.bottom, 12)
@@ -213,7 +213,7 @@ struct CourseAssignmentsCarouselSlideView: View {
                             .padding(.trailing, 8)
 
                         Text(CourseLocalization.CourseCarousel.assigmentsCompleted)
-                            .font(Theme.Fonts.labelLarge)
+                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                             .foregroundStyle(Theme.Colors.textSecondaryDark)
                             .frame(height: 44)
 

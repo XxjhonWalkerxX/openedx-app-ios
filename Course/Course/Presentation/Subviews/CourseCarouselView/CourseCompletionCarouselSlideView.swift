@@ -65,7 +65,7 @@ struct CourseCompletionCarouselSlideView<DownloadBarsView: View>: View {
     private var headerView: some View {
         Text(CourseLocalization.CourseContainer.Progress.title)
             .foregroundStyle(Theme.Colors.textPrimary)
-            .font(Theme.Fonts.titleLarge)
+            .font(Theme.Fonts.notoSans(18, weight: .semibold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipped()
     }
@@ -78,12 +78,12 @@ struct CourseCompletionCarouselSlideView<DownloadBarsView: View>: View {
         return HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(CourseLocalization.CourseContainer.progress)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundColor(Theme.Colors.textPrimary)
                     .accessibilityAddTraits(.isHeader)
 
                 Text(CourseLocalization.CourseCarousel.progressCompletion(progressPercentage))
-                    .font(Theme.Fonts.bodyMedium)
+                    .font(Theme.Fonts.notoSans(14, weight: .regular))
                     .foregroundColor(Theme.Colors.textSecondaryDark)
                     .lineLimit(nil)
             }
@@ -153,7 +153,7 @@ struct CourseCompletionCarouselSlideView<DownloadBarsView: View>: View {
             VStack {
                 HStack {
                     Text("\(chapter.displayName)")
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                         .foregroundColor(Theme.Colors.textPrimary)
 
                     Spacer()
@@ -187,7 +187,7 @@ struct CourseCompletionCarouselSlideView<DownloadBarsView: View>: View {
                         .frame(width: 20, height: 20)
 
                     Text(sequential.displayName)
-                        .font(Theme.Fonts.titleSmall)
+                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                         .frame(

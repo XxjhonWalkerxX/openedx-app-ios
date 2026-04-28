@@ -167,7 +167,7 @@ public struct CourseOutlineAndProgressView: View {
 
                                 }
                                 .background(
-                                    Theme.Colors.background
+                                    Theme.Colors.brandCream
                                         .ignoresSafeArea()
                                 )
                                 .opacity(viewModelProgress.isLoading || viewModelContainer.isShowProgress ? 0 : 1)
@@ -435,14 +435,14 @@ public struct CourseOutlineAndProgressView: View {
 
                 VStack(alignment: .leading) {
                     Text(CourseLocalization.CourseCarousel.upgradeNowBody)
-                        .font(Theme.Fonts.bodySmall)
+                        .font(Theme.Fonts.notoSans(12, weight: .regular))
                         .foregroundStyle(Theme.Colors.textPrimary)
 
                     if let url = URL(string: url) {
                         Link(destination: url) {
                             Text(CourseLocalization.CourseCarousel.upgradeNowButton)
                                 .underline()
-                                .font(Theme.Fonts.bodySmall)
+                                .font(Theme.Fonts.notoSans(12, weight: .regular))
                                 .foregroundStyle(Theme.Colors.textPrimary)
                         }
                         .buttonStyle(.plain)
