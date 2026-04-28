@@ -26,17 +26,47 @@ struct MainScreenView: View {
     
     init(viewModel: MainScreenViewModel) {
         self.viewModel = viewModel
-        UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().barTintColor = Theme.UIColors.tabbarActiveColor
-        UITabBar.appearance().backgroundColor = Theme.UIColors.tabbarBGColor
-        UITabBar.appearance().unselectedItemTintColor = Theme.UIColors.tabbarInactiveColor
-        
-        UITabBarItem.appearance().setTitleTextAttributes(
-            [NSAttributedString.Key.font: Theme.UIFonts.labelSmall()],
-            for: .normal
-        )
+        UITabBar.appearance().isHidden = true
     }
     
+    private var visibleTabs: [BrandTabItem<MainTab>] {
+        var tabs: [BrandTabItem<MainTab>] = []
+        tabs.append(BrandTabItem(
+            id: .dashboard,
+            icon: "house", activeIcon: "house.fill",
+            label: viewModel.config.dashboard.type == .list
+                ? CoreLocalization.Mainscreen.dashboard
+                : CoreLocalization.Mainscreen.learn
+        ))
+        if viewModel.config.dashboard.type == .list && viewModel.config.program.enabled {
+            tabs.append(BrandTabItem(
+                id: .programs,
+                icon: "graduationcap", activeIcon: "graduationcap.fill",
+                label: CoreLocalization.Mainscreen.programs
+            ))
+        }
+        if viewModel.config.discovery.enabled {
+            tabs.append(BrandTabItem(
+                id: .discovery,
+                icon: "magnifyingglass", activeIcon: "magnifyingglass",
+                label: CoreLocalization.Mainscreen.discovery
+            ))
+        }
+        if viewModel.config.experimentalFeatures.appLevelDownloadsEnabled {
+            tabs.append(BrandTabItem(
+                id: .downloads,
+                icon: "arrow.down.circle", activeIcon: "arrow.down.circle.fill",
+                label: DownloadsLocalization.Downloads.title
+            ))
+        }
+        tabs.append(BrandTabItem(
+            id: .profile,
+            icon: "person.crop.circle", activeIcon: "person.crop.circle.fill",
+            label: CoreLocalization.Mainscreen.profile
+        ))
+        return tabs
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $viewModel.selection) {
@@ -220,6 +250,12 @@ struct MainScreenView: View {
                 }
             }
             .accentColor(Theme.Colors.accentXColor)
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 88)
+            }
+
+            BrandTabBar(tabs: visibleTabs, selection: $viewModel.selection)
+
             if updateAvailable {
                 UpdateNotificationView(config: viewModel.config)
             }

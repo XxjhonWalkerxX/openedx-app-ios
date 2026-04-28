@@ -38,6 +38,7 @@
 		D6A1F3C2B4E569781122AABB /* PatternCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A2F3C2B4E569781122AABB /* PatternCover.swift */; };
 		D6B1F3C2B4E569781122AABB /* DecorativeRings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */; };
 		D6C1F3C2B4E569781122AABB /* NotoSansFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C2F3C2B4E569781122AABB /* NotoSansFonts.swift */; };
+		E2A1F3C2B4E569781122AABB /* BrandTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A2F3C2B4E569781122AABB /* BrandTabBar.swift */; };
 		E0D6E6B22B16EA380089F9C9 /* Theme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0770DE0828D07831006D8A5D /* Theme.framework */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
@@ -107,6 +108,7 @@
 		D5F2F3C2B4E569781122AABB /* BrandFactTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandFactTile.swift; sourceTree = "<group>"; };
 		D6A2F3C2B4E569781122AABB /* PatternCover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternCover.swift; sourceTree = "<group>"; };
 		D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecorativeRings.swift; sourceTree = "<group>"; };
+		E2A2F3C2B4E569781122AABB /* BrandTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandTabBar.swift; sourceTree = "<group>"; };
 		D6C2F3C2B4E569781122AABB /* NotoSansFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotoSansFonts.swift; sourceTree = "<group>"; };
 		E0D6E6AE2B16EA380089F9C9 /* ThemeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThemeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6E09DC289758CE811EF93D8 /* Pods-App-Theme-ThemeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Theme-ThemeTests.release.xcconfig"; path = "Target Support Files/Pods-App-Theme-ThemeTests/Pods-App-Theme-ThemeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				D5F2F3C2B4E569781122AABB /* BrandFactTile.swift */,
 				D6A2F3C2B4E569781122AABB /* PatternCover.swift */,
 				D6B2F3C2B4E569781122AABB /* DecorativeRings.swift */,
+				E2A2F3C2B4E569781122AABB /* BrandTabBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				D5F1F3C2B4E569781122AABB /* BrandFactTile.swift in Sources */,
 				D6A1F3C2B4E569781122AABB /* PatternCover.swift in Sources */,
 				D6B1F3C2B4E569781122AABB /* DecorativeRings.swift in Sources */,
+				E2A1F3C2B4E569781122AABB /* BrandTabBar.swift in Sources */,
 				0770DE7B28D0C78C006D8A5D /* Theme.swift in Sources */,
 				E0D6E69F2B161BD70089F9C9 /* ThemeAssets.swift in Sources */,
 			);
