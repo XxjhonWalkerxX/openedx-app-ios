@@ -68,7 +68,7 @@ struct ContentSegmentedControl: View {
                         }
                     }) {
                         Text(tab.title)
-                            .font(Theme.Fonts.ttRoundsBody(13, weight: 700))
+                            .font(Theme.Fonts.notoSans(13, weight: .semibold))
                             .foregroundColor(isSelected ? Theme.Colors.brandGreen : unselectedColor)
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
@@ -95,7 +95,7 @@ struct ContentSegmentedControl: View {
                    total > 0 {
                     HStack(spacing: 6) {
                         Text("\(completed)/\(total)")
-                            .font(Theme.Fonts.ttRoundsBody(10, weight: 700))
+                            .font(Theme.Fonts.notoSans(10, weight: .semibold))
                             .foregroundColor(unselectedColor)
 
                         ZStack(alignment: .leading) {
@@ -137,7 +137,7 @@ struct ContentSegmentedControl: View {
             .padding(.horizontal, 16)
         
         Text("Selected: \(selectedTab.title)")
-            .font(Theme.Fonts.titleMedium)
+            .font(Theme.Fonts.notoSans(15, weight: .medium))
         
         Spacer()
     }

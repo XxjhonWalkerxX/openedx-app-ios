@@ -140,7 +140,7 @@ struct AssignmentsContentView: View {
                                                     ) ?? Color.accentColor
                                                     
                                                     Text("\(Int(section.weight * 100))% of Grade")
-                                                        .font(Theme.Fonts.bodySmall)
+                                                        .font(Theme.Fonts.notoSans(12, weight: .regular))
                                                         .foregroundStyle(Theme.Colors.textPrimary)
                                                         .padding(.horizontal, 8)
                                                         .padding(.vertical, 4)

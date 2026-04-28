@@ -105,7 +105,7 @@ struct AssignmentCardSmallView: View {
         Button(action: onTap) {
             VStack(spacing: 8) {
                 Text(assignmentShortName)
-                    .font(Theme.Fonts.bodyMedium)
+                    .font(Theme.Fonts.notoSans(14, weight: .regular))
                     .foregroundColor(Theme.Colors.textPrimary)
                     .lineLimit(1)
             }

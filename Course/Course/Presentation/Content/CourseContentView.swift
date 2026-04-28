@@ -126,7 +126,7 @@ public struct CourseContentView: View {
                         HStack(spacing: 4) {
                             CoreAssets.gallery.swiftUIImage.renderingMode(.template)
                             Text(CourseLocalization.Assignment.reviewGradingPolicy)
-                                .font(Theme.Fonts.labelLarge)
+                                .font(Theme.Fonts.notoSans(13, weight: .medium))
                         }
                         .foregroundStyle(Theme.Colors.accentColor)
                         })

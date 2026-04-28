@@ -39,7 +39,7 @@ struct NoContentAvailable: View {
                  ? CourseLocalization.Error.videosUnavailable
                  :CourseLocalization.Error.assignmentsUnavailable
             )
-            .font(Theme.Fonts.titleMedium)
+            .font(Theme.Fonts.notoSans(15, weight: .medium))
             .foregroundColor(Theme.Colors.textPrimary)
             .multilineTextAlignment(.center)
 

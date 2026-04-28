@@ -60,7 +60,7 @@ struct VideoSectionView: View {
                                 allVideos.count
                             )
                         )
-                            .font(Theme.Fonts.bodySmall)
+                            .font(Theme.Fonts.notoSans(12, weight: .regular))
                             .foregroundColor(Theme.Colors.textPrimary)
                     }
                     .accessibilityElement(children: .combine)

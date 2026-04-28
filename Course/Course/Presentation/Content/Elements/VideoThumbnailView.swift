@@ -53,11 +53,11 @@ enum VideoThumbnailType {
     var font: Font {
         switch self {
         case .contentVideo:
-            Theme.Fonts.bodySmall
+            Theme.Fonts.notoSans(12, weight: .regular)
         case .navigationVideo:
             Theme.Fonts.labelSmall
         case .continueWith:
-            Theme.Fonts.titleMedium
+            Theme.Fonts.notoSans(15, weight: .medium)
         }
     }
 }

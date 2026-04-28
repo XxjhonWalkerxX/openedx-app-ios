@@ -58,7 +58,7 @@ struct AssignmentDetailCardView: View {
                         .foregroundColor(Theme.Colors.textPrimary)
                     HStack {
                         Text(statusText)
-                            .font(Theme.Fonts.bodySmall)
+                            .font(Theme.Fonts.notoSans(12, weight: .regular))
                             .foregroundColor(Theme.Colors.textPrimary)
 
                         Spacer()
