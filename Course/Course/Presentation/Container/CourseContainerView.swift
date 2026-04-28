@@ -63,16 +63,6 @@ public struct CourseContainerView: View {
         self.viewModel = viewModel
         self.courseDatesViewModel = courseDatesViewModel
         self.courseProgressViewModel = courseProgressViewModel
-        Task {
-            await withTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    await viewModel.getCourseBlocks(courseID: courseID)
-                }
-                group.addTask {
-                    await viewModel.getCourseDeadlineInfo(courseID: courseID, withProgress: false)
-                }
-            }
-        }
         self.courseID = courseID
         self.title = title
         self.courseRawImage = courseRawImage
@@ -100,6 +90,16 @@ public struct CourseContainerView: View {
         .onChange(of: viewModel.selection, perform: didSelect)
         .onChange(of: coordinate, perform: collapseHeader)
         .background(Theme.Colors.background)
+        .task(id: courseID) {
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await viewModel.getCourseBlocks(courseID: courseID)
+                }
+                group.addTask {
+                    await viewModel.getCourseDeadlineInfo(courseID: courseID, withProgress: false)
+                }
+            }
+        }
     }
     
     @ViewBuilder
