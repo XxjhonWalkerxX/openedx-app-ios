@@ -185,24 +185,44 @@ public struct ProfileView: View {
     // MARK: - 6.2 Stats card flotante
 
     private var statsCard: some View {
-        HStack(spacing: 0) {
-            Spacer()
-            profileStatColumn(value: "—", unit: nil, label: "Racha actual")
-            Spacer()
-            statDivider
-            Spacer()
-            profileStatColumn(value: "—", unit: nil, label: "Constancias")
-            Spacer()
-            statDivider
-            Spacer()
-            profileStatColumn(value: "—", unit: nil, label: "Esta semana")
-            Spacer()
+        let user = viewModel.userModel
+        let memberSince: String? = user.map { Self.memberSinceFormatter.string(from: $0.dateJoined) }
+        let country: String? = (user?.country).flatMap { $0.isEmpty ? nil : $0 }
+        let yearOfBirth: String? = (user?.yearOfBirth).flatMap { $0 != 0 ? String($0) : nil }
+
+        let columns: [(value: String, label: String)] = [
+            memberSince.map { (value: $0, label: "Miembro desde") },
+            country.map { (value: $0, label: "País") },
+            yearOfBirth.map { (value: $0, label: "Año nacimiento") }
+        ].compactMap { $0 }
+
+        return HStack(spacing: 0) {
+            if columns.isEmpty {
+                profileStatColumn(value: "—", unit: nil, label: "Miembro desde")
+                    .frame(maxWidth: .infinity)
+            } else {
+                ForEach(Array(columns.enumerated()), id: \.offset) { idx, col in
+                    Spacer()
+                    profileStatColumn(value: col.value, unit: nil, label: col.label)
+                    Spacer()
+                    if idx < columns.count - 1 {
+                        statDivider
+                    }
+                }
+            }
         }
         .padding(.vertical, 20)
         .background(Theme.Colors.surfaceWhite)
         .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard))
         .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 4)
     }
+
+    private static let memberSinceFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "es_MX")
+        df.dateFormat = "LLL yyyy"
+        return df
+    }()
 
     private var statDivider: some View {
         Rectangle()
