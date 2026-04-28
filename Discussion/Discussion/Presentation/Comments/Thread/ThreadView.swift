@@ -104,7 +104,7 @@ public struct ThreadView: View {
                                         }
                                         .padding(.top, 20)
                                         .padding(.leading, 24)
-                                        .font(Theme.Fonts.titleMedium)
+                                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                         let useRelativeDates = viewModel.storage.useRelativeDates
                                         

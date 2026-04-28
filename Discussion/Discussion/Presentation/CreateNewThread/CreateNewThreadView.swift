@@ -52,7 +52,7 @@ public struct CreateNewThreadView: View {
                             VStack(alignment: .leading) {
                                 HStack {
                                     Text(DiscussionLocalization.CreateThread.selectPostType)
-                                        .font(Theme.Fonts.titleMedium)
+                                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                         .padding(.top, 32)
                                     Spacer()
@@ -61,7 +61,7 @@ public struct CreateNewThreadView: View {
                                 Picker("", selection: $postType) {
                                     ForEach(postTypes, id: \.self) {
                                         Text($0.localizedValue.capitalized)
-                                            .font(Theme.Fonts.bodySmall)
+                                            .font(Theme.Fonts.notoSans(12, weight: .regular))
                                     }
                                 }.pickerStyle(.segmented)
                                     .frame(maxWidth: .infinity, maxHeight: 40)
@@ -70,7 +70,7 @@ public struct CreateNewThreadView: View {
                                 Group {
                                     Text(DiscussionLocalization.CreateThread.topic)
                                         .foregroundColor(Theme.Colors.textPrimary)
-                                        .font(Theme.Fonts.titleSmall)
+                                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                         .padding(.top, 16)
                                     
                                     Menu {
@@ -78,14 +78,14 @@ public struct CreateNewThreadView: View {
                                             ForEach(viewModel.allTopics, id: \.id) {
                                                 Text($0.name)
                                                     .tag($0.id)
-                                                    .font(Theme.Fonts.labelLarge)
+                                                    .font(Theme.Fonts.notoSans(13, weight: .medium))
                                             }
                                         } label: {}
                                     } label: {
                                         HStack {
                                             Text(viewModel.allTopics.first(where: {
                                                 $0.id == viewModel.selectedTopic })?.name ?? "")
-                                            .font(Theme.Fonts.labelLarge)
+                                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                                             .foregroundColor(Theme.Colors.textInputTextColor)
                                             .frame(height: 40, alignment: .leading)
                                             Spacer()
@@ -108,12 +108,12 @@ public struct CreateNewThreadView: View {
                                 
                                 Group {
                                     Text(DiscussionLocalization.CreateThread.title)
-                                        .font(Theme.Fonts.titleSmall)
+                                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                     + Text(" *").foregroundColor(Theme.Colors.alert)
                                 }.padding(.top, 16)
                                 TextField("", text: $postTitle)
-                                    .font(Theme.Fonts.bodyLarge)
+                                    .font(Theme.Fonts.notoSans(16, weight: .regular))
                                     .foregroundColor(Theme.Colors.textInputTextColor)
                                     .padding(14)
                                     .frame(height: 40)
@@ -131,12 +131,12 @@ public struct CreateNewThreadView: View {
                                 
                                 Group {
                                     Text("\(postType.localizedValue.capitalized)")
-                                        .font(Theme.Fonts.titleSmall)
+                                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                     + Text(" *").foregroundColor(Theme.Colors.alert)
                                 }.padding(.top, 16)
                                 TextEditor(text: $postBody)
-                                    .font(Theme.Fonts.bodyMedium)
+                                    .font(Theme.Fonts.notoSans(14, weight: .regular))
                                     .foregroundColor(Theme.Colors.textInputTextColor)
                                     .padding(.horizontal, 10)
                                     .padding(.vertical, 10)

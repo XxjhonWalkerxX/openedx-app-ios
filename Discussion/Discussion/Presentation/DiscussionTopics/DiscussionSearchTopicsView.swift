@@ -51,7 +51,7 @@ public struct DiscussionSearchTopicsView: View {
                                 self.focused = true
                             }
                             .foregroundColor(Theme.Colors.textInputTextColor)
-                            .font(Theme.Fonts.bodyMedium)
+                            .font(Theme.Fonts.notoSans(14, weight: .regular))
                         Spacer()
                         if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
                             Button(action: { viewModel.searchText.removeAll() }, label: {
@@ -168,7 +168,7 @@ public struct DiscussionSearchTopicsView: View {
                 .font(Theme.Fonts.displaySmall)
                 .foregroundColor(Theme.Colors.textPrimary)
             Text(searchDescription(viewModel: viewModel))
-                .font(Theme.Fonts.titleSmall)
+                .font(Theme.Fonts.notoSans(13, weight: .semibold))
                 .foregroundColor(Theme.Colors.textPrimary)
         }.listRowBackground(Color.clear)
     }

@@ -59,11 +59,11 @@ public struct ParentCommentView: View {
                 })
                 VStack(alignment: .leading) {
                     Text(comments.authorName)
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                         .foregroundColor(Theme.Colors.textPrimary)
                     Text(comments.postDate
                         .dateToString(style: .lastPost, useRelativeDates: useRelativeDates))
-                    .font(Theme.Fonts.labelSmall)
+                    .font(Theme.Fonts.notoSans(10, weight: .medium))
                     .foregroundColor(Theme.Colors.textSecondaryLight)
                 }
                 Spacer()
@@ -76,14 +76,14 @@ public struct ParentCommentView: View {
                         Text(comments.followed
                              ? DiscussionLocalization.Comment.unfollow
                              : DiscussionLocalization.Comment.follow)
-                        .font(Theme.Fonts.bodyMedium)
+                        .font(Theme.Fonts.notoSans(14, weight: .regular))
                     }).foregroundColor(comments.followed
                                        ? Theme.Colors.accentColor
                                        : Theme.Colors.textSecondaryLight)
                 }
             }.padding(.top, 15)
             Text(comments.postTitle)
-                .font(Theme.Fonts.titleLarge)
+                .font(Theme.Fonts.notoSans(18, weight: .semibold))
                 .foregroundColor(Theme.Colors.textPrimary)
             ZStack(alignment: .topLeading) {
                 HTMLContentView(
@@ -103,7 +103,7 @@ public struct ParentCommentView: View {
                     
                     Text("\(comments.votesCount)")
                     Text(DiscussionLocalization.votesCount(comments.votesCount))
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                     
                 }).foregroundColor(comments.voted
                                    ? Theme.Colors.accentColor
@@ -125,7 +125,7 @@ public struct ParentCommentView: View {
             .accentColor(comments.abuseFlagged
                          ? Theme.Colors.irreversibleAlert
                          : Theme.Colors.textSecondaryLight)
-                .font(Theme.Fonts.labelLarge)
+                .font(Theme.Fonts.notoSans(13, weight: .medium))
         }
         .padding(.horizontal, 24)
         if isThread {

@@ -90,7 +90,7 @@ public struct PostsView: View {
                                             sortButton
                                         }.foregroundColor(Theme.Colors.accentColor)
                                     }
-                                    .font(Theme.Fonts.labelMedium)
+                                    .font(Theme.Fonts.notoSans(12, weight: .medium))
                                     .padding(.horizontal, 24)
                                     .padding(.vertical, 12)
                                     .shadow(color: Theme.Colors.shadowColor,
@@ -110,7 +110,7 @@ public struct PostsView: View {
                                                 .id(1)
                                             HStack(alignment: .center) {
                                                 Text(title)
-                                                    .font(Theme.Fonts.titleLarge)
+                                                    .font(Theme.Fonts.notoSans(18, weight: .semibold))
                                                     .foregroundColor(Theme.Colors.textPrimary)
                                                 Spacer()
                                                 if !(viewModel.isBlackedOut ?? false) {
@@ -128,7 +128,7 @@ public struct PostsView: View {
                                                     }, label: {
                                                         VStack {
                                                             CoreAssets.addComment.swiftUIImage
-                                                                .font(Theme.Fonts.labelLarge)
+                                                                .font(Theme.Fonts.notoSans(13, weight: .medium))
                                                                 .padding(6)
                                                         }
                                                         .foregroundColor(Theme.Colors.white)
@@ -167,13 +167,13 @@ public struct PostsView: View {
                                                     .renderingMode(.template)
                                                     .foregroundColor(Theme.Colors.textPrimary)
                                                 Text(DiscussionLocalization.Posts.NoDiscussion.title)
-                                                    .font(Theme.Fonts.titleLarge)
+                                                    .font(Theme.Fonts.notoSans(18, weight: .semibold))
                                                     .multilineTextAlignment(.center)
                                                     .frame(maxWidth: .infinity)
                                                     .padding(.top, 40)
                                                 if !(viewModel.isBlackedOut ?? false) {
                                                     Text(DiscussionLocalization.Posts.NoDiscussion.description)
-                                                        .font(Theme.Fonts.bodyLarge)
+                                                        .font(Theme.Fonts.notoSans(16, weight: .regular))
                                                         .multilineTextAlignment(.center)
                                                         .frame(maxWidth: .infinity)
                                                         .padding(.top, 12)
@@ -382,21 +382,21 @@ public struct PostCell: View {
                         Text("\(post.unreadCommentCount - 1)")
                         Text(DiscussionLocalization.missedPostsCount(post.unreadCommentCount - 1))
                     }
-                }.font(Theme.Fonts.labelSmall)
+                }.font(Theme.Fonts.notoSans(10, weight: .medium))
                     .foregroundColor(Theme.Colors.textSecondary)
                 Text(post.title)
                     .multilineTextAlignment(.leading)
-                    .font(Theme.Fonts.labelLarge)
+                    .font(Theme.Fonts.notoSans(13, weight: .medium))
                     .foregroundColor(Theme.Colors.textPrimary)
                 Text("\(DiscussionLocalization.Post.lastPost) \(post.lastPostDateFormatted)")
-                    .font(Theme.Fonts.labelSmall)
+                    .font(Theme.Fonts.notoSans(10, weight: .medium))
                     .foregroundColor(Theme.Colors.textSecondary)
                 HStack {
                     CoreAssets.responses.swiftUIImage.renderingMode(.template)
                         .foregroundColor(Theme.Colors.accentXColor)
                     Text("\(post.replies - 1)")
                     Text(DiscussionLocalization.responsesCount(post.replies - 1))
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                 }
                 .foregroundColor(Theme.Colors.accentColor)
             }

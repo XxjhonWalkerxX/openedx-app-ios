@@ -190,10 +190,10 @@ struct HandoutsItemCell: View {
                 VStack(alignment: .leading) {
                     Text(type.title)
                         .foregroundColor(Theme.Colors.textPrimary)
-                        .font(Theme.Fonts.titleSmall)
+                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                     Text(type.description)
                         .foregroundColor(Theme.Colors.textSecondary)
-                        .font(Theme.Fonts.labelSmall)
+                        .font(Theme.Fonts.notoSans(10, weight: .medium))
                 }
                 Spacer()
                 Image(systemName: "chevron.right")

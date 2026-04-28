@@ -65,9 +65,9 @@ public struct CommentCell: View {
                 
                 VStack(alignment: .leading) {
                     Text(comment.authorName)
-                        .font(Theme.Fonts.titleSmall)
+                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
                     Text(comment.postDate.dateToString(style: .lastPost, useRelativeDates: useRelativeDates))
-                        .font(Theme.Fonts.labelSmall)
+                        .font(Theme.Fonts.notoSans(10, weight: .medium))
                         .foregroundColor(Theme.Colors.textSecondary)
                 }
                 Spacer()
@@ -82,7 +82,7 @@ public struct CommentCell: View {
                     Text(comment.abuseFlagged
                          ? DiscussionLocalization.Comment.unreport
                          : DiscussionLocalization.Comment.report)
-                    .font(Theme.Fonts.labelMedium)
+                    .font(Theme.Fonts.notoSans(12, weight: .medium))
                 }).foregroundColor(comment.abuseFlagged
                                    ? Theme.Colors.irreversibleAlert
                                       : Theme.Colors.textSecondaryLight)
@@ -117,7 +117,7 @@ public struct CommentCell: View {
                 }).foregroundColor(comment.voted
                                    ? Theme.Colors.accentColor
                                    : Theme.Colors.textSecondaryLight)
-                .font(Theme.Fonts.labelLarge)
+                .font(Theme.Fonts.notoSans(13, weight: .medium))
 
                 Spacer()
                 if addCommentAvailable {
@@ -128,10 +128,10 @@ public struct CommentCell: View {
                             Text(DiscussionLocalization.commentsCount(comment.responsesCount))
                         }
                         .foregroundColor(Theme.Colors.textSecondary)
-                        .font(Theme.Fonts.labelLarge)
+                        .font(Theme.Fonts.notoSans(13, weight: .medium))
                 }
             }.foregroundColor(Theme.Colors.accentColor)
-                .font(Theme.Fonts.labelMedium)
+                .font(Theme.Fonts.notoSans(12, weight: .medium))
             
         }.cardStyle(top: leftLineEnabled ? 0 : 8, leftLineEnabled: leftLineEnabled,
                     bgColor: Theme.Colors.commentCellBackground)

@@ -61,7 +61,7 @@ public struct DiscussionTopicsView: View {
                                         .padding(.top, 1)
                                     Text(DiscussionLocalization.Topics.search)
                                         .foregroundColor(Theme.Colors.textInputTextColor)
-                                        .font(Theme.Fonts.bodyMedium)
+                                        .font(Theme.Fonts.notoSans(14, weight: .regular))
                                     Spacer()
                                 }
                                 .frame(minHeight: 48)
@@ -94,7 +94,7 @@ public struct DiscussionTopicsView: View {
                                         if let topics = viewModel.discussionTopics {
                                             HStack {
                                                 Text(DiscussionLocalization.Topics.mainCategories)
-                                                    .font(Theme.Fonts.titleMedium)
+                                                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                                                     .foregroundColor(Theme.Colors.textSecondary)
                                                     .padding(.horizontal, 24)
                                                     .padding(.top, 10)
@@ -111,7 +111,7 @@ public struct DiscussionTopicsView: View {
                                                             CoreAssets.allPosts.swiftUIImage.renderingMode(.template)
                                                                 .foregroundColor(Theme.Colors.textPrimary)
                                                             Text(allTopics.name)
-                                                                .font(Theme.Fonts.titleSmall)
+                                                                .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                                                 .foregroundColor(Theme.Colors.textPrimary)
                                                             Spacer(minLength: 0)
                                                         }
@@ -129,7 +129,7 @@ public struct DiscussionTopicsView: View {
                                                             CoreAssets.followed.swiftUIImage.renderingMode(.template)
                                                                 .foregroundColor(Theme.Colors.textPrimary)
                                                             Text(followed.name)
-                                                                .font(Theme.Fonts.titleSmall)
+                                                                .font(Theme.Fonts.notoSans(13, weight: .semibold))
                                                                 .foregroundColor(Theme.Colors.textPrimary)
                                                             Spacer(minLength: 0)
                                                         }
@@ -146,7 +146,7 @@ public struct DiscussionTopicsView: View {
                                                     if topic.style == .title {
                                                         HStack {
                                                             Text("\(topic.name):")
-                                                                .font(Theme.Fonts.titleMedium)
+                                                                .font(Theme.Fonts.notoSans(15, weight: .medium))
                                                                 .foregroundColor(Theme.Colors.textSecondary)
                                                             Spacer()
                                                         }.padding(.top, 12)
@@ -214,7 +214,7 @@ public struct DiscussionTopicsView: View {
         HStack {
             Spacer()
             Text(DiscussionLocalization.Banner.discussionsIsDisabled)
-                .font(Theme.Fonts.titleSmall)
+                .font(Theme.Fonts.notoSans(13, weight: .semibold))
                 .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
                 .padding(.vertical, 10)
@@ -280,7 +280,7 @@ public struct TopicCell: View {
         }, label: {
             HStack {
                 Text(topic.name)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundColor(Theme.Colors.textPrimary)
                     .multilineTextAlignment(.leading)
                 Spacer()

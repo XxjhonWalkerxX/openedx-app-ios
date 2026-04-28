@@ -101,7 +101,7 @@ public struct ResponsesView: View {
                                         .padding(.top, 20)
                                         .padding(.bottom, 14)
                                         .padding(.leading, 24)
-                                        .font(Theme.Fonts.titleMedium)
+                                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                                         .foregroundColor(Theme.Colors.textPrimary)
                                         let useRelativeDates = viewModel.storage.useRelativeDates
                                         ForEach(
