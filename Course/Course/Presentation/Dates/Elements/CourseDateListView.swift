@@ -28,16 +28,17 @@ struct CourseDateListView: View {
                         viewHeight: $viewHeight,
                         externalHeight: $viewHeight
                     )
-                    VStack(alignment: .leading, spacing: 0) {
-                        
+                    VStack(alignment: .leading, spacing: 16) {
+
+                        statsHeroCard
+
                         @State var status: SyncStatus = .offline
-                        
+
                         CalendarSyncStatusView(status: status, router: viewModel.router)
-                            .padding(.bottom, 16)
                             .task {
                                 status = await viewModel.syncStatus()
                             }
-                        
+
                         if !courseDates.hasEnded {
                             DatesStatusInfoView(
                                 datesBannerInfo: courseDates.datesBannerInfo,
@@ -45,41 +46,10 @@ struct CourseDateListView: View {
                                 courseDatesViewModel: viewModel,
                                 screen: .courseDates
                             )
-                            .padding(.bottom, 16)
                         }
-                        
+
                         ForEach(Array(viewModel.sortedStatuses), id: \.self) { status in
-                            let courseDateBlockDict = courseDates.statusDatesBlocks[status]!
-                            if status == .completed {
-                                CompletedBlocks(
-                                    isExpanded: $isExpanded,
-                                    courseDateBlockDict: courseDateBlockDict,
-                                    viewModel: viewModel
-                                )
-                            } else {
-                                Text(status.rawValue)
-                                    .font(Theme.Fonts.titleSmall)
-                                    .padding(.top, 10)
-                                    .padding(.bottom, 10)
-                                HStack {
-                                    TimeLineView(status: status)
-                                        .padding(.bottom, 15)
-                                    VStack(alignment: .leading) {
-                                        ForEach(courseDateBlockDict.keys.sorted(), id: \.self) { date in
-                                            let blocks = courseDateBlockDict[date]!
-                                            let block = blocks[0]
-                                            Text(block.formattedDate)
-                                                .font(Theme.Fonts.labelMedium)
-                                                .foregroundStyle(Theme.Colors.textPrimary)
-                                            BlockStatusView(
-                                                viewModel: viewModel,
-                                                block: block,
-                                                blocks: blocks
-                                            )
-                                        }
-                                    }
-                                }
-                            }
+                            statusSection(status: status)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,6 +59,106 @@ struct CourseDateListView: View {
                     Spacer(minLength: 200)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+    }
+
+    // MARK: - Stats hero card
+
+    private var statsHeroCard: some View {
+        let blocks = courseDates.courseDateBlocks
+        let pending = blocks.filter { ($0.complete ?? false) == false && $0.dateType != "course-start-date" }.count
+        let nextBlock = blocks
+            .filter { $0.date > Date() && ($0.complete ?? false) == false }
+            .min(by: { $0.date < $1.date })
+        let nextDate: String = nextBlock.map { Self.shortDateFormatter.string(from: $0.date) } ?? "—"
+
+        return HStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(pending)")
+                    .font(Theme.Fonts.notoSans(28, weight: .bold))
+                    .foregroundStyle(Theme.Colors.guindaColor)
+                Text("PENDIENTES")
+                    .font(Theme.Fonts.notoSans(10, weight: .medium))
+                    .tracking(0.5)
+                    .foregroundStyle(Theme.Colors.textSecondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Rectangle()
+                .fill(Theme.Colors.brandCreamStrong)
+                .frame(width: 1, height: 40)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(nextDate)
+                    .font(Theme.Fonts.notoSans(20, weight: .bold))
+                    .foregroundStyle(Theme.Colors.brandGreen)
+                Text("PRÓXIMA FECHA")
+                    .font(Theme.Fonts.notoSans(10, weight: .medium))
+                    .tracking(0.5)
+                    .foregroundStyle(Theme.Colors.textSecondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 16)
+        }
+        .padding(16)
+        .background(Theme.Colors.surfaceWhite)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard, style: .continuous))
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+    }
+
+    private static let shortDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "es_MX")
+        df.dateFormat = "d MMM"
+        return df
+    }()
+
+    // MARK: - Status section
+
+    @ViewBuilder
+    private func statusSection(status: CompletionStatus) -> some View {
+        let courseDateBlockDict = courseDates.statusDatesBlocks[status] ?? [:]
+        if status == .completed {
+            CompletedBlocks(
+                isExpanded: $isExpanded,
+                courseDateBlockDict: courseDateBlockDict,
+                viewModel: viewModel
+            )
+        } else {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(status.rawValue.uppercased())
+                    .font(Theme.Fonts.notoSans(11, weight: .semibold))
+                    .tracking(0.5)
+                    .foregroundStyle(Theme.Colors.guindaColor)
+                    .padding(.leading, 2)
+
+                HStack(alignment: .top, spacing: 12) {
+                    TimeLineView(status: status)
+                        .padding(.top, 4)
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(courseDateBlockDict.keys.sorted(), id: \.self) { date in
+                            let blocks = courseDateBlockDict[date]!
+                            let block = blocks[0]
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(block.formattedDate)
+                                    .font(Theme.Fonts.notoSans(13, weight: .semibold))
+                                    .foregroundStyle(Theme.Colors.textPrimary)
+                                BlockStatusView(
+                                    viewModel: viewModel,
+                                    block: block,
+                                    blocks: blocks
+                                )
+                            }
+                        }
+                    }
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Theme.Colors.surfaceWhite)
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Sizes.radiusCard, style: .continuous))
+                    .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 2)
+                }
             }
         }
     }
