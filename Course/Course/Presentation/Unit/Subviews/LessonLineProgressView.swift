@@ -2,7 +2,7 @@
 //  LessonLineProgressView.swift
 //  Course
 //
-//  Created by Eugene Yatsenko on 11.12.2023.
+//  Fase 5: barra continua 3pt verde (reemplaza segmentos de colores)
 //
 
 import SwiftUI
@@ -10,37 +10,29 @@ import Theme
 
 struct LessonLineProgressView: View {
     @ObservedObject var viewModel: CourseUnitViewModel
-
     @Environment(\.isHorizontal) private var isHorizontal
 
     init(viewModel: CourseUnitViewModel) {
         self.viewModel = viewModel
     }
 
+    private var progress: CGFloat {
+        let total = viewModel.verticals[viewModel.verticalIndex].childs.count
+        guard total > 0 else { return 0 }
+        return CGFloat(viewModel.index + 1) / CGFloat(total)
+    }
+
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Theme.Colors.background
-            HStack(spacing: 8) {
-                let vertical = viewModel.verticals[viewModel.verticalIndex]
-                let data = Array(vertical.childs.enumerated())
-                ForEach(data, id: \.offset) { index, item in
-                    let selected = viewModel.verticals[viewModel.verticalIndex].childs[index]
-                    let isSelected = selected == viewModel.selectedLesson()
-                    let isDone = item.completion == 1.0 || vertical.completion == 1.0
-                    if  isSelected && isDone {
-                        Theme.Colors.progressSelectedAndDone
-                            .frame(height: 7)
-                    } else if isSelected {
-                        Theme.Colors.onProgress
-                            .frame(height: 7)
-                    } else if isDone {
-                        Theme.Colors.progressDone
-                    } else {
-                        Theme.Colors.progressSkip
-                    }
-                }
-            }.frame(height: 5)
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Theme.Colors.brandProgressTrack)
+                Rectangle()
+                    .fill(Theme.Colors.brandGreen)
+                    .frame(width: geo.size.width * progress)
+                    .animation(.easeInOut(duration: 0.25), value: progress)
+            }
         }
-        .frame(height: 10)
+        .frame(height: 3)
     }
 }

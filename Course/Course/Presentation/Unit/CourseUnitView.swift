@@ -512,7 +512,7 @@ public struct CourseUnitView: View {
                 let title = block.displayName
                 Text(title)
                     .lineLimit(1)
-                    .font(Theme.Fonts.titleLarge)
+                    .font(Theme.Fonts.notoSans(15, weight: .semibold))
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 20)
@@ -537,7 +537,7 @@ public struct CourseUnitView: View {
                                     let title = currentBlock.displayName
                                     Text(title)
                                         .lineLimit(1)
-                                        .font(Theme.Fonts.titleLarge)
+                                        .font(Theme.Fonts.notoSans(15, weight: .semibold))
                                         .foregroundStyle(Theme.Colors.textPrimary)
                                         .padding(.leading, isHorizontal ? 30 : 42)
                                         .padding(.top, isHorizontal ? 14 : 2)
@@ -558,35 +558,69 @@ public struct CourseUnitView: View {
 
     private var navigationBar: some View {
         VStack(spacing: 0) {
-            ZStack(alignment: .bottom) {
-                let title =  viewModel.showVideoNavigation ? currentBlock?.displayName ?? "" : sequenceTitle
-                NavigationBar(
-                    title: isDropdownActive || viewModel.showVideoNavigation ? title : "",
-                    leftButtonAction: {
-                        viewModel.router.back()
-                        playerStateSubject.send(VideoPlayerState.kill)
-                    }
-                )
-                .padding(.top, isHorizontal ? 10 : 0)
-                .padding(.leading, isHorizontal ? -16 : 0)
+            HStack(spacing: 10) {
+                // Pill de cierre
+                Button {
+                    viewModel.router.back()
+                    playerStateSubject.send(VideoPlayerState.kill)
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(Theme.Colors.brandCardPrimary)
+                        .frame(width: 32, height: 32)
+                        .background(Circle().fill(Theme.Colors.brandCreamStrong))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Cerrar")
 
-                if isDropdownActive {
-                    CourseUnitDropDownTitle(
-                        title: unitTitle,
-                        isAvailable: isDropdownAvailable,
-                        showDropdown: $showDropdown
-                    )
-                    .padding(.bottom, 0)
-                    .padding(.horizontal, 48)
+                // Breadcrumb + título de lección
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(sequenceTitle)
+                        .font(Theme.Fonts.notoSans(10, weight: .medium))
+                        .foregroundColor(Theme.Colors.brandCardSecondary)
+                        .lineLimit(1)
+
+                    let blockTitle = viewModel.showVideoNavigation
+                        ? (currentBlock?.displayName ?? "")
+                        : unitTitle
+                    Text(blockTitle)
+                        .font(Theme.Fonts.notoSans(13, weight: .semibold))
+                        .foregroundColor(Theme.Colors.brandCardPrimary)
+                        .lineLimit(1)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                // Botón índice de unidad
+                if isDropdownActive && isDropdownAvailable {
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            showDropdown.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "list.bullet")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(Theme.Colors.brandGreen)
+                            .frame(width: 32, height: 32)
+                            .background(Circle().fill(Theme.Colors.brandGreen.opacity(0.08)))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Índice de lecciones")
                 }
             }
-            .background(!viewModel.showVideoNavigation ? Theme.Colors.background : Theme.Colors.courseCardBackground)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(
+                !viewModel.showVideoNavigation
+                    ? Theme.Colors.background
+                    : Theme.Colors.courseCardBackground
+            )
             .padding(.trailing, isHorizontal ? 215 : 0)
 
+            // Barra de progreso 3pt
             if viewModel.courseUnitProgressEnabled {
                 LessonLineProgressView(viewModel: viewModel)
-                    .padding(.top, 4)
             }
+
             Spacer()
         }
     }
