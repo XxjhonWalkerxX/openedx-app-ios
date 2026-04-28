@@ -54,7 +54,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .top) {
-                Theme.Colors.guindaDeep
+                Theme.Colors.brandGreenDark
                     .ignoresSafeArea()
 
                 if viewModel.enrollments?.primaryCourse == nil
@@ -116,7 +116,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
     private func dashboardHero(proxy: GeometryProxy) -> some View {
         ZStack(alignment: .top) {
             // Gradiente guinda
-            Theme.Gradients.guindaHeroGradient
+            Theme.Gradients.heroGradient
 
             // Anillos animados detrás del contenido
             DecorativeRings()
@@ -363,7 +363,7 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
             : 0
 
         ZStack {
-            Theme.Gradients.guindaHeroGradient
+            Theme.Gradients.heroGradient
             DecorativeRings()
 
             HStack(spacing: 16) {
