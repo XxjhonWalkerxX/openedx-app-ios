@@ -87,12 +87,12 @@ public struct EditProfileView: View {
 
                                     VStack(alignment: .leading, spacing: 10) {
                                         Text(ProfileLocalization.Edit.Fields.aboutMe)
-                                            .font(Theme.Fonts.titleMedium)
+                                            .font(Theme.Fonts.notoSans(15, weight: .medium))
                                             .foregroundColor(Theme.Colors.textPrimary)
                                             .accessibilityIdentifier("about_text")
 
                                         TextEditor(text: $viewModel.profileChanges.shortBiography)
-                                            .font(Theme.Fonts.bodyMedium)
+                                            .font(Theme.Fonts.notoSans(14, weight: .regular))
                                             .foregroundColor(Theme.Colors.textInputTextColor)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 4)
@@ -183,7 +183,7 @@ public struct EditProfileView: View {
                         HStack(alignment: .top, spacing: 6) {
                             CoreAssets.alarm.swiftUIImage.renderingMode(.template)
                             Text(viewModel.alertMessage ?? "")
-                                .font(Theme.Fonts.labelLarge)
+                                .font(Theme.Fonts.notoSans(13, weight: .medium))
                         }
                         .shadowCardStyle(bgColor: Theme.Colors.warning, textColor: .black)
                         .transition(.move(edge: .bottom))
@@ -255,7 +255,7 @@ public struct EditProfileView: View {
                     viewModel.backButtonTapped()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .font(Theme.Fonts.notoSans(16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(width: EditProfileLayout.backButtonSize, height: EditProfileLayout.backButtonSize)
                         .background(
@@ -268,7 +268,7 @@ public struct EditProfileView: View {
                 Spacer(minLength: 0)
 
                 Text(ProfileLocalization.editProfile)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(28))
+                    .font(Theme.Fonts.notoSans(24, weight: .bold))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
@@ -287,7 +287,7 @@ public struct EditProfileView: View {
                         CoreAssets.done.swiftUIImage.renderingMode(.template)
                             .foregroundColor(.white)
                         Text(CoreLocalization.done)
-                            .font(Theme.Fonts.labelLarge)
+                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                             .foregroundColor(.white)
                     }
                 })
@@ -348,7 +348,7 @@ public struct EditProfileView: View {
             .accessibilityIdentifier("change_profile_image_button")
 
             Text(displayNameText.uppercased())
-                .font(Theme.Fonts.ttRoundsCompressedMedium(32))
+                .font(Theme.Fonts.notoSans(26, weight: .bold))
                 .foregroundColor(Theme.Colors.brandGreen)
                 .multilineTextAlignment(.center)
                 .accessibilityIdentifier("username_text")
@@ -361,7 +361,7 @@ public struct EditProfileView: View {
                     viewModel.checkChanges()
                 }
             )
-            .font(Theme.Fonts.titleMedium)
+            .font(Theme.Fonts.notoSans(15, weight: .medium))
             .foregroundColor(Theme.Colors.brandGreen)
             .accessibilityIdentifier("switch_profile_button")
         }

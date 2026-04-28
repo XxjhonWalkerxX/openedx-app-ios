@@ -67,7 +67,7 @@ public struct DeleteAccountView: View {
             HStack(alignment: .top, spacing: DeleteAccountLayout.headerTitleSpacing) {
                 Button(action: { viewModel.router.back() }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .font(Theme.Fonts.notoSans(16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(
                             width: DeleteAccountLayout.backButtonSize,
@@ -84,7 +84,7 @@ public struct DeleteAccountView: View {
                 .accessibilityIdentifier("back_button")
 
                 Text(ProfileLocalization.DeleteAccount.title)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .font(Theme.Fonts.notoSans(30, weight: .bold))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -138,7 +138,7 @@ public struct DeleteAccountView: View {
                         
                         Text(ProfileLocalization.DeleteAccount.description)
                             .foregroundColor(Theme.Colors.textSecondary)
-                            .font(Theme.Fonts.labelLarge)
+                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                             .multilineTextAlignment(.center)
                             .padding(.top, 16)
                             .accessibilityIdentifier("delete_account_description_text")
@@ -147,7 +147,7 @@ public struct DeleteAccountView: View {
                         Group {
                             Text(ProfileLocalization.DeleteAccount.password)
                                 .foregroundColor(Theme.Colors.textSecondary)
-                                .font(Theme.Fonts.labelLarge)
+                                .font(Theme.Fonts.notoSans(13, weight: .medium))
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 16)
                                 .accessibilityIdentifier("password_text")
@@ -155,7 +155,7 @@ public struct DeleteAccountView: View {
                             HStack(spacing: 11) {
                                 SecureField("",
                                             text: $viewModel.password)
-                                .font(Theme.Fonts.labelLarge)
+                                .font(Theme.Fonts.notoSans(13, weight: .medium))
                                 .foregroundColor(Theme.Colors.textInputTextColor)
                                 .accessibilityIdentifier("password_textfield")
                             }
@@ -178,7 +178,7 @@ public struct DeleteAccountView: View {
                                  ? ProfileLocalization.DeleteAccount.incorrectPassword
                                  : " ")
                             .foregroundColor(Theme.Colors.irreversibleAlert)
-                            .font(Theme.Fonts.labelLarge)
+                            .font(Theme.Fonts.notoSans(13, weight: .medium))
                             .multilineTextAlignment(.leading)
                             .padding(.top, 0)
                             .shake($viewModel.incorrectPassword,

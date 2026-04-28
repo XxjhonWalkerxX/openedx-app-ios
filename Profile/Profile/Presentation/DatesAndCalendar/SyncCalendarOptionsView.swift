@@ -70,7 +70,7 @@ public struct SyncCalendarOptionsView: View {
             HStack(alignment: .top, spacing: SyncCalendarLayout.headerTitleSpacing) {
                 Button(action: { viewModel.router.back() }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .font(Theme.Fonts.notoSans(16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(
                             width: SyncCalendarLayout.backButtonSize,
@@ -87,7 +87,7 @@ public struct SyncCalendarOptionsView: View {
                 .accessibilityIdentifier("back_button")
 
                 Text(ProfileLocalization.DatesAndCalendar.title)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .font(Theme.Fonts.notoSans(30, weight: .bold))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -289,7 +289,7 @@ public struct SyncCalendarOptionsView: View {
     private func optionTitle(_ text: String) -> some View {
         Text(text)
             .multilineTextAlignment(.leading)
-            .font(Theme.Fonts.labelLarge)
+            .font(Theme.Fonts.notoSans(13, weight: .medium))
             .foregroundStyle(Theme.Colors.textPrimary)
             .padding(.horizontal, SyncCalendarLayout.contentHorizontalPadding)
             .frame(
@@ -318,7 +318,7 @@ public struct SyncCalendarOptionsView: View {
                             )
                         )
                     )
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                     Spacer()
                     Image(systemName: "chevron.right")
                 }

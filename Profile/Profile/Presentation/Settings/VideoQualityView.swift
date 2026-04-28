@@ -140,7 +140,7 @@ public struct VideoQualityView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .font(Theme.Fonts.notoSans(16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(width: VideoQualityLayout.backButtonSize, height: VideoQualityLayout.backButtonSize)
                         .background(
@@ -151,7 +151,7 @@ public struct VideoQualityView: View {
                 .accessibilityIdentifier("back_button")
 
                 Text(ProfileLocalization.Settings.videoQualityTitle)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .font(Theme.Fonts.notoSans(30, weight: .bold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                     .foregroundColor(.white)
@@ -182,12 +182,12 @@ public struct VideoQualityView: View {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(quality.title())
-                        .font(Theme.Fonts.titleMedium)
+                        .font(Theme.Fonts.notoSans(15, weight: .medium))
                         .fontWeight(.semibold)
                         .foregroundColor(Theme.Colors.brandGreen)
                     if let description = quality.description() {
                         Text(description)
-                            .font(Theme.Fonts.bodySmall)
+                            .font(Theme.Fonts.notoSans(12, weight: .regular))
                             .foregroundColor(Theme.Colors.brandCardMedium)
                     }
                 }

@@ -154,7 +154,7 @@ public struct DatesAndCalendarView: View {
                     viewModel.router.back()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(Theme.Fonts.ttRoundsSemibold(18))
+                        .font(Theme.Fonts.notoSans(16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(width: 54, height: 54)
                         .background(
@@ -165,7 +165,7 @@ public struct DatesAndCalendarView: View {
                 .accessibilityIdentifier("back_button")
 
                 Text(ProfileLocalization.DatesAndCalendar.title)
-                    .font(Theme.Fonts.ttRoundsCompressedMedium(38))
+                    .font(Theme.Fonts.notoSans(30, weight: .bold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                     .foregroundColor(.white)
@@ -205,7 +205,7 @@ public struct DatesAndCalendarView: View {
     private var calendarSyncCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(ProfileLocalization.CalendarSync.title)
-                .font(Theme.Fonts.labelLarge)
+                .font(Theme.Fonts.notoSans(13, weight: .medium))
                 .foregroundColor(Theme.Colors.brandCardMedium)
                 .padding(.leading, 2)
 
@@ -215,12 +215,12 @@ public struct DatesAndCalendarView: View {
                     .padding(.bottom, 4)
 
                 Text(ProfileLocalization.CalendarSync.title)
-                    .font(Theme.Fonts.titleMedium)
+                    .font(Theme.Fonts.notoSans(15, weight: .medium))
                     .foregroundColor(Theme.Colors.brandCardPrimary)
                     .accessibilityIdentifier("calendar_sync_title")
 
                 Text(ProfileLocalization.CalendarSync.description)
-                    .font(Theme.Fonts.bodyMedium)
+                    .font(Theme.Fonts.notoSans(14, weight: .regular))
                     .foregroundColor(Theme.Colors.brandCardPrimary)
                     .multilineTextAlignment(.center)
                     .accessibilityIdentifier("calendar_sync_description")
