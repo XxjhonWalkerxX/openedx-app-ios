@@ -25,24 +25,8 @@ struct DiscoveryHeroView: View {
                 endPoint: .bottomTrailing
             )
 
-            // Círculos decorativos
-            Circle()
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 32)
-                .frame(width: 220, height: 220)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .offset(x: -50, y: -50)
-
-            Circle()
-                .strokeBorder(Color.white.opacity(0.05), lineWidth: 20)
-                .frame(width: 120, height: 120)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .offset(x: 18, y: 18)
-
-            Circle()
-                .strokeBorder(Color.white.opacity(0.04), lineWidth: 14)
-                .frame(width: 80, height: 80)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                .offset(x: 20, y: 30)
+            // Anillos decorativos animados (consistencia con Dashboard/Profile)
+            DecorativeRings()
 
             // Textos + search bar
             VStack(alignment: .leading, spacing: 12) {

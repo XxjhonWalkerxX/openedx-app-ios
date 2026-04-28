@@ -141,14 +141,7 @@ public struct DiscoveryView: View {
             Theme.Colors.brandGreenDark
                 .ignoresSafeArea()
 
-            // 2. Franja guinda top
-            Theme.Colors.guindaColor
-                .frame(height: 4)
-                .ignoresSafeArea(edges: .top)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .zIndex(10)
-
-            // 3. Contenido scrolleable
+            // 2. Contenido scrolleable
             ScrollView {
                 VStack(spacing: 0) {
 
