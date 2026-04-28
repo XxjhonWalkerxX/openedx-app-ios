@@ -142,15 +142,15 @@ public struct PrimaryCourseDashboardView<ProgramView: View>: View {
 
                 // Saludo
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Bienvenido de vuelta")
-                        .font(Theme.Fonts.notoSans(13, weight: .medium, italic: true))
-                        .foregroundColor(.white.opacity(0.65))
-
-                    let nombre = viewModel.userName
-                    Text(nombre.isEmpty ? "¡Hola!" : "¡Hola, \(nombre)!")
+                    let firstTwo = viewModel.userName
+                        .split(separator: " ")
+                        .prefix(2)
+                        .joined(separator: " ")
+                    Text(firstTwo.isEmpty ? "¡Hola!" : "¡Hola, \(firstTwo)!")
                         .font(Theme.Fonts.display(30))
                         .foregroundColor(.white)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.85)
                         .accessibilityIdentifier("courses_header_text")
 
                     Text("Continúa donde lo dejaste")

@@ -151,21 +151,14 @@ public struct ProfileView: View {
         VStack {
             HStack {
                 Spacer()
-                HStack(spacing: 10) {
-                    profileIconButton(
-                        systemName: "bell",
-                        accessibilityLabel: "Notificaciones"
-                    ) {}
-
-                    profileIconButton(
-                        systemName: "gearshape",
-                        accessibilityLabel: ProfileLocalization.settings
-                    ) {
-                        HapticFeedback.selection()
-                        viewModel.router.showSettings()
-                    }
-                    .accessibilityIdentifier("settings_button")
+                profileIconButton(
+                    systemName: "gearshape",
+                    accessibilityLabel: ProfileLocalization.settings
+                ) {
+                    HapticFeedback.selection()
+                    viewModel.router.showSettings()
                 }
+                .accessibilityIdentifier("settings_button")
             }
             .padding(.horizontal, ProfileLayout.horizontalPadding)
             .padding(.top, ProfileLayout.heroTopPadding)
