@@ -371,7 +371,29 @@ public class Router: AuthorizationRouter,
         )
         return UIHostingController(rootView: view)
     }
-    
+
+    public func showContentReader(
+        courseID: String,
+        courseName: String,
+        chapters: [CourseChapter],
+        chapterIndex: Int,
+        sequentialIndex: Int,
+        verticalIndex: Int
+    ) {
+        let viewModel = Container.shared.resolve(
+            ContentReaderViewModel.self,
+            arguments: chapters,
+            courseID,
+            courseName,
+            chapterIndex,
+            sequentialIndex,
+            verticalIndex
+        )!
+        let view = ContentReaderView(viewModel: viewModel)
+        let controller = UIHostingController(rootView: view)
+        navigationController.pushViewController(controller, animated: true)
+    }
+
     public func showCourseScreens(
         courseID: String,
         hasAccess: Bool?,

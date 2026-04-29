@@ -165,32 +165,16 @@ struct CourseSyllabusView: View {
 
         viewModel.trackSequentialClicked(sequential)
 
-        if viewModel.config.uiComponents.courseDropDownNavigationEnabled {
-            guard let block = sequential.childs.first?.childs.first else {
-                viewModel.router.showGatedContentError(url: sequential.childs.first?.webUrl ?? "")
-                return
-            }
-            viewModel.router.showCourseUnit(
-                courseName: viewModel.courseStructure?.displayName ?? "",
-                blockId: block.id,
-                courseID: viewModel.courseStructure?.id ?? "",
-                verticalIndex: 0,
-                chapters: course.childs,
-                chapterIndex: chapterIndex,
-                sequentialIndex: sequentialIndex,
-                showVideoNavigation: false,
-                courseVideoStructure: nil
-            )
-        } else {
-            viewModel.router.showCourseVerticalView(
-                courseID: viewModel.courseStructure?.id ?? "",
-                courseName: viewModel.courseStructure?.displayName ?? "",
-                title: sequential.displayName,
-                chapters: course.childs,
-                chapterIndex: chapterIndex,
-                sequentialIndex: sequentialIndex
-            )
-        }
+        let startVertical = sequential.childs.firstIndex(where: { $0.completion < 1.0 }) ?? 0
+
+        viewModel.router.showContentReader(
+            courseID: course.id,
+            courseName: course.displayName,
+            chapters: course.childs,
+            chapterIndex: chapterIndex,
+            sequentialIndex: sequentialIndex,
+            verticalIndex: startVertical
+        )
     }
 }
 

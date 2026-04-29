@@ -46,6 +46,15 @@ public protocol CourseRouter: BaseRouter {
         chapterIndex: Int,
         sequentialIndex: Int
     )
+
+    func showContentReader(
+        courseID: String,
+        courseName: String,
+        chapters: [CourseChapter],
+        chapterIndex: Int,
+        sequentialIndex: Int,
+        verticalIndex: Int
+    )
     
     func showHandoutsUpdatesView(
         handouts: String?,
@@ -107,7 +116,16 @@ public class CourseRouterMock: BaseRouterMock, CourseRouter {
         chapterIndex: Int,
         sequentialIndex: Int
     ) {}
-    
+
+    public func showContentReader(
+        courseID: String,
+        courseName: String,
+        chapters: [CourseChapter],
+        chapterIndex: Int,
+        sequentialIndex: Int,
+        verticalIndex: Int
+    ) {}
+
     public func showHandoutsUpdatesView(
         handouts: String?,
         announcements: [CourseUpdate]?,

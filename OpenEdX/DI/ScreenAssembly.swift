@@ -407,6 +407,22 @@ class ScreenAssembly: Assembly {
             )
         }
         
+        container.register(
+            ContentReaderViewModel.self
+        ) { @MainActor r, chapters, courseID, courseName, chapterIndex, sequentialIndex, verticalIndex in
+            ContentReaderViewModel(
+                chapters: chapters,
+                courseID: courseID,
+                courseName: courseName,
+                chapterIndex: chapterIndex,
+                sequentialIndex: sequentialIndex,
+                verticalIndex: verticalIndex,
+                router: r.resolve(CourseRouter.self)!,
+                interactor: r.resolve(CourseInteractorProtocol.self)!,
+                analytics: r.resolve(CourseAnalytics.self)!
+            )
+        }
+
         container.register(WebUnitViewModel.self) { @MainActor r in
             WebUnitViewModel(
                 authInteractor: r.resolve(AuthInteractorProtocol.self)!,
