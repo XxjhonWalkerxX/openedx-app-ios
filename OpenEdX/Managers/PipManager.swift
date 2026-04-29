@@ -106,7 +106,7 @@ public final class PipManager: PipManagerProtocol {
         
         var viewControllers: [UIViewController] = [mainController]
         if currentControllers.count > 1,
-            let containerController = currentControllers[1] as? UIHostingController<CourseContainerView>,
+            let containerController = currentControllers[1] as? UIHostingController<CourseHubContainerView>,
             containerController.rootView.courseID == holder.courseID {
             containerController.rootView.viewModel.selection = holder.selectedCourseTab
             viewControllers.append(containerController)
@@ -168,7 +168,7 @@ public final class PipManager: PipManagerProtocol {
     
     private func containerController(
         for holder: PlayerViewControllerHolderProtocol
-    ) async throws -> UIHostingController<CourseContainerView> {
+    ) async throws -> UIHostingController<CourseHubContainerView> {
         let courseDetails = try await getCourseDetails(for: holder)
         let hasAccess: Bool? = nil
         let controller = router.getCourseScreensController(
