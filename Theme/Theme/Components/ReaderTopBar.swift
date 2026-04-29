@@ -68,6 +68,8 @@ public struct ReaderTopBar: View {
                         .lineLimit(1)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(subtitle.map { "\(title), \($0)" } ?? title)
             Spacer()
             progressLabel
             if let trailingMenu {
@@ -96,6 +98,7 @@ public struct ReaderTopBar: View {
             .font(Theme.Fonts.notoSans(12, weight: .medium))
             .foregroundStyle(Theme.Colors.textSecondary)
             .monospacedDigit()
+            .accessibilityLabel("Sección \(currentIndex + 1) de \(totalCount)")
     }
 
     private func trailingButton(action: @escaping () -> Void) -> some View {

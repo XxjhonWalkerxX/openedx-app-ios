@@ -137,6 +137,7 @@ struct VerticalRenderer: View {
                     .scaledToFit()
                     .frame(width: 48, height: 48)
                     .foregroundStyle(Theme.Colors.guindaColor.opacity(0.45))
+                    .accessibilityHidden(true)
                 VStack(spacing: 8) {
                     Text(title.isEmpty ? "Discusión" : title)
                         .font(Theme.Fonts.notoSans(17, weight: .semibold))
@@ -147,6 +148,7 @@ struct VerticalRenderer: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                 }
+                .accessibilityElement(children: .combine)
                 Spacer(minLength: 80)
             }
             .frame(maxWidth: .infinity)
@@ -165,11 +167,13 @@ struct VerticalRenderer: View {
                 .scaledToFit()
                 .frame(width: 44, height: 44)
                 .foregroundStyle(Theme.Colors.textSecondary.opacity(0.35))
+                .accessibilityHidden(true)
             Text("Sin contenido disponible")
                 .font(Theme.Fonts.notoSans(14, weight: .regular))
                 .foregroundStyle(Theme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Scroll Offset Helper

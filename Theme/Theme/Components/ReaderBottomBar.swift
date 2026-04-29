@@ -48,7 +48,7 @@ public struct ReaderBottomBar: View {
     // MARK: - Previous
 
     private var previousButton: some View {
-        Button(action: { if canGoPrevious { onPrevious(); HapticFeedback.selection() } }) {
+        Button(action: { if canGoPrevious { onPrevious() } }) {
             HStack(spacing: 5) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 13, weight: .semibold))
@@ -60,13 +60,13 @@ public struct ReaderBottomBar: View {
         .buttonStyle(.plain)
         .disabled(!canGoPrevious)
         .accessibilityLabel("Sección anterior")
-        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(canGoPrevious ? "Ir a la sección anterior" : "No hay sección anterior")
     }
 
     // MARK: - Complete
 
     private var completeButton: some View {
-        Button(action: { if !isLoading { onComplete(); if !isCompleted { HapticFeedback.notification(.success) } } }) {
+        Button(action: { if !isLoading { onComplete() } }) {
             Group {
                 if isLoading {
                     ProgressView()
@@ -100,7 +100,7 @@ public struct ReaderBottomBar: View {
     // MARK: - Next
 
     private var nextButton: some View {
-        Button(action: { if canGoNext { onNext(); HapticFeedback.selection() } }) {
+        Button(action: { if canGoNext { onNext() } }) {
             HStack(spacing: 5) {
                 Text("Siguiente")
                     .font(Theme.Fonts.notoSans(14, weight: .medium))
@@ -112,7 +112,7 @@ public struct ReaderBottomBar: View {
         .buttonStyle(.plain)
         .disabled(!canGoNext)
         .accessibilityLabel("Sección siguiente")
-        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(canGoNext ? "Ir a la sección siguiente" : "No hay sección siguiente")
     }
 }
 

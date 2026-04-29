@@ -43,6 +43,7 @@ public struct ContentReaderView: View {
                     )
                     .tag(idx)
                     .environment(\.readerPageSwipeGesture, pagingGesture)
+                    .accessibilityLabel("\(vertical.displayName), sección \(idx + 1) de \(viewModel.currentVerticals.count)")
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -73,6 +74,11 @@ public struct ContentReaderView: View {
             .onChange(of: viewModel.isCurrentVerticalComplete) { completed in
                 guard completed, !reduceMotion else { return }
                 successFeedback.notificationOccurred(.success)
+            }
+            // VoiceOver: anuncia transición cross-sequential
+            .onChange(of: viewModel.boundaryLabel) { label in
+                guard let label else { return }
+                UIAccessibility.post(notification: .announcement, argument: label)
             }
 
             // MARK: Top Bar

@@ -27,6 +27,7 @@ public struct ReaderProgressRail: View {
         .frame(height: 4)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilitySummary)
+        .accessibilityCustomActions(segmentActions)
     }
 
     @ViewBuilder
@@ -49,6 +50,21 @@ public struct ReaderProgressRail: View {
     private var accessibilitySummary: String {
         let done = segments.filter { if case .completed = $0 { return true }; return false }.count
         return "\(done) de \(segments.count) secciones completadas"
+    }
+
+    private var segmentActions: [AccessibilityCustomAction] {
+        segments.enumerated().map { idx, state in
+            let stateLabel: String
+            switch state {
+            case .completed: stateLabel = "completada"
+            case .current:   stateLabel = "actual"
+            case .pending:   stateLabel = "pendiente"
+            }
+            return AccessibilityCustomAction("Ir a sección \(idx + 1), \(stateLabel)") {
+                onTap(idx)
+                return true
+            }
+        }
     }
 }
 
