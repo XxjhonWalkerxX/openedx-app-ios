@@ -1,159 +1,190 @@
 import SwiftUI
+import Combine
 import Core
 import Theme
 
 // MARK: - VerticalRenderer
 
-/// Renderizador por tipo de bloque del vertical.
-/// F4: placeholder informativo con estructura del vertical.
-/// F5: renderers reales — WKWebView (html/problem), AVPlayer (video), discussion embed.
+/// Despacha cada CourseVertical al renderer correcto según el tipo de bloque.
+/// Web (html/problem/survey/dragAndDrop) → WebView + CSS brandCream.
+/// Video → EncodedVideoView / YouTubeView.
+/// Discussion → mensaje + link a tab Foro.
+/// Unknown → NotAvailableOnMobileView.
 struct VerticalRenderer: View {
 
     let vertical: CourseVertical
     let courseID: String
     let onScrollChange: (CGFloat) -> Void
 
+    @State private var playerStateSubject = CurrentValueSubject<VideoPlayerState?, Never>(nil)
+
+    private var primaryBlock: CourseBlock? { vertical.childs.first }
+
+    private var lessonType: LessonType? {
+        guard let block = primaryBlock else { return nil }
+        return LessonType.from(block, streamingQuality: .auto)
+    }
+
+    // MARK: - Body
+
     var body: some View {
-        GeometryReader { _ in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    contentHeader
-                    contentPlaceholder
-                    if !vertical.childs.isEmpty {
-                        childBlocksList
-                    }
-                    Spacer(minLength: 120)
+        Group {
+            switch lessonType {
+            case .web(let url, let injections, let blockId, _):
+                webRenderer(url: url, injections: injections, blockId: blockId)
+
+            case .video(let encodedUrl, let blockId):
+                videoRenderer(encodedUrl: encodedUrl, blockId: blockId)
+
+            case .youtube(let ytUrl, let blockId):
+                youtubeRenderer(ytUrl: ytUrl, blockId: blockId)
+
+            case .discussion(let topicId, let blockId, let title):
+                discussionRenderer(topicId: topicId, blockId: blockId, title: title)
+
+            case .unknown(let url):
+                GeometryReader { geo in
+                    NotAvailableOnMobileView(url: url)
+                        .frame(width: geo.size.width, height: geo.size.height)
                 }
-                .background(
-                    GeometryReader { geo in
-                        Color.clear.preference(
-                            key: VerticalScrollOffsetKey.self,
-                            value: geo.frame(in: .named("readerScroll")).minY
-                        )
-                    }
+
+            case nil:
+                emptyRenderer
+            }
+        }
+        .onDisappear {
+            playerStateSubject.send(.kill)
+        }
+    }
+
+    // MARK: - Web Renderer
+
+    private func webRenderer(url: String, injections: [WebviewInjection], blockId: String) -> some View {
+        GeometryReader { geo in
+            WebView(
+                url: url,
+                localUrl: nil,
+                injections: injections + [.readerBrandCSS],
+                blockID: blockId,
+                roundedBackgroundEnabled: false
+            )
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .ignoresSafeArea(edges: .bottom)
+    }
+
+    // MARK: - Encoded Video Renderer
+
+    private func videoRenderer(encodedUrl: String, blockId: String) -> some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                EncodedVideoView(
+                    name: primaryBlock?.displayName ?? vertical.displayName,
+                    url: URL(string: encodedUrl),
+                    courseID: courseID,
+                    blockID: blockId,
+                    playerStateSubject: playerStateSubject,
+                    languages: primaryBlock?.subtitles ?? [],
+                    isOnScreen: true
                 )
+                .padding(.top, 8)
+                Spacer(minLength: 120)
             }
-            .coordinateSpace(name: "readerScroll")
-            .onPreferenceChange(VerticalScrollOffsetKey.self) { onScrollChange($0) }
+            .background(
+                scrollOffsetReader
+            )
         }
-        .background(Theme.Colors.brandCream)
+        .coordinateSpace(name: "readerVerticalScroll")
+        .onPreferenceChange(ReaderScrollOffsetKey.self, perform: onScrollChange)
     }
 
-    // MARK: - Header
+    // MARK: - YouTube Renderer
 
-    private var contentHeader: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 8) {
-                primaryTypeIcon
-                    .frame(width: 18, height: 18)
-                    .foregroundStyle(Theme.Colors.guindaColor)
-                Text(blockTypeLabel.uppercased())
-                    .font(Theme.Fonts.notoSans(10, weight: .semibold))
-                    .foregroundStyle(Theme.Colors.guindaColor)
-                    .kerning(1.0)
+    private func youtubeRenderer(ytUrl: String, blockId: String) -> some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                YouTubeView(
+                    name: primaryBlock?.displayName ?? vertical.displayName,
+                    url: ytUrl,
+                    courseID: courseID,
+                    blockID: blockId,
+                    playerStateSubject: playerStateSubject,
+                    languages: primaryBlock?.subtitles ?? [],
+                    isOnScreen: true
+                )
+                .padding(.top, 8)
+                Spacer(minLength: 120)
             }
-            Text(vertical.displayName)
-                .font(Theme.Fonts.notoSans(20, weight: .semibold))
-                .foregroundStyle(Theme.Colors.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
+            .background(scrollOffsetReader)
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 24)
-        .padding(.bottom, 20)
+        .coordinateSpace(name: "readerVerticalScroll")
+        .onPreferenceChange(ReaderScrollOffsetKey.self, perform: onScrollChange)
     }
 
-    // MARK: - Placeholder (F5 will replace this)
+    // MARK: - Discussion Renderer
 
-    private var contentPlaceholder: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(Theme.Colors.surfaceWhite)
-            .frame(minHeight: 220)
-            .overlay {
-                VStack(spacing: 14) {
-                    primaryTypeIcon
-                        .frame(width: 36, height: 36)
-                        .foregroundStyle(Theme.Colors.textSecondary.opacity(0.4))
-                    Text("Contenido disponible próximamente")
-                        .font(Theme.Fonts.notoSans(13, weight: .regular))
+    private func discussionRenderer(topicId: String, blockId: String, title: String) -> some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 24) {
+                Spacer(minLength: 40)
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .foregroundStyle(Theme.Colors.guindaColor.opacity(0.45))
+                VStack(spacing: 8) {
+                    Text(title.isEmpty ? "Discusión" : title)
+                        .font(Theme.Fonts.notoSans(17, weight: .semibold))
+                        .foregroundStyle(Theme.Colors.textPrimary)
+                    Text("Ve al tab «Foro» para participar en esta discusión.")
+                        .font(Theme.Fonts.notoSans(14, weight: .regular))
                         .foregroundStyle(Theme.Colors.textSecondary)
                         .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
                 }
-                .padding(24)
+                Spacer(minLength: 80)
             }
-            .padding(.horizontal, 24)
-    }
-
-    // MARK: - Child Blocks
-
-    private var childBlocksList: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("BLOQUES")
-                .font(Theme.Fonts.notoSans(10, weight: .semibold))
-                .foregroundStyle(Theme.Colors.textSecondary)
-                .kerning(1.0)
-                .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 10)
-
-            VStack(spacing: 0) {
-                ForEach(vertical.childs) { block in
-                    HStack(spacing: 12) {
-                        block.type.image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 16, height: 16)
-                            .foregroundStyle(Theme.Colors.textSecondary)
-                        Text(block.displayName)
-                            .font(Theme.Fonts.notoSans(13, weight: .regular))
-                            .foregroundStyle(Theme.Colors.textPrimary)
-                            .lineLimit(2)
-                        Spacer()
-                        if block.completion >= 1.0 {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundStyle(Theme.Colors.brandGreen)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Theme.Colors.surfaceWhite)
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding(.horizontal, 24)
+            .frame(maxWidth: .infinity)
+            .background(scrollOffsetReader)
         }
+        .coordinateSpace(name: "readerVerticalScroll")
+        .onPreferenceChange(ReaderScrollOffsetKey.self, perform: onScrollChange)
     }
 
-    // MARK: - Helpers
+    // MARK: - Empty Renderer
 
-    private var primaryBlockType: BlockType {
-        vertical.childs.first?.type ?? vertical.type
+    private var emptyRenderer: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "doc.questionmark")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 44, height: 44)
+                .foregroundStyle(Theme.Colors.textSecondary.opacity(0.35))
+            Text("Sin contenido disponible")
+                .font(Theme.Fonts.notoSans(14, weight: .regular))
+                .foregroundStyle(Theme.Colors.textSecondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private var primaryTypeIcon: some View {
-        primaryBlockType.image
-            .resizable()
-            .scaledToFit()
-    }
+    // MARK: - Scroll Offset Helper
 
-    private var blockTypeLabel: String {
-        switch primaryBlockType {
-        case .video: return "Video"
-        case .html: return "Lectura"
-        case .problem: return "Ejercicio"
-        case .discussion: return "Discusión"
-        case .survey: return "Encuesta"
-        case .openassessment: return "Evaluación"
-        default: return "Contenido"
+    private var scrollOffsetReader: some View {
+        GeometryReader { geo in
+            Color.clear.preference(
+                key: ReaderScrollOffsetKey.self,
+                value: geo.frame(in: .named("readerVerticalScroll")).minY
+            )
         }
     }
 }
 
 // MARK: - Preference Key
 
-private struct VerticalScrollOffsetKey: PreferenceKey {
+private struct ReaderScrollOffsetKey: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
 }
+

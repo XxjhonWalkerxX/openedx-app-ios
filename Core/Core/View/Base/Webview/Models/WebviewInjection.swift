@@ -66,4 +66,35 @@ public extension WebviewInjection {
         AccessibilityInjection()
             .webviewInjection()
     }
+
+    /// CSS de marca para ContentReaderView: brandCream bg, Noto Sans, legibilidad móvil + dark mode.
+    static var readerBrandCSS: WebviewInjection {
+        WebviewInjection(
+            id: "readerBrandCSS",
+            script: """
+            (function() {
+                if (document.getElementById('readerBrandCSS')) return;
+                var s = document.createElement('style');
+                s.id = 'readerBrandCSS';
+                s.textContent = [
+                    'body{font-family:-apple-system,"Noto Sans",sans-serif;font-size:17px;line-height:1.65;',
+                    'color:#1A1A1A;background-color:#FAF6F0;padding:20px 24px 120px 24px;',
+                    'max-width:680px;margin:0 auto;overflow-x:hidden;word-wrap:break-word;',
+                    '-webkit-text-size-adjust:100%;}',
+                    'img,video,iframe{max-width:100%;height:auto;border-radius:8px;}',
+                    'table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}',
+                    'pre{white-space:pre-wrap;word-break:break-word;}',
+                    'a{color:#8B1D41;}',
+                    'h1,h2,h3,h4{line-height:1.3;}',
+                    '@media(prefers-color-scheme:dark){',
+                    'body{background-color:#1C1C1E;color:#F2F2F7;}',
+                    'a{color:#FF9F9F;}}'
+                ].join('');
+                document.head.appendChild(s);
+            })();
+            """,
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: true
+        )
+    }
 }
