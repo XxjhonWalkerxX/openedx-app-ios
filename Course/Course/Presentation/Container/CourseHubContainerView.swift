@@ -157,9 +157,8 @@ public struct CourseHubContainerView: View {
 
     private var tabsView: some View {
         TabView(selection: $hubTab) {
-            CourseOutlineAndProgressView(
-                viewModelContainer: viewModel,
-                viewModelProgress: courseProgressViewModel,
+            CourseOutlineView(
+                viewModel: viewModel,
                 title: title,
                 courseID: courseID,
                 isVideo: false,
@@ -167,8 +166,7 @@ public struct CourseHubContainerView: View {
                 coordinate: $coordinate,
                 collapsed: $collapsed,
                 viewHeight: $viewHeight,
-                dateTabIndex: CourseTab.dates.rawValue,
-                connectivity: viewModel.connectivity
+                dateTabIndex: CourseTab.dates.rawValue
             )
             .tag(0)
 
