@@ -419,7 +419,7 @@ public class Router: AuthorizationRouter,
         courseRawImage: String?,
         showDates: Bool,
         lastVisitedBlockID: String?
-    ) -> UIHostingController<CourseContainerView> {
+    ) -> UIHostingController<CourseHubContainerView> {
         let vm = Container.shared.resolve(
             CourseContainerViewModel.self,
             arguments: hasAccess,
@@ -430,16 +430,16 @@ public class Router: AuthorizationRouter,
             showDates ? CourseTab.dates : CourseTab.course,
             lastVisitedBlockID
         )!
-        
+
         let datesVm = Container.shared.resolve(
             CourseDatesViewModel.self,
             arguments: courseID,
             title
         )!
-        
+
         let progressVm = Container.shared.resolve(CourseProgressViewModel.self)!
-        
-        let screensView = CourseContainerView(
+
+        let screensView = CourseHubContainerView(
             viewModel: vm,
             courseDatesViewModel: datesVm,
             courseProgressViewModel: progressVm,
@@ -447,7 +447,7 @@ public class Router: AuthorizationRouter,
             title: title,
             courseRawImage: courseRawImage
         )
-        
+
         return UIHostingController(rootView: screensView)
     }
     

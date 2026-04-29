@@ -106,6 +106,8 @@ struct CourseHeaderView: View {
         case blurBg
     }
 
+    private var displayedTabs: [CourseTab]
+
     init(
         viewModel: CourseContainerViewModel,
         title: String,
@@ -114,7 +116,8 @@ struct CourseHeaderView: View {
         animationNamespace: Namespace.ID,
         isAnimatingForTap: Binding<Bool>,
         courseRawImage: String?,
-        headerHeight: Binding<CGFloat>
+        headerHeight: Binding<CGFloat>,
+        displayedTabs: [CourseTab] = CourseTab.allCases
     ) {
         self.viewModel = viewModel
         self.title = title
@@ -124,6 +127,7 @@ struct CourseHeaderView: View {
         self._isAnimatingForTap = isAnimatingForTap
         self.courseRawImage = courseRawImage
         self._headerHeight = headerHeight
+        self.displayedTabs = displayedTabs
     }
 
     var body: some View {
@@ -376,7 +380,7 @@ struct CourseHeaderView: View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(CourseTab.allCases, id: \.id) { tab in
+                    ForEach(displayedTabs, id: \.id) { tab in
                         let isSelected = viewModel.selection == tab.rawValue
                         Button {
                             HapticFeedback.selection()

@@ -137,6 +137,8 @@
 		CE812FAD2E15168C00EDCC63 /* VideoThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE812FAC2E15168C00EDCC63 /* VideoThumbnailView.swift */; };
 		CE83F79E2E5DD4AD004E0F7B /* CourseContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F79D2E5DD4AD004E0F7B /* CourseContainerView.swift */; };
 		CE83F7A02E5DD516004E0F7B /* CourseContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F79F2E5DD516004E0F7B /* CourseContainerViewModel.swift */; };
+		CE83F7B12E5DD4AD004E0F7B /* CourseHubContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F7B02E5DD4AD004E0F7B /* CourseHubContainerView.swift */; };
+		CE83F7B32E5DD4AD004E0F7B /* CourseMoreTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F7B22E5DD4AD004E0F7B /* CourseMoreTabView.swift */; };
 		CEAB6BDC2E19695D00E8E898 /* NoContentAvailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6BDB2E19695D00E8E898 /* NoContentAvailable.swift */; };
 		CEAB6C2F2E1D242100E8E898 /* CourseProgressDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6C2E2E1D242100E8E898 /* CourseProgressDetails.swift */; };
 		CEAB6C312E1D3B2700E8E898 /* AssignmentsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6C302E1D3B2700E8E898 /* AssignmentsContentView.swift */; };
@@ -322,6 +324,8 @@
 		CE812FAC2E15168C00EDCC63 /* VideoThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoThumbnailView.swift; sourceTree = "<group>"; };
 		CE83F79D2E5DD4AD004E0F7B /* CourseContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContainerView.swift; sourceTree = "<group>"; };
 		CE83F79F2E5DD516004E0F7B /* CourseContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContainerViewModel.swift; sourceTree = "<group>"; };
+		CE83F7B02E5DD4AD004E0F7B /* CourseHubContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseHubContainerView.swift; sourceTree = "<group>"; };
+		CE83F7B22E5DD4AD004E0F7B /* CourseMoreTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseMoreTabView.swift; sourceTree = "<group>"; };
 		CEAB6BDB2E19695D00E8E898 /* NoContentAvailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoContentAvailable.swift; sourceTree = "<group>"; };
 		CEAB6C2C2E1D240300E8E898 /* Data_CourseProgressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_CourseProgressResponse.swift; sourceTree = "<group>"; };
 		CEAB6C2E2E1D242100E8E898 /* CourseProgressDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseProgressDetails.swift; sourceTree = "<group>"; };
@@ -603,6 +607,8 @@
 			children = (
 				CE83F79F2E5DD516004E0F7B /* CourseContainerViewModel.swift */,
 				CE83F79D2E5DD4AD004E0F7B /* CourseContainerView.swift */,
+				CE83F7B02E5DD4AD004E0F7B /* CourseHubContainerView.swift */,
+				CE83F7B22E5DD4AD004E0F7B /* CourseMoreTabView.swift */,
 				0631FF972D2BE674007CA011 /* CourseDownloadHelper.swift */,
 				073512E129C0E400005CFA41 /* BaseCourseViewModel.swift */,
 			);
@@ -1188,6 +1194,8 @@
 				0295C889299BBE8200ABE571 /* CourseNavigationView.swift in Sources */,
 				CE83F7A02E5DD516004E0F7B /* CourseContainerViewModel.swift in Sources */,
 				CE83F79E2E5DD4AD004E0F7B /* CourseContainerView.swift in Sources */,
+				CE83F7B12E5DD4AD004E0F7B /* CourseHubContainerView.swift in Sources */,
+				CE83F7B32E5DD4AD004E0F7B /* CourseMoreTabView.swift in Sources */,
 				CE1AC4012E055CCD00618645 /* CourseProgressScreenView.swift in Sources */,
 				06FD7EDF2B1F29F3008D632B /* CourseVerticalImageView.swift in Sources */,
 				BAC0E0DB2B32F0AE006B68A9 /* CourseVideoDownloadBarViewModel.swift in Sources */,

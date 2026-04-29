@@ -281,7 +281,7 @@ Primer load mide `contentSize.width`. Si > `bounds.width + threshold` → log wa
 | Fase | Scope | Componentes nuevos | Build risk |
 |---|---|---|---|
 | F1 | Theme: `BrandUnitAccordion`, `CourseStatsStrip`, `ReaderProgressRail`, `ReaderTopBar`, `ReaderBottomBar` | 5 nuevos | ✅ BUILD VERDE |
-| F2 | `CourseHubView` reemplaza `CourseContainerView` (3 tabs, drilldowns sheet) | hub + sheets Progress/Dates | medio (toca routing) |
+| F2 | `CourseHubView` reemplaza `CourseContainerView` (3 tabs, drilldowns sheet) | hub + sheets Progress/Dates | ✅ BUILD VERDE |
 | F3 | Syllabus dinámico con `completion_stat` real | usa F1 | bajo |
 | F4 | `ContentReaderView` paginado (TabView page) + `VerticalRenderer` por type | nuevo flow | alto (reemplaza CourseUnitView) |
 | F5 | HTML injection CSS + AVPlayer inline + problem nativo | renderers | medio |
@@ -319,7 +319,7 @@ Build verde por commit. Cada fase preserva `CourseTab` enum legacy hasta F2 cuto
 | Fase | Estado | Commit |
 |---|---|---|
 | F1 — Theme components | ✅ completo | (próximo commit) |
-| F2 — CourseHubView | ⏳ pendiente | — |
+| F2 — CourseHubView | ✅ completo | (próximo commit) |
 | F3 — Syllabus dinámico | ⏳ pendiente | — |
 | F4 — ContentReaderView | ⏳ pendiente | — |
 | F5 — Renderers | ⏳ pendiente | — |
