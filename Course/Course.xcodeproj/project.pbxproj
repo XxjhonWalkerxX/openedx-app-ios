@@ -52,6 +52,7 @@
 		CE84D0042E0B000000000001 /* ContentReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */; };
 		CE84D0052E0B000000000001 /* ContentReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0022E0B000000000001 /* ContentReaderView.swift */; };
 		CE84D0062E0B000000000001 /* VerticalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0032E0B000000000001 /* VerticalRenderer.swift */; };
+		CE84D0072E0B000000000001 /* ReaderScrollConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */; };
 		02C355392C08DCD700501342 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 02C355372C08DCD700501342 /* Localizable.stringsdict */; };
 		02C7B1D82C271A7000D2A7BB /* OfflineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */; };
 		02D4FC2E2BBD7C9C00C47748 /* MessageSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4FC2D2BBD7C9C00C47748 /* MessageSectionView.swift */; };
@@ -228,6 +229,7 @@
 		CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderViewModel.swift; sourceTree = "<group>"; };
 		CE84D0022E0B000000000001 /* ContentReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderView.swift; sourceTree = "<group>"; };
 		CE84D0032E0B000000000001 /* VerticalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRenderer.swift; sourceTree = "<group>"; };
+		CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderScrollConfigurator.swift; sourceTree = "<group>"; };
 		02C355382C08DCD700501342 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C3553A2C08DCE000501342 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineContentView.swift; sourceTree = "<group>"; };
@@ -563,6 +565,7 @@
 				CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */,
 				CE84D0022E0B000000000001 /* ContentReaderView.swift */,
 				CE84D0032E0B000000000001 /* VerticalRenderer.swift */,
+				CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -1231,6 +1234,7 @@
 				CE84D0042E0B000000000001 /* ContentReaderViewModel.swift in Sources */,
 				CE84D0052E0B000000000001 /* ContentReaderView.swift in Sources */,
 				CE84D0062E0B000000000001 /* VerticalRenderer.swift in Sources */,
+				CE84D0072E0B000000000001 /* ReaderScrollConfigurator.swift in Sources */,
 				CEAB6BDC2E19695D00E8E898 /* NoContentAvailable.swift in Sources */,
 				CE4BA91E2E0AED930050F2C7 /* CustomProgressShape.swift in Sources */,
 				022C64E229ADEB83000F532B /* CourseUpdate.swift in Sources */,

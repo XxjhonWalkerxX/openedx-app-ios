@@ -17,6 +17,7 @@ struct VerticalRenderer: View {
     let onScrollChange: (CGFloat) -> Void
 
     @State private var playerStateSubject = CurrentValueSubject<VideoPlayerState?, Never>(nil)
+    @Environment(\.readerPageSwipeGesture) private var pageSwipeGesture
 
     private var primaryBlock: CourseBlock? { vertical.childs.first }
 
@@ -64,11 +65,15 @@ struct VerticalRenderer: View {
             WebView(
                 url: url,
                 localUrl: nil,
-                injections: injections + [.readerBrandCSS],
+                injections: injections + [.readerBrandCSS, .readerGestureAdjuster],
                 blockID: blockId,
                 roundedBackgroundEnabled: false
             )
             .frame(width: geo.size.width, height: geo.size.height)
+            // Layer B+C: configura WKScrollView y coordina con paging gesture
+            .background(
+                ReaderScrollConfigurator(pageSwipeGesture: pageSwipeGesture)
+            )
         }
         .ignoresSafeArea(edges: .bottom)
     }

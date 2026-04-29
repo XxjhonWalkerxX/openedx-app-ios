@@ -1,6 +1,7 @@
 import SwiftUI
 import Core
 import Theme
+@_spi(Advanced) import SwiftUIIntrospect
 
 // MARK: - ContentReaderView
 
@@ -11,6 +12,8 @@ public struct ContentReaderView: View {
 
     @ObservedObject public var viewModel: ContentReaderViewModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Layer C: pan gesture del TabView paging, capturado por introspect.
+    @State private var pagingGesture: UIPanGestureRecognizer? = nil
 
     public init(viewModel: ContentReaderViewModel) {
         self.viewModel = viewModel
@@ -32,10 +35,17 @@ public struct ContentReaderView: View {
                         onScrollChange: { viewModel.updateScrollOffset($0) }
                     )
                     .tag(idx)
+                    .environment(\.readerPageSwipeGesture, pagingGesture)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
+            // Layer C: captura el pan GR del UIScrollView paging subyacente
+            .introspect(.scrollView, on: .iOS(.v16, .v17, .v18)) { scrollView in
+                if pagingGesture == nil {
+                    pagingGesture = scrollView.panGestureRecognizer
+                }
+            }
             // Recrear TabView al cambiar sequential → reset limpio de paginación
             .id(viewModel.currentSequential.id)
             .animation(
