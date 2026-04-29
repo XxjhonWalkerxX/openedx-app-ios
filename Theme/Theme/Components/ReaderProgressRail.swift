@@ -19,14 +19,16 @@ public struct ReaderProgressRail: View {
     }
 
     public var body: some View {
-        HStack(spacing: 3) {
-            ForEach(Array(segments.enumerated()), id: \.offset) { index, state in
-                segmentView(state: state, index: index)
+        Group {
+            HStack(spacing: 3) {
+                ForEach(Array(segments.enumerated()), id: \.offset) { index, state in
+                    segmentView(state: state, index: index)
+                }
             }
+            .frame(height: 4)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(accessibilitySummary)
         }
-        .frame(height: 4)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilitySummary)
         .accessibilityCustomActions(segmentActions)
     }
 
