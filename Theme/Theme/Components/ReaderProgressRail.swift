@@ -19,17 +19,14 @@ public struct ReaderProgressRail: View {
     }
 
     public var body: some View {
-        Group {
-            HStack(spacing: 3) {
-                ForEach(Array(segments.enumerated()), id: \.offset) { index, state in
-                    segmentView(state: state, index: index)
-                }
+        HStack(spacing: 3) {
+            ForEach(Array(segments.enumerated()), id: \.offset) { index, state in
+                segmentView(state: state, index: index)
             }
-            .frame(height: 4)
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(accessibilitySummary)
         }
-        .accessibilityCustomActions(segmentActions)
+        .frame(height: 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilitySummary)
     }
 
     @ViewBuilder
@@ -54,20 +51,6 @@ public struct ReaderProgressRail: View {
         return "\(done) de \(segments.count) secciones completadas"
     }
 
-    private var segmentActions: [AccessibilityCustomAction] {
-        segments.enumerated().map { idx, state in
-            let stateLabel: String
-            switch state {
-            case .completed: stateLabel = "completada"
-            case .current:   stateLabel = "actual"
-            case .pending:   stateLabel = "pendiente"
-            }
-            return AccessibilityCustomAction("Ir a sección \(idx + 1), \(stateLabel)") {
-                onTap(idx)
-                return true
-            }
-        }
-    }
 }
 
 // MARK: - Preview
