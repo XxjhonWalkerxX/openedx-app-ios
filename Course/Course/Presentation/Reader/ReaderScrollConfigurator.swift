@@ -30,17 +30,17 @@ struct ReaderScrollConfigurator: UIViewRepresentable {
     /// Pan gesture del TabView paging (capturado en ContentReaderView via introspect).
     let pageSwipeGesture: UIPanGestureRecognizer?
 
-    func makeUIView(context: Context) -> _Configurator {
-        _Configurator(pageSwipeGesture: pageSwipeGesture)
+    func makeUIView(context: Context) -> ScrollConfigurator {
+        ScrollConfigurator(pageSwipeGesture: pageSwipeGesture)
     }
 
-    func updateUIView(_ uiView: _Configurator, context: Context) {
+    func updateUIView(_ uiView: ScrollConfigurator, context: Context) {
         uiView.pageSwipeGesture = pageSwipeGesture
     }
 
     // MARK: - Configurator UIView
 
-    final class _Configurator: UIView {
+    final class ScrollConfigurator: UIView {
         var pageSwipeGesture: UIPanGestureRecognizer?
         private var didConfigure = false
 
