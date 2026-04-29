@@ -118,9 +118,8 @@ public struct CourseOutlineView: View {
                                         }
                                         
                                         // MARK: - Sections
-                                        CustomDisclosureGroup(
+                                        CourseSyllabusView(
                                             course: course,
-                                            proxy: proxy,
                                             viewModel: viewModel
                                         )
                                     } else {

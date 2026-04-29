@@ -48,6 +48,7 @@
 		02B6B3BE28E1D15C00232911 /* CourseEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B3BD28E1D15C00232911 /* CourseEndpoint.swift */; };
 		02B6B3C928E1E68100232911 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B6B3C828E1E68100232911 /* Core.framework */; };
 		02BB20182BFCE7B200364948 /* CustomDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BB20172BFCE7B200364948 /* CustomDisclosureGroup.swift */; };
+		CE84C0012E0A000000000001 /* CourseSyllabusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84C0002E0A000000000001 /* CourseSyllabusView.swift */; };
 		02C355392C08DCD700501342 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 02C355372C08DCD700501342 /* Localizable.stringsdict */; };
 		02C7B1D82C271A7000D2A7BB /* OfflineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */; };
 		02D4FC2E2BBD7C9C00C47748 /* MessageSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4FC2D2BBD7C9C00C47748 /* MessageSectionView.swift */; };
@@ -220,6 +221,7 @@
 		02B6B3C228E1DCD100232911 /* CourseDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetails.swift; sourceTree = "<group>"; };
 		02B6B3C828E1E68100232911 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BB20172BFCE7B200364948 /* CustomDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDisclosureGroup.swift; sourceTree = "<group>"; };
+		CE84C0002E0A000000000001 /* CourseSyllabusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyllabusView.swift; sourceTree = "<group>"; };
 		02C355382C08DCD700501342 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C3553A2C08DCE000501342 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineContentView.swift; sourceTree = "<group>"; };
@@ -771,6 +773,7 @@
 				BA58CF622B471047005B102E /* VideoDownloadQualityBarView */,
 				02FCB2B22BBEB36600373180 /* CourseHeaderView.swift */,
 				02BB20172BFCE7B200364948 /* CustomDisclosureGroup.swift */,
+				CE84C0002E0A000000000001 /* CourseSyllabusView.swift */,
 				02E3803D2BFF9F0A00815AFA /* CourseProgressView.swift */,
 				02EBC7542C19CFCF00BE182C /* CalendarSyncStatusView.swift */,
 			);
@@ -1207,6 +1210,7 @@
 				CE4BA9202E0AF22A0050F2C7 /* SectionProgressView.swift in Sources */,
 				07DE59862BECB868001CBFBC /* CourseAnalytics.swift in Sources */,
 				02BB20182BFCE7B200364948 /* CustomDisclosureGroup.swift in Sources */,
+				CE84C0012E0A000000000001 /* CourseSyllabusView.swift in Sources */,
 				CEAB6BDC2E19695D00E8E898 /* NoContentAvailable.swift in Sources */,
 				CE4BA91E2E0AED930050F2C7 /* CustomProgressShape.swift in Sources */,
 				022C64E229ADEB83000F532B /* CourseUpdate.swift in Sources */,

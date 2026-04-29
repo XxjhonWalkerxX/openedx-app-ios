@@ -90,9 +90,8 @@ struct AllContentView: View {
                                 }
                                 
                                 // MARK: - Sections
-                                CustomDisclosureGroup(
+                                CourseSyllabusView(
                                     course: course,
-                                    proxy: proxy,
                                     viewModel: viewModel
                                 )
                                 .accessibilityElement(children: .contain)
