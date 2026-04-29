@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import Core
 import Theme
 @_spi(Advanced) import SwiftUIIntrospect
@@ -15,6 +16,9 @@ public struct ContentReaderView: View {
     /// Layer C: pan gesture del TabView paging, capturado por introspect.
     @State private var pagingGesture: UIPanGestureRecognizer? = nil
 
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    private let successFeedback = UINotificationFeedbackGenerator()
+
     public init(viewModel: ContentReaderViewModel) {
         self.viewModel = viewModel
     }
@@ -27,6 +31,9 @@ public struct ContentReaderView: View {
                 .ignoresSafeArea()
 
             // MARK: Pages
+            let insertEdge: Edge = viewModel.isMovingForward ? .trailing : .leading
+            let removeEdge: Edge = viewModel.isMovingForward ? .leading : .trailing
+
             TabView(selection: $viewModel.verticalIndex) {
                 ForEach(Array(viewModel.currentVerticals.enumerated()), id: \.element.id) { idx, vertical in
                     VerticalRenderer(
@@ -46,12 +53,27 @@ public struct ContentReaderView: View {
                     pagingGesture = scrollView.panGestureRecognizer
                 }
             }
-            // Recrear TabView al cambiar sequential → reset limpio de paginación
+            // Recrear TabView al cambiar sequential → animación direction-aware
             .id(viewModel.currentSequential.id)
+            .transition(reduceMotion ? .opacity : .asymmetric(
+                insertion: .move(edge: insertEdge),
+                removal: .move(edge: removeEdge)
+            ))
             .animation(
                 reduceMotion ? .none : .easeInOut(duration: 0.28),
                 value: viewModel.currentSequential.id
             )
+            // Háptico selection en cada cambio de vertical (swipe o botón)
+            .onChange(of: viewModel.verticalIndex) { _ in
+                guard !reduceMotion else { return }
+                selectionFeedback.selectionChanged()
+                viewModel.prefetchIfApproachingBoundary()
+            }
+            // Háptico success al marcar completo
+            .onChange(of: viewModel.isCurrentVerticalComplete) { completed in
+                guard completed, !reduceMotion else { return }
+                successFeedback.notificationOccurred(.success)
+            }
 
             // MARK: Top Bar
             VStack(spacing: 0) {

@@ -22,8 +22,11 @@ public final class ContentReaderViewModel: ObservableObject {
     @Published public var boundaryLabel: String? = nil
     @Published public var isTopBarVisible: Bool = true
     @Published public var isMarkingComplete: Bool = false
+    /// Dirección de la última navegación — usado para transición asimétrica en ContentReaderView.
+    @Published public var isMovingForward: Bool = true
 
     private var completedVerticalIDs: Set<String> = []
+    private var prefetchedSequentialIDs: Set<String> = []
 
     // MARK: - Dependencies
     let router: CourseRouter
@@ -99,10 +102,12 @@ public final class ContentReaderViewModel: ObservableObject {
     // MARK: - Navigation
 
     public func goNext() {
+        isMovingForward = true
         if verticalIndex < currentVerticals.count - 1 {
             withAnimation(.easeInOut(duration: 0.22)) {
                 verticalIndex += 1
             }
+            prefetchIfApproachingBoundary()
         } else if sequentialIndex < currentChapter.childs.count - 1 {
             let prevName = currentSequential.displayName
             withAnimation(.easeInOut(duration: 0.28)) {
@@ -110,6 +115,7 @@ public final class ContentReaderViewModel: ObservableObject {
                 verticalIndex = 0
             }
             showBoundaryLabel(from: prevName, to: currentSequential.displayName)
+            prefetchIfApproachingBoundary()
         } else if chapterIndex < chapters.count - 1 {
             showChapterCompletionSheet = true
         }
@@ -117,6 +123,7 @@ public final class ContentReaderViewModel: ObservableObject {
     }
 
     public func goPrevious() {
+        isMovingForward = false
         if verticalIndex > 0 {
             withAnimation(.easeInOut(duration: 0.22)) {
                 verticalIndex -= 1
@@ -139,6 +146,7 @@ public final class ContentReaderViewModel: ObservableObject {
 
     public func jumpTo(verticalIndex idx: Int) {
         guard idx >= 0, idx < currentVerticals.count else { return }
+        isMovingForward = idx >= verticalIndex
         withAnimation(.easeInOut(duration: 0.18)) {
             verticalIndex = idx
         }
@@ -150,6 +158,7 @@ public final class ContentReaderViewModel: ObservableObject {
             router.back()
             return
         }
+        isMovingForward = true
         let prevName = currentChapter.displayName
         chapterIndex += 1
         sequentialIndex = 0
@@ -182,6 +191,47 @@ public final class ContentReaderViewModel: ObservableObject {
         guard shouldShow != isTopBarVisible else { return }
         withAnimation(.easeInOut(duration: 0.18)) {
             isTopBarVisible = shouldShow
+        }
+    }
+
+    // MARK: - Prefetch
+
+    /// Dispara prefetch del siguiente sequential cuando el usuario está a 1 vertical del límite.
+    func prefetchIfApproachingBoundary() {
+        let atLastVertical = verticalIndex >= currentVerticals.count - 2
+        guard atLastVertical else { return }
+
+        // Siguiente sequential en el mismo chapter
+        if sequentialIndex < currentChapter.childs.count - 1 {
+            let nextSeq = currentChapter.childs[sequentialIndex + 1]
+            prefetchSequential(nextSeq)
+        }
+        // Primer sequential del siguiente chapter
+        else if chapterIndex < chapters.count - 1 {
+            let nextChapter = chapters[chapterIndex + 1]
+            if let firstSeq = nextChapter.childs.first {
+                prefetchSequential(firstSeq)
+            }
+        }
+    }
+
+    private func prefetchSequential(_ sequential: CourseSequential) {
+        guard !prefetchedSequentialIDs.contains(sequential.id) else { return }
+        prefetchedSequentialIDs.insert(sequential.id)
+
+        let urls: [URL] = sequential.childs.prefix(3).compactMap { vertical in
+            vertical.childs.first.flatMap { block in
+                let candidate = block.encodedVideo?.mobileHigh?.url
+                    ?? block.encodedVideo?.mobileLow?.url
+                    ?? (block.studentUrl.isEmpty ? nil : block.studentUrl)
+                return candidate.flatMap { URL(string: $0) }
+            }
+        }
+
+        Task.detached(priority: .background) {
+            for url in urls {
+                _ = try? await URLSession.shared.data(from: url)
+            }
         }
     }
 
