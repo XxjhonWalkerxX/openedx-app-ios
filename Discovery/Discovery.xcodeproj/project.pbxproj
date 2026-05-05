@@ -27,18 +27,18 @@
 		1402A0C92B61012F00A0A00B /* ProgramWebviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1402A0C72B61012F00A0A00B /* ProgramWebviewView.swift */; };
 		1402A0CA2B61012F00A0A00B /* ProgramWebviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1402A0C82B61012F00A0A00B /* ProgramWebviewViewModel.swift */; };
 		63C6E9CBBF5E33B8B9B4DFEC /* Pods_App_Discovery_DiscoveryUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780FC373E1D479E58870BD85 /* Pods_App_Discovery_DiscoveryUnitTests.framework */; };
+		9CAD6339F6394AF0AE219BF4 /* DiscoveryHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */; };
 		9F47BCC672941A9854404EC7 /* Pods_App_Discovery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 919E55130969D91EF03C4C0B /* Pods_App_Discovery.framework */; };
 		CE7CAF312CC155FD00E0AC9D /* OEXFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = CE7CAF302CC155FD00E0AC9D /* OEXFoundation */; };
 		CEB1E26A2CC14E7900921517 /* OEXFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = CEB1E2692CC14E7900921517 /* OEXFoundation */; };
 		CFC8494C299A66080055E497 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = CFC8494E299A66080055E497 /* Localizable.stringsdict */; };
 		CFC84950299BE52C0055E497 /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC8494F299BE52C0055E497 /* SearchViewModelTests.swift */; };
+		D50EE10730264D0580DB3B5C /* DiscoveryCourseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A0294397AA4727BF0EB8EF /* DiscoveryCourseCard.swift */; };
 		E0B9F69C2B4D57F800168366 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6962B4D57F800168366 /* SearchView.swift */; };
 		E0B9F69D2B4D57F800168366 /* DiscoveryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6972B4D57F800168366 /* DiscoveryViewModel.swift */; };
 		E0B9F69E2B4D57F800168366 /* CourseDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6982B4D57F800168366 /* CourseDetailsView.swift */; };
 		E0B9F69F2B4D57F800168366 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6992B4D57F800168366 /* SearchViewModel.swift */; };
 		E0B9F6A02B4D57F800168366 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F69A2B4D57F800168366 /* DiscoveryView.swift */; };
-		9CAD6339F6394AF0AE219BF4 /* DiscoveryHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */; };
-		D50EE10730264D0580DB3B5C /* DiscoveryCourseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A0294397AA4727BF0EB8EF /* DiscoveryCourseCard.swift */; };
 		E0B9F6A12B4D57F800168366 /* CourseDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F69B2B4D57F800168366 /* CourseDetailsViewModel.swift */; };
 		E0B9F6A42B4D59E000168366 /* CourseDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6A32B4D59E000168366 /* CourseDetails.swift */; };
 		E0B9F6A62B4D620100168366 /* Data_CourseDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9F6A52B4D620100168366 /* Data_CourseDetailsResponse.swift */; };
@@ -90,35 +90,52 @@
 		02EF39DB28D86BEF0058F6BD /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		02F1752E2A4DA3B60019CD70 /* DiscoveryAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryAnalytics.swift; sourceTree = "<group>"; };
 		02F3BFDE29252F2F0051930C /* DiscoveryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryRouter.swift; sourceTree = "<group>"; };
+		067D4BBCA68A6B8CCCFA592D /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0692409931272CDA39B10321 /* Pods-App-Discovery.releasestage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.releasestage.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.releasestage.xcconfig"; sourceTree = "<group>"; };
 		0727879928D34C03002E9142 /* Discovery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Discovery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		072787AC28D34D15002E9142 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		076A4DD1BD63BE83FD66CF4D /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0C3850985F33C1AD72BF1B04 /* Pods-App-Discovery.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.release.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.release.xcconfig"; sourceTree = "<group>"; };
+		12884FD99020E709709E3000 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
+		12A0294397AA4727BF0EB8EF /* DiscoveryCourseCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryCourseCard.swift; sourceTree = "<group>"; };
 		1402A0C72B61012F00A0A00B /* ProgramWebviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramWebviewView.swift; sourceTree = "<group>"; };
 		1402A0C82B61012F00A0A00B /* ProgramWebviewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgramWebviewViewModel.swift; sourceTree = "<group>"; };
 		2334C76D248D0A95634AFFD9 /* Pods-App-Discovery-DiscoveryUnitTests.debugstage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.debugstage.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.debugstage.xcconfig"; sourceTree = "<group>"; };
 		2760B1F234E01FFCB73F41C2 /* Pods-App-Discovery.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.debug.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.debug.xcconfig"; sourceTree = "<group>"; };
+		28A54EA4A4B54B610FD15793 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2CB04C93A606BC164C1E88C5 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2E8044C49AC74331F5509DF3 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3BD640EB83DF7509283FBC7A /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		445F0675BF0E1DEB78F3CE73 /* Pods-App-Discovery-DiscoveryUnitTests.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.releasedev.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.releasedev.xcconfig"; sourceTree = "<group>"; };
+		463241C1B04C174E5413D2B4 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		46FC4194B3BE4D34393CB8D1 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4786022BA3ED2D55DD0E5C8F /* Pods-App-Discovery.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.debugdev.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.debugdev.xcconfig"; sourceTree = "<group>"; };
+		53E14C27B0125E58C8D0585F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		57E62A3FCA858F5A1FF77347 /* Pods-App-Discovery.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		617697245CE8F67AF2BBE250 /* Pods-App-Discovery.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.debugprod.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.debugprod.xcconfig"; sourceTree = "<group>"; };
+		61E44032BE946A408E80A62F /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69F97EEB323CA56E818CD6C4 /* Pods-App-Discovery-DiscoveryUnitTests.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.debugprod.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.debugprod.xcconfig"; sourceTree = "<group>"; };
+		6CC34D06BD74E547A1D32358 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6D3D411B91B7778FDE2667FD /* es_419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_419; path = es_419.lproj/Localizable.strings; sourceTree = "<group>"; };
+		714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryHeroView.swift; sourceTree = "<group>"; };
 		780FC373E1D479E58870BD85 /* Pods_App_Discovery_DiscoveryUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App_Discovery_DiscoveryUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		836BEF3BBFF8FD02C62D862C /* Pods-App-Discovery.debugstage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.debugstage.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.debugstage.xcconfig"; sourceTree = "<group>"; };
 		83FB998DD9C5B57B61B88170 /* Pods-App-Discovery-DiscoveryUnitTests.releasestage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.releasestage.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.releasestage.xcconfig"; sourceTree = "<group>"; };
+		844D4EF4A105A88E9ED9FCCF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		919E55130969D91EF03C4C0B /* Pods_App_Discovery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App_Discovery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F968F74AD7F4B5F6E5A6084 /* Pods-App-Discovery-DiscoveryUnitTests.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.debugdev.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.debugdev.xcconfig"; sourceTree = "<group>"; };
 		AAC0D83F5D34491E9FABCABC /* Pods-App-Discovery-DiscoveryUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3064766B50D494577F445F9 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CFC8494D299A66080055E497 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		CFC8494F299BE52C0055E497 /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
+		DA3A4B27866602898D1196DE /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DA5946D284336EA99E048FA7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E08D12E22B482D720096311A /* Course.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Course.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0B9F6962B4D57F800168366 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		E0B9F6972B4D57F800168366 /* DiscoveryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryViewModel.swift; sourceTree = "<group>"; };
 		E0B9F6982B4D57F800168366 /* CourseDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetailsView.swift; sourceTree = "<group>"; };
 		E0B9F6992B4D57F800168366 /* SearchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		E0B9F69A2B4D57F800168366 /* DiscoveryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
-		714166A58DCC482EB4FADC8C /* DiscoveryHeroView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryHeroView.swift; sourceTree = "<group>"; };
-		12A0294397AA4727BF0EB8EF /* DiscoveryCourseCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryCourseCard.swift; sourceTree = "<group>"; };
 		E0B9F69B2B4D57F800168366 /* CourseDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetailsViewModel.swift; sourceTree = "<group>"; };
 		E0B9F6A32B4D59E000168366 /* CourseDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDetails.swift; sourceTree = "<group>"; };
 		E0B9F6A52B4D620100168366 /* Data_CourseDetailsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data_CourseDetailsResponse.swift; sourceTree = "<group>"; };
@@ -130,6 +147,8 @@
 		E0D586242B300134009B4BA7 /* URL+PathExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+PathExtension.swift"; sourceTree = "<group>"; };
 		E0D586282B302C3A009B4BA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E192F9B4A7EECED9665AB8A7 /* Pods-App-Discovery.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery.releasedev.xcconfig"; path = "Target Support Files/Pods-App-Discovery/Pods-App-Discovery.releasedev.xcconfig"; sourceTree = "<group>"; };
+		EB884AAB97CA7D0C8961EFC4 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F1AE496D9EBEA9F047D37E58 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		F340BD73D38B0DF9E4EA6482 /* Pods-App-Discovery-DiscoveryUnitTests.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		FF565519B9BBC73E92249648 /* Pods-App-Discovery-DiscoveryUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Discovery-DiscoveryUnitTests.release.xcconfig"; path = "Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +459,15 @@
 				en,
 				Base,
 				uk,
+				ar,
+				fa,
+				"zh-HK",
+				bo,
+				"af-ZA",
+				vi,
+				lv,
+				uz,
+				es_419,
 			);
 			mainGroup = 0727878F28D34C03002E9142;
 			packageReferences = (
@@ -524,9 +552,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Discovery-DiscoveryUnitTests/Pods-App-Discovery-DiscoveryUnitTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -619,6 +651,25 @@
 			isa = PBXVariantGroup;
 			children = (
 				02EF39D828D86A380058F6BD /* en */,
+				53E14C27B0125E58C8D0585F /* ar */,
+				844D4EF4A105A88E9ED9FCCF /* fa */,
+				61E44032BE946A408E80A62F /* uk */,
+				F1AE496D9EBEA9F047D37E58 /* zh-HK */,
+				EB884AAB97CA7D0C8961EFC4 /* bo */,
+				076A4DD1BD63BE83FD66CF4D /* af-ZA */,
+				463241C1B04C174E5413D2B4 /* vi */,
+				2CB04C93A606BC164C1E88C5 /* lv */,
+				12884FD99020E709709E3000 /* uz */,
+				28A54EA4A4B54B610FD15793 /* ar */,
+				DA3A4B27866602898D1196DE /* fa */,
+				DA5946D284336EA99E048FA7 /* uk */,
+				3BD640EB83DF7509283FBC7A /* zh-HK */,
+				6D3D411B91B7778FDE2667FD /* es_419 */,
+				2E8044C49AC74331F5509DF3 /* bo */,
+				067D4BBCA68A6B8CCCFA592D /* af-ZA */,
+				46FC4194B3BE4D34393CB8D1 /* vi */,
+				6CC34D06BD74E547A1D32358 /* lv */,
+				C3064766B50D494577F445F9 /* uz */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

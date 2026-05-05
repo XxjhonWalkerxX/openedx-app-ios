@@ -116,7 +116,8 @@ public final class CourseContainerViewModel: BaseCourseViewModel {
     let enrollmentStart: Date?
     let enrollmentEnd: Date?
     let lastVisitedBlockID: String?
-    
+    private var didAutoResume = false
+
     var courseDownloadTasks: [DownloadDataTask] = []
     private(set) var waitingDownloads: [CourseBlock]?
     
@@ -361,7 +362,10 @@ public final class CourseContainerViewModel: BaseCourseViewModel {
                 blockID: lastVisitedBlockID,
                 courseStructure: courseStructure
             )
-            openLastVisitedBlock()
+            if !didAutoResume {
+                didAutoResume = true
+                openLastVisitedBlock()
+            }
         } else {
             let result = try await interactor.resumeBlock(courseID: courseID)
             withAnimation {
@@ -1728,13 +1732,14 @@ public final class CourseContainerViewModel: BaseCourseViewModel {
 extension CourseContainerViewModel {
     @objc private func handleShiftDueDates(_ notification: Notification) {
         if let courseID = notification.object as? String {
-            Task {
+            Task { [weak self] in
+                guard let self else { return }
                 await withTaskGroup(of: Void.self) { group in
-                    group.addTask {
-                        await self.getCourseBlocks(courseID: courseID, withProgress: true)
+                    group.addTask { [weak self] in
+                        await self?.getCourseBlocks(courseID: courseID, withProgress: true)
                     }
-                    group.addTask {
-                        await self.getCourseDeadlineInfo(courseID: courseID, withProgress: true)
+                    group.addTask { [weak self] in
+                        await self?.getCourseDeadlineInfo(courseID: courseID, withProgress: true)
                     }
                     await MainActor.run { [weak self] in
                         self?.dueDatesShifted = true

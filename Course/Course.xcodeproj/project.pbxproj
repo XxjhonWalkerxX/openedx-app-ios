@@ -48,11 +48,6 @@
 		02B6B3BE28E1D15C00232911 /* CourseEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B6B3BD28E1D15C00232911 /* CourseEndpoint.swift */; };
 		02B6B3C928E1E68100232911 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B6B3C828E1E68100232911 /* Core.framework */; };
 		02BB20182BFCE7B200364948 /* CustomDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BB20172BFCE7B200364948 /* CustomDisclosureGroup.swift */; };
-		CE84C0012E0A000000000001 /* CourseSyllabusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84C0002E0A000000000001 /* CourseSyllabusView.swift */; };
-		CE84D0042E0B000000000001 /* ContentReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */; };
-		CE84D0052E0B000000000001 /* ContentReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0022E0B000000000001 /* ContentReaderView.swift */; };
-		CE84D0062E0B000000000001 /* VerticalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0032E0B000000000001 /* VerticalRenderer.swift */; };
-		CE84D0072E0B000000000001 /* ReaderScrollConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */; };
 		02C355392C08DCD700501342 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 02C355372C08DCD700501342 /* Localizable.stringsdict */; };
 		02C7B1D82C271A7000D2A7BB /* OfflineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */; };
 		02D4FC2E2BBD7C9C00C47748 /* MessageSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4FC2D2BBD7C9C00C47748 /* MessageSectionView.swift */; };
@@ -99,10 +94,10 @@
 		A52897DC2E276B12009C7044 /* CourseGradeCarouselSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52897DB2E276B02009C7044 /* CourseGradeCarouselSlideView.swift */; };
 		A52897DE2E277A7C009C7044 /* GradeItemCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52897DD2E277A7C009C7044 /* GradeItemCarouselView.swift */; };
 		A52897E02E278D7D009C7044 /* ViewAllButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52897DF2E278D7D009C7044 /* ViewAllButton.swift */; };
+		A59016D52E69B2E900076220 /* VideoNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59016D42E69B2E900076220 /* VideoNavigationView.swift */; };
 		A5A510A22E66E8D600553607 /* CourseVideoCarouselSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A510A12E66E8D600553607 /* CourseVideoCarouselSlideView.swift */; };
 		A5A510A42E6728AD00553607 /* CourseAssignmentsCarouselSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A510A32E6728AD00553607 /* CourseAssignmentsCarouselSlideView.swift */; };
 		A5A510A62E672E4A00553607 /* AssignmentCarouselDetailCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A510A52E672E4A00553607 /* AssignmentCarouselDetailCardView.swift */; };
-		A59016D52E69B2E900076220 /* VideoNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59016D42E69B2E900076220 /* VideoNavigationView.swift */; };
 		B8F50317B6B830A0E520C954 /* Pods_App_Course_CourseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E59D2B81E12610964282C5 /* Pods_App_Course_CourseTests.framework */; };
 		BA58CF5D2B3D804D005B102E /* CourseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58CF5C2B3D804D005B102E /* CourseStorage.swift */; };
 		BA58CF612B471041005B102E /* VideoDownloadQualityBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58CF602B471041005B102E /* VideoDownloadQualityBarView.swift */; };
@@ -144,6 +139,11 @@
 		CE83F7A02E5DD516004E0F7B /* CourseContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F79F2E5DD516004E0F7B /* CourseContainerViewModel.swift */; };
 		CE83F7B12E5DD4AD004E0F7B /* CourseHubContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F7B02E5DD4AD004E0F7B /* CourseHubContainerView.swift */; };
 		CE83F7B32E5DD4AD004E0F7B /* CourseMoreTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE83F7B22E5DD4AD004E0F7B /* CourseMoreTabView.swift */; };
+		CE84C0012E0A000000000001 /* CourseSyllabusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84C0002E0A000000000001 /* CourseSyllabusView.swift */; };
+		CE84D0042E0B000000000001 /* ContentReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */; };
+		CE84D0052E0B000000000001 /* ContentReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0022E0B000000000001 /* ContentReaderView.swift */; };
+		CE84D0062E0B000000000001 /* VerticalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0032E0B000000000001 /* VerticalRenderer.swift */; };
+		CE84D0072E0B000000000001 /* ReaderScrollConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */; };
 		CEAB6BDC2E19695D00E8E898 /* NoContentAvailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6BDB2E19695D00E8E898 /* NoContentAvailable.swift */; };
 		CEAB6C2F2E1D242100E8E898 /* CourseProgressDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6C2E2E1D242100E8E898 /* CourseProgressDetails.swift */; };
 		CEAB6C312E1D3B2700E8E898 /* AssignmentsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAB6C302E1D3B2700E8E898 /* AssignmentsContentView.swift */; };
@@ -183,6 +183,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00C940D1ACD1783264EDB3E0 /* es_419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_419; path = es_419.lproj/Localizable.strings; sourceTree = "<group>"; };
 		02228B2E2C221412009A5F28 /* LargestDownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargestDownloadsView.swift; sourceTree = "<group>"; };
 		02280F5D294B4FDA0032823A /* CourseCoreModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CourseCoreModel.xcdatamodel; sourceTree = "<group>"; };
 		02280F5F294B50030032823A /* CoursePersistenceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursePersistenceProtocol.swift; sourceTree = "<group>"; };
@@ -225,11 +226,6 @@
 		02B6B3C228E1DCD100232911 /* CourseDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetails.swift; sourceTree = "<group>"; };
 		02B6B3C828E1E68100232911 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BB20172BFCE7B200364948 /* CustomDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDisclosureGroup.swift; sourceTree = "<group>"; };
-		CE84C0002E0A000000000001 /* CourseSyllabusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyllabusView.swift; sourceTree = "<group>"; };
-		CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderViewModel.swift; sourceTree = "<group>"; };
-		CE84D0022E0B000000000001 /* ContentReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderView.swift; sourceTree = "<group>"; };
-		CE84D0032E0B000000000001 /* VerticalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRenderer.swift; sourceTree = "<group>"; };
-		CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderScrollConfigurator.swift; sourceTree = "<group>"; };
 		02C355382C08DCD700501342 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C3553A2C08DCE000501342 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		02C7B1D72C271A7000D2A7BB /* OfflineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineContentView.swift; sourceTree = "<group>"; };
@@ -243,6 +239,7 @@
 		02FF6FA62C20BFF800E44DD8 /* OfflineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineView.swift; sourceTree = "<group>"; };
 		02FF6FA92C20D56A00E44DD8 /* TotalDownloadedProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDownloadedProgressView.swift; sourceTree = "<group>"; };
 		02FFAD0C29E4347300140E46 /* VideoPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewModel.swift; sourceTree = "<group>"; };
+		059A4BCE82662ECC1BAF03C2 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		060E8BC92B5FD68C0080C952 /* UnitStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitStack.swift; sourceTree = "<group>"; };
 		0631FF972D2BE674007CA011 /* CourseDownloadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDownloadHelper.swift; sourceTree = "<group>"; };
 		065275342BB1B39C0093BCCA /* PlayerViewControllerHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewControllerHolder.swift; sourceTree = "<group>"; };
@@ -265,17 +262,28 @@
 		0766DFCD299AB26D00EBEF6A /* EncodedVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodedVideoPlayer.swift; sourceTree = "<group>"; };
 		0766DFCF299AB29000EBEF6A /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		07DE59852BECB868001CBFBC /* CourseAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseAnalytics.swift; sourceTree = "<group>"; };
+		127E4E299B0E7E6309192E67 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1D3B4393BBB0E657C08733A6 /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		206844A4AE4FBE8229977086 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2A444220A08C5035164B071F /* Pods-App-Course-CourseTests.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.releasedev.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.releasedev.xcconfig"; sourceTree = "<group>"; };
 		3A55620C6018088BFF77F9AE /* Pods-App-CourseDetails.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-CourseDetails.debug.xcconfig"; path = "Target Support Files/Pods-App-CourseDetails/Pods-App-CourseDetails.debug.xcconfig"; sourceTree = "<group>"; };
 		3D506212980347A9D5A70E20 /* Pods-App-Course.debugstage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.debugstage.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.debugstage.xcconfig"; sourceTree = "<group>"; };
 		418D00932369361311AEEBD3 /* Pods-App-Course-CourseTests.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.debugprod.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.debugprod.xcconfig"; sourceTree = "<group>"; };
+		44134283972311ACD4A7E84C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4D2F08669DD2579EAAE02E2F /* Pods-App-Course.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.releasedev.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.releasedev.xcconfig"; sourceTree = "<group>"; };
 		4DD47D29A4059C1222E8B7D2 /* Pods-App-Course-CourseTests.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		50E59D2B81E12610964282C5 /* Pods_App_Course_CourseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App_Course_CourseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51A3A7BA0FC6386531BE678A /* Pods-App-CourseDetails.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-CourseDetails.debugdev.xcconfig"; path = "Target Support Files/Pods-App-CourseDetails/Pods-App-CourseDetails.debugdev.xcconfig"; sourceTree = "<group>"; };
+		539A4254BC06DAD9A21A84C7 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		56C843529E34D5CF78BFE669 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5E604738B81B0B9BB159C7DD /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		600A464AEDA7BEFEC1A7FE99 /* Pods-App-Course-CourseTests.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.debugdev.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.debugdev.xcconfig"; sourceTree = "<group>"; };
+		639648D89DDFB065A64F2842 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		69A261790A0B4C724CCFA4F2 /* Pods-App-CourseDetails.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-CourseDetails.release.xcconfig"; path = "Target Support Files/Pods-App-CourseDetails/Pods-App-CourseDetails.release.xcconfig"; sourceTree = "<group>"; };
+		6D7F4FE0B311708167B4F9D5 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		75424EE8A8FD2CF3D310B7F6 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
 		831B08139890634968EDD44D /* Pods-App-Course-CourseTests.debugstage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.debugstage.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.debugstage.xcconfig"; sourceTree = "<group>"; };
+		91B74E249EF6933AE125A73F /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		975F475D2B6151FD00E5B031 /* CourseDatesMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDatesMock.swift; sourceTree = "<group>"; };
 		975F475F2B615DA700E5B031 /* CourseStructureMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseStructureMock.swift; sourceTree = "<group>"; };
 		97C99C352B9A08FE004EEDE2 /* CalendarSyncProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSyncProgressView.swift; sourceTree = "<group>"; };
@@ -291,10 +299,11 @@
 		A52897DB2E276B02009C7044 /* CourseGradeCarouselSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseGradeCarouselSlideView.swift; sourceTree = "<group>"; };
 		A52897DD2E277A7C009C7044 /* GradeItemCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeItemCarouselView.swift; sourceTree = "<group>"; };
 		A52897DF2E278D7D009C7044 /* ViewAllButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAllButton.swift; sourceTree = "<group>"; };
+		A59016D42E69B2E900076220 /* VideoNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoNavigationView.swift; sourceTree = "<group>"; };
 		A5A510A12E66E8D600553607 /* CourseVideoCarouselSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseVideoCarouselSlideView.swift; sourceTree = "<group>"; };
 		A5A510A32E6728AD00553607 /* CourseAssignmentsCarouselSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseAssignmentsCarouselSlideView.swift; sourceTree = "<group>"; };
 		A5A510A52E672E4A00553607 /* AssignmentCarouselDetailCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentCarouselDetailCardView.swift; sourceTree = "<group>"; };
-		A59016D42E69B2E900076220 /* VideoNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoNavigationView.swift; sourceTree = "<group>"; };
+		AB7F4FBA853035B33BCDDBA7 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ADC2A1B8183A674705F5F7E2 /* Pods-App-Course.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.debug.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.debug.xcconfig"; sourceTree = "<group>"; };
 		B196A14555D0E006995A5683 /* Pods-App-CourseDetails.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-CourseDetails.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-CourseDetails/Pods-App-CourseDetails.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		BA58CF5C2B3D804D005B102E /* CourseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseStorage.swift; sourceTree = "<group>"; };
@@ -305,6 +314,8 @@
 		BAC0E0DD2B32F0F3006B68A9 /* DownloadsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewModel.swift; sourceTree = "<group>"; };
 		BAD9CA2C2B2736BB00DE790A /* LessonLineProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonLineProgressView.swift; sourceTree = "<group>"; };
 		BAD9CA492B2C88E000DE790A /* CourseVideoDownloadBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseVideoDownloadBarView.swift; sourceTree = "<group>"; };
+		CABA4512A1A17727C5514499 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CB7F48648842B2C83512DE92 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		CE02086B2E0EC88C005999E2 /* VideosContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosContentView.swift; sourceTree = "<group>"; };
 		CE1AC3FF2E055CCD00618645 /* CourseProgressScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseProgressScreenView.swift; sourceTree = "<group>"; };
 		CE1AC4022E05A33D00618645 /* Data_CourseProgressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_CourseProgressResponse.swift; sourceTree = "<group>"; };
@@ -336,6 +347,11 @@
 		CE83F79F2E5DD516004E0F7B /* CourseContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseContainerViewModel.swift; sourceTree = "<group>"; };
 		CE83F7B02E5DD4AD004E0F7B /* CourseHubContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseHubContainerView.swift; sourceTree = "<group>"; };
 		CE83F7B22E5DD4AD004E0F7B /* CourseMoreTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseMoreTabView.swift; sourceTree = "<group>"; };
+		CE84C0002E0A000000000001 /* CourseSyllabusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyllabusView.swift; sourceTree = "<group>"; };
+		CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderViewModel.swift; sourceTree = "<group>"; };
+		CE84D0022E0B000000000001 /* ContentReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentReaderView.swift; sourceTree = "<group>"; };
+		CE84D0032E0B000000000001 /* VerticalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRenderer.swift; sourceTree = "<group>"; };
+		CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderScrollConfigurator.swift; sourceTree = "<group>"; };
 		CEAB6BDB2E19695D00E8E898 /* NoContentAvailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoContentAvailable.swift; sourceTree = "<group>"; };
 		CEAB6C2C2E1D240300E8E898 /* Data_CourseProgressResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_CourseProgressResponse.swift; sourceTree = "<group>"; };
 		CEAB6C2E2E1D242100E8E898 /* CourseProgressDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseProgressDetails.swift; sourceTree = "<group>"; };
@@ -345,15 +361,18 @@
 		CECF38322E3A4BB100184EC4 /* VideoContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoContentData.swift; sourceTree = "<group>"; };
 		CECF38352E3A545B00184EC4 /* AssignmentContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentContentData.swift; sourceTree = "<group>"; };
 		CECF38372E3A73C200184EC4 /* VideoThumbnailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoThumbnailService.swift; sourceTree = "<group>"; };
+		DA7B4167AFBE4BF1E91236F7 /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		DB205BFA2AE81B1200136EC2 /* CourseDateViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDateViewModelTests.swift; sourceTree = "<group>"; };
 		DB7D6EAB2ADFCAC40036BB13 /* CourseDatesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseDatesView.swift; sourceTree = "<group>"; };
 		DB7D6EAD2ADFCB4A0036BB13 /* CourseDatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDatesViewModel.swift; sourceTree = "<group>"; };
 		DBE05972CB5115D4535C6B8A /* Pods-App-Course-CourseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.debug.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E3AC46D6B77EA9250A5DB022 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E5E795BD160CDA7D9C120DE6 /* Pods_App_Course.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App_Course.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6BDAE887ED8A46860B3F6D3 /* Pods-App-Course-CourseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.release.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.release.xcconfig"; sourceTree = "<group>"; };
 		E954A304FDC0409BEC34C125 /* Pods-App-Course.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.debugprod.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.debugprod.xcconfig"; sourceTree = "<group>"; };
 		EBB67646EDD08315BA7B3DC5 /* Pods-App-Course-CourseTests.releasestage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course-CourseTests.releasestage.xcconfig"; path = "Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests.releasestage.xcconfig"; sourceTree = "<group>"; };
 		EDCFD7A1BFD2200B14F10F71 /* Pods-App-Course.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.debugdev.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.debugdev.xcconfig"; sourceTree = "<group>"; };
+		F0A540D9A8297CE79DB5811D /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F4640D6B8065C404E0BC30D5 /* Pods-App-Course.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.release.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.release.xcconfig"; sourceTree = "<group>"; };
 		F496B47B12CFD866EA6845CC /* Pods-App-Course.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-Course.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-Course/Pods-App-Course.releaseprod.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -557,17 +576,6 @@
 				CE84D0002E0B000000000001 /* Reader */,
 			);
 			path = Presentation;
-			sourceTree = "<group>";
-		};
-		CE84D0002E0B000000000001 /* Reader */ = {
-			isa = PBXGroup;
-			children = (
-				CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */,
-				CE84D0022E0B000000000001 /* ContentReaderView.swift */,
-				CE84D0032E0B000000000001 /* VerticalRenderer.swift */,
-				CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */,
-			);
-			path = Reader;
 			sourceTree = "<group>";
 		};
 		02FF6FA52C20BFE100E44DD8 /* Offline */ = {
@@ -874,6 +882,17 @@
 			path = Elements;
 			sourceTree = "<group>";
 		};
+		CE84D0002E0B000000000001 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				CE84D0012E0B000000000001 /* ContentReaderViewModel.swift */,
+				CE84D0022E0B000000000001 /* ContentReaderView.swift */,
+				CE84D0032E0B000000000001 /* VerticalRenderer.swift */,
+				CE84D0082E0B000000000001 /* ReaderScrollConfigurator.swift */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
 		CECF38332E3A4BB100184EC4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1005,6 +1024,15 @@
 				en,
 				Base,
 				uk,
+				ar,
+				fa,
+				"zh-HK",
+				bo,
+				"af-ZA",
+				vi,
+				lv,
+				uz,
+				es_419,
 			);
 			mainGroup = 0289F8E428E1C3510064F8F3;
 			packageReferences = (
@@ -1068,9 +1096,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App-Course-CourseTests/Pods-App-Course-CourseTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1292,6 +1324,25 @@
 			isa = PBXVariantGroup;
 			children = (
 				02B6B3B328E1C49400232911 /* en */,
+				44134283972311ACD4A7E84C /* ar */,
+				E3AC46D6B77EA9250A5DB022 /* fa */,
+				539A4254BC06DAD9A21A84C7 /* uk */,
+				CB7F48648842B2C83512DE92 /* zh-HK */,
+				AB7F4FBA853035B33BCDDBA7 /* bo */,
+				1D3B4393BBB0E657C08733A6 /* af-ZA */,
+				639648D89DDFB065A64F2842 /* vi */,
+				F0A540D9A8297CE79DB5811D /* lv */,
+				127E4E299B0E7E6309192E67 /* uz */,
+				6D7F4FE0B311708167B4F9D5 /* ar */,
+				91B74E249EF6933AE125A73F /* fa */,
+				5E604738B81B0B9BB159C7DD /* uk */,
+				56C843529E34D5CF78BFE669 /* zh-HK */,
+				00C940D1ACD1783264EDB3E0 /* es_419 */,
+				206844A4AE4FBE8229977086 /* bo */,
+				DA7B4167AFBE4BF1E91236F7 /* af-ZA */,
+				059A4BCE82662ECC1BAF03C2 /* vi */,
+				CABA4512A1A17727C5514499 /* lv */,
+				75424EE8A8FD2CF3D310B7F6 /* uz */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

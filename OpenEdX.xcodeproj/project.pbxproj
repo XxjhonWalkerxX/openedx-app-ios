@@ -120,6 +120,7 @@
 		02ED50DB29A6600B008341CD /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = uk; path = uk.lproj/languages.json; sourceTree = "<group>"; };
 		02F175302A4DA95B0019CD70 /* MainScreenAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenAnalytics.swift; sourceTree = "<group>"; };
 		065275362BB1B4070093BCCA /* PipManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipManager.swift; sourceTree = "<group>"; };
+		06C143969D65649C5352849A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		071009C828D1DB3F00344290 /* ScreenAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenAssembly.swift; sourceTree = "<group>"; };
 		0727878D28D347C7002E9142 /* MainScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenView.swift; sourceTree = "<group>"; };
 		072787B028D34D83002E9142 /* Discovery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Discovery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,10 +136,26 @@
 		07D5DA3128D075AA00752FD9 /* OpenEdX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEdX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D5DA3428D075AA00752FD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07D5DA3D28D075AB00752FD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		084A473E9819DCF5DE775E53 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		13F64846990AF594C6298E54 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		149FF39D2B9F1AB50034B33F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1AFA4B5DAA05002E291F1070 /* es_419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_419; path = es_419.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1B354980868F094C99B8ED72 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		23EE4120BF2AAE96B0C51DFD /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		2F74479682F8824E9AA3872A /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		377B4048A8B27AAD2862EC09 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		3D27E034A83DDEBF18D53B04 /* Pods_App_OpenEdX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App_OpenEdX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4449C4D4F119C87B452DDFCD /* Pods-App-OpenEdX.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OpenEdX.releaseprod.xcconfig"; path = "Target Support Files/Pods-App-OpenEdX/Pods-App-OpenEdX.releaseprod.xcconfig"; sourceTree = "<group>"; };
+		53B94D8FBDCFB491B1D4CFCC /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
+		554C4C6CA8DF584C5001EA48 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		56974209B669B635F4705A85 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61D64BE4BC0AC4840C9F8E8B /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6C9F4B34B01CDCF2524F2554 /* af-ZA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "af-ZA"; path = "af-ZA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		7F5B417290CFAD365D8F188D /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
+		839D4222B0C57366D64450DA /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
+		85A64CB19FB1D65E41D48725 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A45E2C9AF0CBE70A09FB37B /* Pods-App-OpenEdX.debugstage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OpenEdX.debugstage.xcconfig"; path = "Target Support Files/Pods-App-OpenEdX/Pods-App-OpenEdX.debugstage.xcconfig"; sourceTree = "<group>"; };
+		982945F894862608F9A428D8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9FF04A942F85D97900CCE087 /* OpenEdXReleaseDev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenEdXReleaseDev.entitlements; sourceTree = "<group>"; };
 		A500668A2B613ED10024680B /* PushNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationsManager.swift; sourceTree = "<group>"; };
 		A500668C2B6143000024680B /* FCMProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMProvider.swift; sourceTree = "<group>"; };
@@ -147,6 +164,7 @@
 		A59568942B61630500ED4F90 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
 		A59568962B61653700ED4F90 /* DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		A59568982B616D9400ED4F90 /* PushLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushLink.swift; sourceTree = "<group>"; };
+		B74948E083F135CEF3CDB057 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BA7468752B96201D00793145 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 		CCE1E0F850D3E25C0D6C6702 /* Pods-App-OpenEdX.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OpenEdX.debugdev.xcconfig"; path = "Target Support Files/Pods-App-OpenEdX/Pods-App-OpenEdX.debugdev.xcconfig"; sourceTree = "<group>"; };
 		CE1D5B7A2CE60E000019CA34 /* ContainerMainActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerMainActor.swift; sourceTree = "<group>"; };
@@ -154,6 +172,7 @@
 		CEB36E512D6A29CE00907A89 /* Downloads.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Downloads.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE5EDED2D6E0A290089F67C /* DownloadsPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPersistence.swift; sourceTree = "<group>"; };
 		D70D30110012B7D52D05E876 /* Pods-App-OpenEdX.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OpenEdX.debugprod.xcconfig"; path = "Target Support Files/Pods-App-OpenEdX/Pods-App-OpenEdX.debugprod.xcconfig"; sourceTree = "<group>"; };
+		D9444F479D1C696B5C24976C /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E0D6E6A22B1626B10089F9C9 /* Theme.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Theme.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0CE8D22B755B4003A113BB /* Pods-App-OpenEdX.releasestage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App-OpenEdX.releasestage.xcconfig"; path = "Target Support Files/Pods-App-OpenEdX/Pods-App-OpenEdX.releasestage.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +459,15 @@
 				en,
 				Base,
 				uk,
+				ar,
+				fa,
+				"zh-HK",
+				bo,
+				"af-ZA",
+				vi,
+				lv,
+				uz,
+				es_419,
 			);
 			mainGroup = 07D5DA2828D075AA00752FD9;
 			packageReferences = (
@@ -638,6 +666,25 @@
 			isa = PBXVariantGroup;
 			children = (
 				0770DE6528D0BCC7006D8A5D /* en */,
+				982945F894862608F9A428D8 /* ar */,
+				61D64BE4BC0AC4840C9F8E8B /* fa */,
+				084A473E9819DCF5DE775E53 /* uk */,
+				377B4048A8B27AAD2862EC09 /* zh-HK */,
+				B74948E083F135CEF3CDB057 /* bo */,
+				6C9F4B34B01CDCF2524F2554 /* af-ZA */,
+				85A64CB19FB1D65E41D48725 /* vi */,
+				554C4C6CA8DF584C5001EA48 /* lv */,
+				839D4222B0C57366D64450DA /* uz */,
+				56974209B669B635F4705A85 /* ar */,
+				7F5B417290CFAD365D8F188D /* fa */,
+				D9444F479D1C696B5C24976C /* uk */,
+				1B354980868F094C99B8ED72 /* zh-HK */,
+				1AFA4B5DAA05002E291F1070 /* es_419 */,
+				13F64846990AF594C6298E54 /* bo */,
+				23EE4120BF2AAE96B0C51DFD /* af-ZA */,
+				06C143969D65649C5352849A /* vi */,
+				2F74479682F8824E9AA3872A /* lv */,
+				53B94D8FBDCFB491B1D4CFCC /* uz */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -742,7 +789,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.diegonicolas.openedx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diego1nicolas.openedx;
 				PRODUCT_NAME = "$(TARGET_NAME) Stage";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -837,7 +884,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.diegonicolas.openedx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diego1nicolas.openedx;
 				PRODUCT_NAME = "$(TARGET_NAME) Stage";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1033,7 +1080,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.diegonicolas.openedx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diego1nicolas.openedx;
 				PRODUCT_NAME = "$(TARGET_NAME) Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1188,7 +1235,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.diegonicolas.openedx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diego1nicolas.openedx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1229,7 +1276,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.diegonicolas.openedx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diego1nicolas.openedx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
